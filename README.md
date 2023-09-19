@@ -14,3 +14,7 @@ The system administrator is responsible for adding/removing brokers.  The broker
 * Sarah Malik -
 * Mark Ghaby -
 * Andrei Mihaescu -
+
+## [Meeting Minutes](https://docs.google.com/document/d/1fAs3DRg0vzcju0SPYCO5jQVp3JQgr2mX9F3wEzdK4c8/edit?usp=sharing)
+
+
