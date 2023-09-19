@@ -2,7 +2,6 @@
 ### [Meeting Minutes](https://docs.google.com/document/d/1fAs3DRg0vzcju0SPYCO5jQVp3JQgr2mX9F3wEzdK4c8/edit?usp=sharing)
 ### [Sprint Planning]()
 ### [Contribution Log]()
-### [Stack](#stack)
 
 ## Description
 A real estate web application designed to facilitate the buying, selling, and renting, of real estate properties. These applications offer a wide range of features and functionalities to streamline the entire real estate transaction process, making it more convenient and efficient for users. 
