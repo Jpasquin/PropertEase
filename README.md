@@ -22,11 +22,14 @@ The system administrator is responsible for adding/removing brokers.  The broker
 ## Stack
 
 ## Instructions
+### Clone the repository
+```bash
+git clone git@github.com:Jpasquin/spectrum-soen341projectF2023.git
+```
 ### Install the dependencies
 ```bash
 npm install
 ```
-
 ### Start the app in development mode
 ```bash
 quasar dev
