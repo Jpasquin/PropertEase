@@ -2,7 +2,7 @@
   <q-layout view="lHh Lpr lFf">
     <q-header
       class="border-4 border-black"
-      style="border-bottom: 1px solid #d9d9d9;"
+      style="border-bottom: 1px solid #e9e9e9;"
     >
       <q-toolbar class="bg-white h-[80px] px-6">
         <q-toolbar-title
