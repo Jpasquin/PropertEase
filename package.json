@@ -17,6 +17,7 @@
     "@unocss/preset-uno": "^0.56.1",
     "@unocss/webpack": "^0.56.1",
     "firebase": "^10.4.0",
+    "pinia": "^2.1.6",
     "quasar": "^2.6.0",
     "unocss": "^0.56.1",
     "vue": "^3.0.0",

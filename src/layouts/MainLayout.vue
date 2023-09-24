@@ -5,13 +5,24 @@
       style="border-bottom: 1px solid #e9e9e9;"
     >
       <q-toolbar class="bg-white h-[80px] px-6">
-        <q-toolbar-title
-          class="text-[#2AAA8A] font-bold text-3xl tracking-[-1.5px]"
+        <div
+          class="text-[#2AAA8A] font-bold text-3xl tracking-[-1.5px] cursor-pointer"
+          @click="$router.push('/')"
         >
           PropertEase
-        </q-toolbar-title>
+        </div>
 
-        <div class="text-black">Quasar v{{ $q.version }}</div>
+        <div class="absolute right-0 mr-[24px]">
+          <q-btn flat no-caps rounded class="text-black mr-2 border-solid border-1 border-[#2AAA8A]" label="Buy, Sell or Rent a home" 
+            @click="$router.push('/signin')"
+          />
+          <!--<q-btn
+            outline
+            no-caps
+            class="text-[#2AAA8A] rounded-md py-2"
+            label="Sign in"
+          />-->
+        </div>
       </q-toolbar>
     </q-header>
 
@@ -22,51 +33,4 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import EssentialLink, { EssentialLinkProps } from 'components/EssentialLink.vue';
-
-const essentialLinks: EssentialLinkProps[] = [
-  {
-    title: 'Docs',
-    caption: 'quasar.dev',
-    icon: 'school',
-    link: 'https://quasar.dev'
-  },
-  {
-    title: 'Github',
-    caption: 'github.com/quasarframework',
-    icon: 'code',
-    link: 'https://github.com/quasarframework'
-  },
-  {
-    title: 'Discord Chat Channel',
-    caption: 'chat.quasar.dev',
-    icon: 'chat',
-    link: 'https://chat.quasar.dev'
-  },
-  {
-    title: 'Forum',
-    caption: 'forum.quasar.dev',
-    icon: 'record_voice_over',
-    link: 'https://forum.quasar.dev'
-  },
-  {
-    title: 'Twitter',
-    caption: '@quasarframework',
-    icon: 'rss_feed',
-    link: 'https://twitter.quasar.dev'
-  },
-  {
-    title: 'Facebook',
-    caption: '@QuasarFramework',
-    icon: 'public',
-    link: 'https://facebook.quasar.dev'
-  },
-  {
-    title: 'Quasar Awesome',
-    caption: 'Community Quasar projects',
-    icon: 'favorite',
-    link: 'https://awesome.quasar.dev'
-  }
-];
 </script>
