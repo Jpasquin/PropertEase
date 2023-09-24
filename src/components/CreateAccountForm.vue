@@ -1,8 +1,6 @@
 <template>
   <div class="grid grid-cols-1 gap-4 min-w-[400px]">
-    <div
-      class="text-[#2AAA8A] font-bold text-5xl tracking-[-1.5px] m-auto"
-    >
+    <div class="text-[#2AAA8A] font-bold text-5xl tracking-[-1.5px] m-auto">
       Create an account
     </div>
 
@@ -23,19 +21,14 @@
 
       <q-splitter class="py-2" horizontal />
 
-      <q-input
-        outlined
-        color="black"
-        label="Email"
-        v-model="userInfo.email"
-      />
+      <q-input outlined color="black" label="Email" v-model="userInfo.email" />
 
       <q-input
         outlined
         color="black"
         label="Password"
         type="password"
-        v-model="userInfo.password"
+        v-model="password"
       />
 
       <q-input
@@ -66,28 +59,21 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useAuthStore } from 'stores/auth';
-
+import User from '../interfaces/user';
 const authStore = useAuthStore();
 
-interface User {
-  firstName: string;
-  lastName: string;
-  emai: string;
-  password?: string;
-}
-
-const userInfo: User = ref({
+const userInfo: User = {
   firstName: '',
   lastName: '',
   email: '',
-  password: ''
-});
+};
 
+const password = ref('');
 const confirmPassword = ref('');
 const agreeTermsAndPolicy = ref(false);
 
 const onCreateAccount = async () => {
-  console.log('Create account: ' + userInfo.value.email);
-  authStore.createUser(userInfo.value.email, userInfo.value.password);
-}
+  console.log('Create account: ' + userInfo.email);
+  authStore.createUser(userInfo.email, password.value);
+};
 </script>
