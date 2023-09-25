@@ -13,15 +13,39 @@
         </div>
 
         <div class="absolute right-0 mr-[24px]">
-          <q-btn flat no-caps rounded class="text-black mr-2 border-solid border-1 border-[#2AAA8A]" label="Buy, Sell or Rent a home" 
+          <q-btn
+            v-if="!authStore.isSignedIn"
+            flat
+            no-caps
+            rounded
+            class="text-black mr-2 border-solid border-1 border-[#2AAA8A]"
+            label="Buy, Sell or Rent a home" 
             @click="$router.push('/signin')"
           />
-          <!--<q-btn
-            outline
+
+          <q-btn
+            v-if="authStore.isSignedIn"
+            flat
             no-caps
-            class="text-[#2AAA8A] rounded-md py-2"
-            label="Sign in"
-          />-->
+            round
+            class="text-black mr-2 border-solid border-1 border-[#2AAA8A]"
+            :label="userInitials()"
+          >
+            <q-menu>
+              <q-list style="min-width: 200px">
+                <q-item clickable v-close-popup>
+                  <q-item-section>Settings</q-item-section>
+                </q-item>
+                <q-separator />
+                <q-item clickable
+                  v-close-popup
+                  @click="authStore.signOutUser"
+                >
+                  <q-item-section>Sign out</q-item-section>
+                </q-item>
+              </q-list>
+            </q-menu>
+          </q-btn>
         </div>
       </q-toolbar>
     </q-header>
@@ -33,4 +57,15 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue';
+import { useAuthStore } from 'stores/auth';
+
+const authStore = useAuthStore();
+
+const userInitials = () => {
+  if (authStore.user) {
+    return (authStore.user.firstName[0] + authStore.user.lastName[0]).toUpperCase();
+  }
+  return null
+}
 </script>

@@ -50,6 +50,6 @@ const password = ref('');
 const rememberUser = ref(false);
 
 const onSignIn = () => {
-  authStore.signInUser(email, password);
+  authStore.signInUser(email.value, password.value);
 }
 </script>

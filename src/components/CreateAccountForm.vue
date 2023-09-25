@@ -9,19 +9,19 @@
         outlined
         color="black"
         label="First name"
-        v-model="userInfo.firstName"
+        v-model="userData.firstName"
       />
 
       <q-input
         outlined
         color="black"
         label="Last name"
-        v-model="userInfo.lastName"
+        v-model="userData.lastName"
       />
 
       <q-splitter class="py-2" horizontal />
 
-      <q-input outlined color="black" label="Email" v-model="userInfo.email" />
+      <q-input outlined color="black" label="Email" v-model="userData.email" />
 
       <q-input
         outlined
@@ -59,21 +59,20 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useAuthStore } from 'stores/auth';
-import User from '../interfaces/user';
+import UserInterface from '../interfaces/user';
 const authStore = useAuthStore();
 
-const userInfo: User = {
+const userData: User = ref({
   firstName: '',
   lastName: '',
   email: '',
-};
+});
 
 const password = ref('');
 const confirmPassword = ref('');
 const agreeTermsAndPolicy = ref(false);
 
 const onCreateAccount = async () => {
-  console.log('Create account: ' + userInfo.email);
-  authStore.createUser(userInfo.email, password.value);
+  authStore.createUser(userData.value, password.value);
 };
 </script>

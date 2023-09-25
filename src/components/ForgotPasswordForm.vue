@@ -1,7 +1,7 @@
 <template>
-  <div class="grid grid-cols-1 gap-4 min-w-[400px]">
-    <div class="text-[#2AAA8A] font-bold text-5xl tracking-[-1.5px] m-auto">
-      Forgot your password?
+  <div class="grid grid-cols-1 gap-4 !min-w-[400px]">
+    <div class="text-[#2AAA8A] text-center font-bold text-5xl tracking-[-1.5px] m-auto">
+      Forgot your <br> password?
     </div>
     <div class="grid grid-cols-1 gap-2">
       <q-input outlined color="black" label="Email" />
@@ -15,3 +15,6 @@
     </div>
   </div>
 </template>
+
+<script setup lang="ts">
+</script>

@@ -5,6 +5,7 @@ import {
   createWebHashHistory,
   createWebHistory,
 } from 'vue-router';
+import { useAuthStore } from 'stores/auth';
 
 import routes from './routes';
 
@@ -18,6 +19,8 @@ import routes from './routes';
  */
 
 export default route(function (/* { store, ssrContext } */) {
+  const authStore = useAuthStore();
+
   const Router = createRouter({
     scrollBehavior: () => ({ left: 0, top: 0 }),
     routes,

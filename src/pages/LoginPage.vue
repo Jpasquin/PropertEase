@@ -32,6 +32,7 @@
 
       <q-tab-panel name="forgotpassword">
         <forgot-password-form />
+
         <div class="text-center pt-2">
           <div class="cursor-pointer" @click="selectedPanel = 'signin'">
             <span class="opacity-60">Remember your password? &nbsp;</span>
@@ -53,8 +54,6 @@ import CreateAccountForm from 'components/CreateAccountForm.vue';
 
 const selectedPanel = ref('signin');
 const authStore = useAuthStore();
-
-console.log(authStore.getUser);
 </script>
 
 <style>
