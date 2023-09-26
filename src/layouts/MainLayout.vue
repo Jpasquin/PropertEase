@@ -2,7 +2,7 @@
   <q-layout view="lHh Lpr lFf">
     <q-header
       class="border-4 border-black bg-white"
-      style="border-bottom: 1px solid #e9e9e9;"
+      style="border-bottom: 1px solid #e9e9e9"
     >
       <q-toolbar class="h-[80px] px-6 min-w-[448px] max-w-[1800px] m-auto">
         <div
@@ -19,7 +19,7 @@
             no-caps
             rounded
             class="text-black mr-2 border-solid border-1 border-[#2AAA8A]"
-            label="Buy, Sell or Rent a home" 
+            label="Buy, Sell or Rent a home"
             @click="$router.push('/signin')"
           />
 
@@ -33,14 +33,15 @@
           >
             <q-menu>
               <q-list style="min-width: 200px">
-                <q-item clickable v-close-popup>
+                <q-item
+                  clickable
+                  v-close-popup
+                  @click="$router.push('/settings')"
+                >
                   <q-item-section>Settings</q-item-section>
                 </q-item>
                 <q-separator />
-                <q-item clickable
-                  v-close-popup
-                  @click="authStore.signOutUser"
-                >
+                <q-item clickable v-close-popup @click="authStore.signOutUser">
                   <q-item-section>Sign out</q-item-section>
                 </q-item>
               </q-list>
@@ -64,8 +65,10 @@ const authStore = useAuthStore();
 
 const userInitials = () => {
   if (authStore.user) {
-    return (authStore.user.firstName[0] + authStore.user.lastName[0]).toUpperCase();
+    return (
+      authStore.user.firstName[0] + authStore.user.lastName[0]
+    ).toUpperCase();
   }
-  return null
-}
+  return null;
+};
 </script>
