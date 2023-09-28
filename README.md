@@ -45,6 +45,7 @@ The system administrator is responsible for adding/removing brokers.  The broker
 - **TailwindCSS**: A utility-first CSS framework for rapidly building custom user interfaces.
   - Rather than hand-coding or overriding a rigid set of pre-defined styles, Tailwind allows developers to construct a unique design by composing utility classes in the HTML.
 
+### Project Approach
 The combination of VueJS with Quasar and TypeScript offers a robust foundation for building dynamic and cross-platform applications. With Firebase, we get a serverless architecture that's perfect for swiftly developing scalable apps without the hassle of managing infrastructure. TailwindCSS complements this by providing a means to rapidly prototype and style our application without leaving the HTML. This stack is especially advantageous for projects where speed and efficiency are paramount, offering a lightweight yet powerful set of tools to turn ideas into reality swiftly.
 
 
