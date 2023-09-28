@@ -14,7 +14,7 @@ The system administrator is responsible for adding/removing brokers.  The broker
 ## Team & Roles
 
 * Jonathan Pasquin - 
-* Youssef Ouakaa -
+* Youssef Ouakaa - Front End Developer - Broker user functionality
 * Noura Tabbara -
 * Sarah Malik - Front End - Homebuyer/Renter Functionality
 * Mark Ghaby -
