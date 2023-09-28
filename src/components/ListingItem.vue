@@ -1,13 +1,24 @@
 <template>
   <div class="w-full relative cursor-pointer">
     <div class="w-full relative pt-full">
-      <div class="animate-pulse absolute top-0 left-0 right-0 bottom-0 bg-[#d8d8d8] rounded-[16px]"></div>
+      <div
+        class="absolute top-0 left-0 right-0 bottom-0 bg-[#d8d8d8] rounded-[16px]"
+      >
+        <q-img
+          no-spinner
+          v-if="!!listing?.id"
+          :src="propertyImageUrl"
+          alt="Listing Image"
+          class="absolute inset-0 object-cover w-full h-full rounded-[16px]"
+          ratio="1x1"
+        />
+      </div>
     </div>
 
     <div class="h-30 w-full">
       <div
         class="mt-4 rounded-[4px] h-[16px] w-[50%]"
-        :class="!!!!listing?.propertyType ? 'text-[16px] font-medium whitespace-nowrap' :'animate-pulse bg-[#d8d8d8]'"
+        :class="!!listing?.propertyType ? 'text-[16px] font-medium whitespace-nowrap' :'animate-pulse bg-[#d8d8d8]'"
       >
         <span v-if="!!listing?.propertyType">
           {{ propertyTitle(listing.propertyType) }}
@@ -47,12 +58,15 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps } from 'vue';
+import { ref, defineProps, onMounted, computed } from 'vue';
+import { useAppStore } from 'stores/app';
 import Listing from '../interfaces/listing';
 
 const props = defineProps<{
   listing: any;
 }>()
+
+const appStore = useAppStore();
 
 const formatCurrency = (value: number) => {
   return new Intl.NumberFormat('en-US', {
@@ -63,14 +77,19 @@ const formatCurrency = (value: number) => {
 }
 
 const propertyTitle = (propertyType: string) => {
+  let propertyTitle;
   switch (propertyType) {
     case 'condo':
-      return 'Condo in ' + props.listing?.city.charAt(0).toUpperCase() + props.listing?.city.slice(1) + ', ' + props.listing?.province.toUpperCase();
+      propertyTitle = 'Condo in ';
+      break;
     case 'house':
-      return 'Home in ' + props.listing?.city.charAt(0).toUpperCase() + props.listing?.city.slice(1) + ', ' + props.listing?.province.toUpperCase();
+      propertyTitle = 'Home in ';
+      break;
     default:
-      return 'Home in';
+      propertyTitle = 'Home in ';
+      break;
   }
+  return propertyTitle + props.listing?.city.charAt(0).toUpperCase() + props.listing?.city.slice(1) + ', ' + props.listing?.province.toUpperCase();
 }
 
 const propertyDescription = (description: string) => {
@@ -79,4 +98,9 @@ const propertyDescription = (description: string) => {
   }
   return description.substr(0, 34) + '...';
 }
+
+const propertyImageUrl = computed(() => 'https://firebasestorage.googleapis.com/v0/b/propertease-5ff7d.appspot.com/o/listings-images%2F'
+    + props.listing?.id
+    + '-01'
+    + '.webp?alt=media');
 </script>
