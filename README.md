@@ -21,6 +21,31 @@ The system administrator is responsible for adding/removing brokers.  The broker
 
 ## Stack
 
+### VueJS with Quasar and TypeScript
+- **VueJS**: A progressive JavaScript framework for building user interfaces. It's simple, fast, and has a gentle learning curve.
+  - Reactive data-binding makes it easy to manage state and build dynamic interfaces. It's also lightweight and optimized for performance.
+- **Quasar**: A high-performance Material Design component suite with builders for SPA, SSR, PWA, Mobile (Cordova & Capacitor), Electron, and Browser Extensions.
+  - Offers a rich set of components and directives, making it faster to develop cross-platform applications.
+- **TypeScript**: A typed superset of JavaScript that adds optional types.
+  - Brings static type-checking along with the latest ECMAScript features. This enhances code quality and understandability, making the development process smoother.
+
+### Google Firebase
+- **Authentication**: Provides an easy-to-use suite of authentication options ranging from email & password, social providers, and more.
+  - Reduces the need for backend development for authentication and provides a secure, scalable solution.
+- **Realtime Database**: A cloud-hosted NoSQL database. Data is stored as JSON and synchronized in real-time to every connected client.
+  - Perfect for building real-time applications where you want to detect changes instantly.
+- **Firestore**: A flexible, scalable database for mobile, web, and server development. It keeps your data in sync across client apps through real-time listeners.
+  - Offers advanced querying and filtering of data. It's also more scalable than the Realtime Database.
+- **Hosting**: Provides fast and secure hosting for your web app, static and dynamic content, and microservices.
+  - Simplifies deployment process with one command, and serves your site over a secure connection.
+
+### Tailwind
+- **TailwindCSS**: A utility-first CSS framework for rapidly building custom user interfaces.
+  - Rather than hand-coding or overriding a rigid set of pre-defined styles, Tailwind allows developers to construct a unique design by composing utility classes in the HTML.
+
+The combination of VueJS with Quasar and TypeScript offers a robust foundation for building dynamic and cross-platform applications. With Firebase, we get a serverless architecture that's perfect for swiftly developing scalable apps without the hassle of managing infrastructure. TailwindCSS complements this by providing a means to rapidly prototype and style our application without leaving the HTML. This stack is especially advantageous for projects where speed and efficiency are paramount, offering a lightweight yet powerful set of tools to turn ideas into reality swiftly.
+
+
 ## Instructions
 ### Clone the repository
 ```bash
