@@ -20,7 +20,7 @@ The system administrator is responsible for adding/removing brokers.  The broker
 * Mark Ghaby -
 * Andrei Mihaescu -
 
-## Stack
+## Technology and Approach
 
 ### VueJS with Quasar and TypeScript
 - **VueJS**: A progressive JavaScript framework for building user interfaces. It's simple, fast, and has a gentle learning curve.
