@@ -1,4 +1,5 @@
-# SOEN 341 PROJECT - Team Spectrum
+# PropertEase ([Link](https://propertease-5ff7d.web.app))
+
 ### [Meeting Minutes](https://docs.google.com/document/d/1fAs3DRg0vzcju0SPYCO5jQVp3JQgr2mX9F3wEzdK4c8/edit?usp=sharing)
 ### [Sprint Planning]()
 ### [Contribution Log](https://docs.google.com/document/d/14Vl4Anu5Lk7ZvlzS5H4oGLovtiyfDHwU7j5zh7lyEos/edit?usp=sharing)
