@@ -4,6 +4,7 @@
 ### [Sprint Planning]()
 ### [Contribution Log](https://docs.google.com/document/d/14Vl4Anu5Lk7ZvlzS5H4oGLovtiyfDHwU7j5zh7lyEos/edit?usp=sharing)
 ### [User Stories](https://docs.google.com/document/d/1C_qaazkOoA4voUydYpOeJQQqoFUSTETEa56SImrKguc/edit?usp=sharing)
+### [Wiki](https://github.com/Jpasquin/spectrum-soen341projectF2023/wiki)
 
 ## Description
 A real estate web application designed to facilitate the buying, selling, and renting, of real estate properties. These applications offer a wide range of features and functionalities to streamline the entire real estate transaction process, making it more convenient and efficient for users. 
