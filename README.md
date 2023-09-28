@@ -2,7 +2,7 @@
 
 ### [Meeting Minutes](https://docs.google.com/document/d/1fAs3DRg0vzcju0SPYCO5jQVp3JQgr2mX9F3wEzdK4c8/edit?usp=sharing)
 ### [Sprint Planning]()
-### [Contribution Log](https://docs.google.com/document/d/14Vl4Anu5Lk7ZvlzS5H4oGLovtiyfDHwU7j5zh7lyEos/edit?usp=sharing)
+### [Contribution Log](https://docs.google.com/spreadsheets/d/1zzdhYC-tlj-8haEgOCKvL_3sBwnYYgP96RVW1nIbsQI/edit#gid=1386834576)
 ### [User Stories](https://docs.google.com/document/d/1C_qaazkOoA4voUydYpOeJQQqoFUSTETEa56SImrKguc/edit?usp=sharing)
 ### [Wiki](https://github.com/Jpasquin/spectrum-soen341projectF2023/wiki)
 
