@@ -19,7 +19,7 @@ export const useAppStore = defineStore('app', {
       const listingListSnapshot = await get(buyListingsQuery);
     
       // Convert the snapshot to an array of objects
-      const listings: any | null = [];
+      const listings: any = [];
       listingListSnapshot.forEach(childSnapshot => {
         listings.push(childSnapshot.val());
       });
