@@ -1,5 +1,5 @@
 <template>
-  <div class="min-w-[448px] max-w-[1800px] m-auto">
+  <div class="min-w-[400px] max-w-[1800px] m-auto">
     <router-view v-if="!isLoading" />
   </div>
 </template>

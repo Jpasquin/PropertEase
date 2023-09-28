@@ -4,7 +4,7 @@
       class="border-4 border-black bg-white"
       style="border-bottom: 1px solid #e9e9e9;"
     >
-      <q-toolbar class="h-[80px] px-6 min-w-[448px] max-w-[1800px] m-auto">
+      <q-toolbar class="h-[80px] px-6 min-w-[400px] max-w-[1800px] m-auto">
         <div
           class="text-[#2AAA8A] font-bold text-3xl tracking-[-1.5px] cursor-pointer"
           @click="$router.push('/')"
