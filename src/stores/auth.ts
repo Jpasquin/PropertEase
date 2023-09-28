@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
-import { getDatabase, ref, set, get, child } from "firebase/database";
+import { getDatabase, ref, set, get, child, orderByChild, equalTo, query } from "firebase/database";
 import User from '../interfaces/user';
 
 export const useAuthStore = defineStore('auth', {
@@ -49,7 +49,7 @@ export const useAuthStore = defineStore('auth', {
           unsubscribe();
         });
       });
-    },    
+    },
 
     async createUser(userData: User, password: string) {
       const auth = getAuth();

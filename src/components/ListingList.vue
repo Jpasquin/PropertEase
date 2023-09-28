@@ -1,0 +1,44 @@
+<template>
+  <div class="p-6 absolute top-0 w-full">
+    <transition-group name="fade" tag="div" class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <listing-item
+        v-for="(item, index) in listAmount"
+        :key="index"
+        :listing="getListingItem(index)"
+      />
+    </transition-group>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref, onMounted } from 'vue';
+import { useAppStore } from 'stores/app';
+import ListingItem from 'components/ListingItem.vue';
+
+const props = defineProps<{
+  amount: number;
+}>()
+
+const appStore = useAppStore();
+const listings = ref([]);
+const listAmount = ref(props.amount);
+
+const getListingItem = (index) => {
+  return listings.value[index]
+}
+
+onMounted(async () => {
+  listings.value = await appStore.getListings('buy');
+  listAmount.value = listings.value.length;
+})
+</script>
+
+<style scoped>
+/* Define the transition styles */
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 1s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active in <2.1.8 */ {
+  opacity: 0;
+}
+</style>
