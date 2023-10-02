@@ -1,9 +1,10 @@
 # PropertEase ([Link](https://propertease-5ff7d.web.app))
 
 ### [Meeting Minutes](https://docs.google.com/document/d/1fAs3DRg0vzcju0SPYCO5jQVp3JQgr2mX9F3wEzdK4c8/edit?usp=sharing)
-### [Sprint Planning]()
-### [Contribution Log](https://docs.google.com/document/d/14Vl4Anu5Lk7ZvlzS5H4oGLovtiyfDHwU7j5zh7lyEos/edit?usp=sharing)
+### [Sprint Planning](https://docs.google.com/document/d/1AWSJw1WR9Cif5JsjOVZ7un6dJYMlg5lRNgvT5fZ6fSY/edit)
+### [Contribution Log](https://docs.google.com/spreadsheets/d/1zzdhYC-tlj-8haEgOCKvL_3sBwnYYgP96RVW1nIbsQI/edit#gid=1386834576)
 ### [User Stories](https://docs.google.com/document/d/1C_qaazkOoA4voUydYpOeJQQqoFUSTETEa56SImrKguc/edit?usp=sharing)
+### [Wiki](https://github.com/Jpasquin/spectrum-soen341projectF2023/wiki)
 
 ## Description
 A real estate web application designed to facilitate the buying, selling, and renting, of real estate properties. These applications offer a wide range of features and functionalities to streamline the entire real estate transaction process, making it more convenient and efficient for users. 
@@ -13,14 +14,14 @@ The system administrator is responsible for adding/removing brokers.  The broker
 
 ## Team & Roles
 
-* Jonathan Pasquin - 
-* Youssef Ouakaa -
-* Noura Tabbara -
-* Sarah Malik -
-* Mark Ghaby -
-* Andrei Mihaescu -
+* Jonathan Pasquin - Front End Developer, System Admin functionality
+* Youssef Ouakaa - Front End Developer, Broker user functionality
+* Noura Tabbara - Front End Developer, System Admin functionality
+* Sarah Malik - Front End, Homebuyer/Renter Functionality
+* Mark Ghaby - Front End Developer, Broker user functionality
+* Andrei Mihaescu - Front End, Homebuyer/Renter Functionality
 
-## Stack
+## Technology and Approach
 
 ### VueJS with Quasar and TypeScript
 - **VueJS**: A progressive JavaScript framework for building user interfaces. It's simple, fast, and has a gentle learning curve.
@@ -44,6 +45,7 @@ The system administrator is responsible for adding/removing brokers.  The broker
 - **TailwindCSS**: A utility-first CSS framework for rapidly building custom user interfaces.
   - Rather than hand-coding or overriding a rigid set of pre-defined styles, Tailwind allows developers to construct a unique design by composing utility classes in the HTML.
 
+### Project Approach
 The combination of VueJS with Quasar and TypeScript offers a robust foundation for building dynamic and cross-platform applications. With Firebase, we get a serverless architecture that's perfect for swiftly developing scalable apps without the hassle of managing infrastructure. TailwindCSS complements this by providing a means to rapidly prototype and style our application without leaving the HTML. This stack is especially advantageous for projects where speed and efficiency are paramount, offering a lightweight yet powerful set of tools to turn ideas into reality swiftly.
 
 
