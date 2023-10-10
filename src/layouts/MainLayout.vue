@@ -1,5 +1,5 @@
 <template>
-  <q-layout view="lHh Lpr lFf">
+  <q-layout view="lHh Lpr lFf">   
     <q-header
       class="border-4 border-black bg-white"
       style="border-bottom: 1px solid #e9e9e9"
@@ -11,6 +11,18 @@
         >
           PropertEase
         </div>
+
+        <q-input v-model="text"
+          rounded
+          outlined 
+          color="customteal" 
+          bottom-slots 
+          label="Search"
+          class="rounded absolute top-15% left-35% right-35%">
+          <template v-slot:append>
+            <q-icon name="close" @click="text = ''" class="cursor-pointer" />
+          </template>
+        </q-input>
 
         <div
           class="absolute right-0 mr-[24px]" 
@@ -68,6 +80,8 @@
     </q-page-container>
   </q-layout>
 </template>
+
+
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, computed } from 'vue';
