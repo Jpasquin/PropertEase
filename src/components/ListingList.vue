@@ -4,7 +4,7 @@
       <listing-item
         v-for="(item, index) in listAmount"
         :key="index"
-        :listing="getListingItem(index)"
+        :listing="listings[index]"
       />
     </transition-group>
   </div>
@@ -22,10 +22,6 @@ const props = defineProps<{
 const appStore = useAppStore();
 const listings = ref([]);
 const listAmount = ref(props.amount);
-
-const getListingItem = (index) => {
-  return listings.value[index]
-}
 
 onMounted(async () => {
   listings.value = await appStore.getListings('buy');

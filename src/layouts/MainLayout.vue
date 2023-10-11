@@ -44,7 +44,7 @@
             no-caps
             round
             class="text-black mr-2 border-solid border-1 border-[#2AAA8A]"
-            :label="userInitials() ?? ''"
+            :label="userInitials ?? ''"
           >
             <q-menu>
               <q-list style="min-width: 200px">
