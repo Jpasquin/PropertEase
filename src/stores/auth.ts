@@ -26,6 +26,10 @@ export const useAuthStore = defineStore('auth', {
     isSignedIn(): boolean {
       return !!this.user;
     },
+    isBroker(): boolean {
+      if (this.user) return this.user.accountType == 'broker';
+      return false;
+    },
   },
 
   actions: {

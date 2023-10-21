@@ -50,6 +50,7 @@
                 </q-item>
                 <q-separator />
                 <q-item
+                  v-if="authStore.isBroker"
                   clickable
                   v-close-popup
                   @click="$router.push('/broker')"
