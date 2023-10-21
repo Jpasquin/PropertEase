@@ -48,6 +48,14 @@
                 <q-item clickable v-close-popup @click="authStore.signOutUser">
                   <q-item-section>Sign out</q-item-section>
                 </q-item>
+                <q-separator />
+                <q-item
+                  clickable
+                  v-close-popup
+                  @click="$router.push('/broker')"
+                >
+                  <q-item-section>View Listings</q-item-section>
+                </q-item>
               </q-list>
             </q-menu>
           </q-btn>
