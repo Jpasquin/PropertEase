@@ -12,18 +12,6 @@
           PropertEase
         </div>
 
-        <q-input v-model="text"
-          rounded
-          outlined 
-          color="customteal" 
-          bottom-slots 
-          label="Search"
-          class="rounded absolute top-15% left-35% right-35%">
-          <template v-slot:append>
-            <q-icon name="close" @click="text = ''" class="cursor-pointer" />
-          </template>
-        </q-input>
-
         <div
           class="absolute right-0 mr-[24px]" 
           v-if="showDiv"
@@ -80,8 +68,6 @@
     </q-page-container>
   </q-layout>
 </template>
-
-
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, computed } from 'vue';
