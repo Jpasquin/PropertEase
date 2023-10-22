@@ -7,22 +7,28 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { useAppStore } from 'stores/app';
-import Filter from '../interfaces/filter';
+import { useAuthStore } from 'stores/auth';
+
 import ListingItem from 'components/ListingItem.vue';
 
 const props = defineProps<{
   amount: number;
-  filter: Filter;
 }>()
 
 const appStore = useAppStore();
+const authStore = useAuthStore();
 const listings = ref([]);
 const listAmount = ref(props.amount);
+const userToken = ref('');
 
 onMounted(async () => {
-  listings.value = await appStore.getListings(props.filter);
+  const userId = await authStore.getUser();
+  if (userId) {
+    userToken.value = userId;
+  }
+  listings.value = await appStore.getListingsBroker(userToken.value);
   listAmount.value = listings.value.length;
 })
 </script>
