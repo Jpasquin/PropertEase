@@ -26,6 +26,8 @@
                 <q-item v-if="authStore.isBroker" clickable v-close-popup @click="$router.push('/broker')">
                   <q-item-section>View my Listings</q-item-section>
                 </q-item>
+                <q-separator />
+
                 <q-item v-if="authStore.isBroker" clickable v-close-popup @click="$router.push('/add')">
                   <q-item-section>Add Listing</q-item-section>
                 </q-item>

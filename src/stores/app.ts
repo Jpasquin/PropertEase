@@ -12,18 +12,11 @@ import {
   getDownloadURL,
 } from 'firebase/storage';
 import { defineStore } from 'pinia';
+import Filter from '../interfaces/filter';
 
 export const useAppStore = defineStore('app', {
   state: () => ({
-<<<<<<< HEAD
     listings: null,
-=======
-    filter: {
-      type: 'buy',
-      tags: ['']
-    },
-    listings: null
->>>>>>> staging
   }),
 
   getters: {},
@@ -34,12 +27,16 @@ export const useAppStore = defineStore('app', {
       const brokerListRef = ref(db, 'users/');
 
       // Query listings with type set to "buy"
-      const brokerQuery = query(brokerListRef, orderByChild('accountType'), equalTo('broker'));
+      const brokerQuery = query(
+        brokerListRef,
+        orderByChild('accountType'),
+        equalTo('broker')
+      );
       const brokerListSnapshot = await get(brokerQuery);
 
       // Convert the snapshot to an array of objects
       const brokers: any = [];
-      brokerListSnapshot.forEach(childSnapshot => {
+      brokerListSnapshot.forEach((childSnapshot) => {
         const brokerId = childSnapshot.key; // This will give you the ID, e.g., "001"
         const brokerData = childSnapshot.val();
 
@@ -48,16 +45,20 @@ export const useAppStore = defineStore('app', {
 
         brokers.push(brokerData);
       });
-      console.log(brokers)
+      console.log(brokers);
       return brokers;
     },
 
-    async getListings() {
+    async getListings(filter: Filter) {
       const db = getDatabase();
       const listingListRef = ref(db, 'listings/');
 
       // Query listings with type set to "buy"
-      const buyListingsQuery = query(listingListRef, orderByChild('type'), equalTo(this.filter.type));
+      const buyListingsQuery = query(
+        listingListRef,
+        orderByChild('type'),
+        equalTo(filter.type)
+      );
       const listingListSnapshot = await get(buyListingsQuery);
 
       // Convert the snapshot to an array of objects
