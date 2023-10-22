@@ -1,10 +1,12 @@
 <template>
-  <q-layout view="lHh Lpr lFf">   
+  <q-layout view="lHh Lpr lFf">
     <q-header
       class="border-4 border-black bg-white"
       style="border-bottom: 1px solid #e9e9e9"
     >
-      <q-toolbar class="h-[80px] px-6 min-w-[400px] max-w-[1800px] justify-center sm:justify-start m-auto">
+      <q-toolbar
+        class="h-[80px] px-6 min-w-[400px] max-w-[1800px] justify-center sm:justify-start m-auto"
+      >
         <div
           class="text-[#2AAA8A] font-bold text-3xl tracking-[-1.5px] cursor-pointer"
           @click="$router.push('/')"
@@ -72,13 +74,14 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, computed } from 'vue';
 import { useAuthStore } from 'stores/auth';
+import FilterSearch from '../components/FilterSearch.vue';
 
 const authStore = useAuthStore();
 
 const windowWidth = ref(window.innerWidth);
 
 const updateWidth = () => {
-    windowWidth.value = window.innerWidth;
+  windowWidth.value = window.innerWidth;
 };
 
 const showDiv = computed(() => windowWidth.value > 640);
@@ -93,10 +96,10 @@ const userInitials = computed(() => {
 });
 
 onMounted(() => {
-    window.addEventListener('resize', updateWidth);
+  window.addEventListener('resize', updateWidth);
 });
 
 onUnmounted(() => {
-    window.removeEventListener('resize', updateWidth);
+  window.removeEventListener('resize', updateWidth);
 });
 </script>
