@@ -4,6 +4,10 @@ import { defineStore } from 'pinia';
 
 export const useAppStore = defineStore('app', {
   state: () => ({
+    filter: {
+      type: 'buy',
+      tags: ['']
+    },
     listings: null
   }),
 
@@ -11,12 +15,35 @@ export const useAppStore = defineStore('app', {
   },
 
   actions: {
-    async getListings(type: string) {
+    async getBrokers() {
+      const db = getDatabase();
+      const brokerListRef = ref(db, 'users/');
+    
+      // Query listings with type set to "buy"
+      const brokerQuery = query(brokerListRef, orderByChild('accountType'), equalTo('broker'));
+      const brokerListSnapshot = await get(brokerQuery);
+    
+      // Convert the snapshot to an array of objects
+      const brokers: any = [];
+      brokerListSnapshot.forEach(childSnapshot => {
+        const brokerId = childSnapshot.key; // This will give you the ID, e.g., "001"
+        const brokerData = childSnapshot.val();
+        
+        // Add the ID to the listing object
+        brokerData.id = brokerId;
+        
+        brokers.push(brokerData);
+      });
+      console.log(brokers)
+      return brokers;
+    },
+
+    async getListings() {
       const db = getDatabase();
       const listingListRef = ref(db, 'listings/');
     
       // Query listings with type set to "buy"
-      const buyListingsQuery = query(listingListRef, orderByChild('type'), equalTo(type));
+      const buyListingsQuery = query(listingListRef, orderByChild('type'), equalTo(this.filter.type));
       const listingListSnapshot = await get(buyListingsQuery);
     
       // Convert the snapshot to an array of objects
@@ -36,7 +63,6 @@ export const useAppStore = defineStore('app', {
     },
 
     async getListingImage(listingId: string): Promise<string> {
-      console.log('hello');
       const storage = getStorage();
       const imagePath = `listings-images/${listingId}.webp?alt=media`;
       console.log(imagePath)

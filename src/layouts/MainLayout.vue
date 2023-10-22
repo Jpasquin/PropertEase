@@ -14,9 +14,11 @@
           PropertEase
         </div>
 
-        <FilterSearch />
-
-        <div class="absolute right-0 mr-[24px]" v-if="showDiv">
+        <div
+          class="absolute right-0 mr-[24px]" 
+          v-if="showDiv"
+        >
+          <!--<filter-search />-->
           <q-btn
             v-if="!authStore.isSignedIn"
             flat
