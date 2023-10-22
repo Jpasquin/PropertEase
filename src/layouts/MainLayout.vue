@@ -5,10 +5,8 @@
         <div class="text-[#2AAA8A] font-bold text-3xl tracking-[-1.5px] cursor-pointer" @click="$router.push('/')">
           PropertEase
         </div>
-
-        <FilterSearch />
-
         <div class="absolute right-0 mr-[24px]" v-if="showDiv">
+          <!--<filter-search />-->
           <q-btn v-if="!authStore.isSignedIn" flat no-caps rounded
             class="text-black mr-2 border-solid border-1 border-[#2AAA8A]" label="Buy, Sell or Rent a home"
             @click="$router.push('/signin')" />
