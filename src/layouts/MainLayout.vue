@@ -1,7 +1,7 @@
 <template>
   <q-layout view="lHh Lpr lFf">
     <q-header class="border-4 border-black bg-white" style="border-bottom: 1px solid #e9e9e9">
-      <q-toolbar class="h-[80px] px-6 min-w-[400px] max-w-[1800px] justify-center sm:justify-start m-auto">
+      <q-toolbar class="h-[64px] px-6 min-w-[400px] max-w-[1800px] justify-center sm:justify-start m-auto">
         <div class="text-[#2AAA8A] font-bold text-3xl tracking-[-1.5px] cursor-pointer" @click="$router.push('/')">
           PropertEase
         </div>
@@ -15,14 +15,6 @@
             class="text-black mr-2 border-solid border-1 border-[#2AAA8A]" :label="userInitials ?? ''">
             <q-menu>
               <q-list style="min-width: 200px">
-                <q-item clickable v-close-popup @click="$router.push('/settings')">
-                  <q-item-section>Settings</q-item-section>
-                </q-item>
-                <q-separator />
-                <q-item clickable v-close-popup @click="authStore.signOutUser">
-                  <q-item-section>Sign out</q-item-section>
-                </q-item>
-                <q-separator />
                 <q-item v-if="authStore.isBroker" clickable v-close-popup @click="$router.push('/broker')">
                   <q-item-section>View my Listings</q-item-section>
                 </q-item>
@@ -31,6 +23,16 @@
                 <q-item v-if="authStore.isBroker" clickable v-close-popup @click="$router.push('/add')">
                   <q-item-section>Add Listing</q-item-section>
                 </q-item>
+                <q-separator />
+
+                <q-item clickable v-close-popup @click="$router.push('/settings')">
+                  <q-item-section>Settings</q-item-section>
+                </q-item>
+                <q-separator />
+                <q-item clickable v-close-popup @click="authStore.signOutUser">
+                  <q-item-section>Sign out</q-item-section>
+                </q-item>
+
               </q-list>
             </q-menu>
           </q-btn>
@@ -41,11 +43,15 @@
           </q-toolbar>
         </q-footer>
       </q-toolbar>
+      <q-separator />
+
+
     </q-header>
 
     <q-page-container>
       <router-view />
     </q-page-container>
+
   </q-layout>
 </template>
 
