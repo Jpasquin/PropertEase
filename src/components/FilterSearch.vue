@@ -7,7 +7,7 @@
         { label: 'Rent', value: 'rent' }
       ]" />
     <q-input type="text" v-model="location" rounded outlined color="customteal" bottom-slots label="Location"
-      class="rounded mt-20px">
+      class="rounded mt-20px mr-10px">
       <template v-slot:append>
         <q-icon name="close" @click="location = ''" class="cursor-pointer" />
       </template>
@@ -95,7 +95,7 @@
 
     </div>
     <q-btn color="white" outline label="Filters" icon-left="true" @click="prompt = true"
-      class="flex my-[10px] h-[25px] text-black justify-center items-center" />
+      class="flex ml-[10px] my-[10px] h-[25px] text-black justify-center items-center" />
     <q-dialog v-model="prompt" persistent>
 
 
