@@ -1,5 +1,5 @@
 <template>
-  <div class="min-w-[400px] max-w-[1800px] m-auto">
+  <div class="min-w-[400px] max-w-[1200px] m-auto">
     <router-view v-if="!isLoading" />
   </div>
 </template>
@@ -16,3 +16,9 @@ onBeforeMount(async () => {
   isLoading.value = false;
 });
 </script>
+
+<style>
+.q-field--outlined .q-field__control {
+  border-radius: 8px !important;
+}
+</style>

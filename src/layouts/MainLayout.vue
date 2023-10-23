@@ -5,7 +5,7 @@
       style="border-bottom: 1px solid #e9e9e9"
     >
       <q-toolbar
-        class="h-[80px] px-6 min-w-[400px] max-w-[1800px] justify-center sm:justify-start m-auto"
+        class="h-[80px] px-10 min-w-[400px] max-w-[1200px] justify-center sm:justify-start m-auto"
       >
         <div
           class="text-[#2AAA8A] font-bold text-3xl tracking-[-1.5px] cursor-pointer"
@@ -34,7 +34,7 @@
             flat
             no-caps
             round
-            class="text-black mr-2 border-solid border-1 border-[#2AAA8A]"
+            class="text-black mr-4 border-solid border-1 border-[#2AAA8A]"
             :label="userInitials ?? ''"
           >
             <q-menu>
@@ -66,7 +66,7 @@
       </q-toolbar>
     </q-header>
 
-    <q-page-container>
+    <q-page-container class="px-4">
       <router-view />
     </q-page-container>
   </q-layout>

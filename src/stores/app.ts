@@ -1,4 +1,4 @@
-import { equalTo, get, getDatabase, orderByChild, query, ref } from 'firebase/database';
+import { child, equalTo, get, getDatabase, orderByChild, query, ref } from 'firebase/database';
 import { getStorage, ref as firebaseRef, getDownloadURL } from "firebase/storage";
 import { defineStore } from 'pinia';
 
@@ -12,6 +12,9 @@ export const useAppStore = defineStore('app', {
   }),
 
   getters: {
+    getImageURL() {
+      return 'https://firebasestorage.googleapis.com/v0/b/propertease-5ff7d.appspot.com/o/'
+    }
   },
 
   actions: {
@@ -60,6 +63,28 @@ export const useAppStore = defineStore('app', {
     
       console.log(listings);
       return listings;
+    },
+
+    async getListing(listingId: string) {
+      const db = getDatabase();
+      const listingListRef = ref(db, 'listings/');
+      const specificListingRef = child(listingListRef, listingId);
+    
+      try {
+        const snapshot = await get(specificListingRef);
+        
+        if (snapshot.exists()) {
+          const listing = snapshot.val();
+          listing.id = snapshot.key;
+          return listing;
+        } else {
+          console.error(`No listing found with id: ${listingId}`);
+          return null;
+        }
+      } catch (error) {
+        console.error('Error fetching listing:', error);
+        return null;
+      }
     },
 
     async getListingImage(listingId: string): Promise<string> {

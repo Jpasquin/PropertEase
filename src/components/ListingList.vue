@@ -24,7 +24,7 @@ const listings = ref([]);
 const listAmount = ref(props.amount);
 
 onMounted(async () => {
-  listings.value = await appStore.getListings();
+  listings.value = await appStore.getListings('buy');
   listAmount.value = listings.value.length;
 })
 </script>

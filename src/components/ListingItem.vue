@@ -1,16 +1,16 @@
 <template>
-  <div class="w-full relative cursor-pointer">
+  <div
+    @click="navigateToListing"
+    class="w-full relative cursor-pointer"
+  >
     <div class="w-full relative pt-full">
       <div
         class="absolute top-0 left-0 right-0 bottom-0 bg-[#d8d8d8] rounded-[16px]"
       >
-        <q-img
-          no-spinner
+        <listing-image
           v-if="!!listing?.id"
-          :src="propertyImageUrl"
-          alt="Listing Image"
-          class="absolute inset-0 object-cover w-full h-full rounded-[16px]"
-          ratio="1x1"
+          :listingId="listing?.id"
+          class="rounded-2xl"
         />
       </div>
     </div>
@@ -60,13 +60,25 @@
 <script setup lang="ts">
 import { ref, defineProps, onMounted, computed } from 'vue';
 import { useAppStore } from 'stores/app';
+import { useRouter } from 'vue-router'; // Import useRouter
 import Listing from '../interfaces/listing';
+import ListingImage from 'components/ListingImage.vue';
 
 const props = defineProps<{
   listing: any;
 }>()
 
 const appStore = useAppStore();
+
+// Get the router instance
+const router = useRouter();
+
+// Create the navigation function
+const navigateToListing = () => {
+  if (props.listing?.id) {
+    router.push(`/listing?id=${props.listing.id}`);
+  }
+};
 
 const formatCurrency = (value: number) => {
   return new Intl.NumberFormat('en-US', {
@@ -98,9 +110,4 @@ const propertyDescription = (description: string) => {
   }
   return description.substr(0, 34) + '...';
 }
-
-const propertyImageUrl = computed(() => 'https://firebasestorage.googleapis.com/v0/b/propertease-5ff7d.appspot.com/o/listings-images%2F'
-    + props.listing?.id
-    + '-01'
-    + '.webp?alt=media');
 </script>

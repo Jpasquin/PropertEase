@@ -1,5 +1,5 @@
 <template>
-  <q-page class="login-page row items-center justify-evenly">
+  <q-page class="row items-center justify-evenly">
     <q-tab-panels animated v-model="selectedPanel">
       <q-tab-panel name="signin">
         <login-form />
@@ -55,9 +55,3 @@ import CreateAccountForm from 'components/CreateAccountForm.vue';
 const selectedPanel = ref('signin');
 const authStore = useAuthStore();
 </script>
-
-<style>
-.login-page .q-field--outlined .q-field__control {
-  border-radius: 8px !important;
-}
-</style>
