@@ -1,6 +1,6 @@
-export default interface User {
+export default interface BrokerApp {
   firstName: string;
   lastName: string;
   email: string;
-  accountType: string;
+  info: string;
 }
