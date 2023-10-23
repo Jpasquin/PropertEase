@@ -6,6 +6,12 @@
         { label: 'Buy', value: 'buy' },
         { label: 'Rent', value: 'rent' }
       ]" />
+    <q-input type="text" v-model="location" rounded outlined color="customteal" bottom-slots label="Location"
+      class="rounded mt-20px">
+      <template v-slot:append>
+        <q-icon name="close" @click="location = ''" class="cursor-pointer" />
+      </template>
+    </q-input>
     <div class="scrolling-container">
       <!-- Content goes here -->
       <div class="flex-col items-center inline-flex mx-10px">
@@ -69,6 +75,21 @@
         <div>Condo</div>
       </div>
 
+      <div class="flex-col items-center inline-flex mx-10px">
+        <q-btn flat round color="black" icon="card_giftcard" />
+        <div>Condo</div>
+      </div>
+
+      <div class="flex-col items-center inline-flex mx-10px">
+        <q-btn flat round color="black" icon="card_giftcard" />
+        <div>Condo</div>
+      </div>
+
+      <div class="flex-col items-center inline-flex mx-10px">
+        <q-btn flat round color="black" icon="card_giftcard" />
+        <div>Condo</div>
+      </div>
+
 
 
 
@@ -76,12 +97,7 @@
     <q-btn color="white" outline label="Filters" icon-left="true" @click="prompt = true"
       class="flex my-[10px] h-[25px] text-black justify-center items-center" />
     <q-dialog v-model="prompt" persistent>
-      <q-input type="text" v-model="location" rounded outlined color="customteal" bottom-slots label="Location"
-        class="rounded absolute top-15% left-35% right-35%">
-        <template v-slot:append>
-          <q-icon name="close" @click="location = ''" class="cursor-pointer" />
-        </template>
-      </q-input>
+
 
       <!-- Price filter -->
       <q-input v-model="minPrice" type="number" rounded outlined color="customteal" label="Min Price"
