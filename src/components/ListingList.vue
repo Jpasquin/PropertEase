@@ -1,15 +1,10 @@
 <template>
-  <div class="p-6 top-0 w-full">
-    <transition-group
-      name="fade"
-      tag="div"
-      class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4"
-    >
-      <listing-item
-        v-for="(item, index) in listAmount"
-        :key="index"
-        :listing="listings[index]"
-      />
+  <filter-search class="fixed top-[64px] z-[999] py-2" />
+
+  <div class="p-6 absolute top-[58px] w-full">
+
+    <transition-group name="fade" tag="div" class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <listing-item v-for="(item, index) in listAmount" :key="index" :listing="listings[index]" />
     </transition-group>
   </div>
 </template>
@@ -19,6 +14,7 @@ import { ref, onMounted } from 'vue';
 import { useAppStore } from 'stores/app';
 import Filter from '../interfaces/filter';
 import ListingItem from 'components/ListingItem.vue';
+import FilterSearch from 'components/FilterSearch.vue';
 
 const props = defineProps<{
   amount: number;
