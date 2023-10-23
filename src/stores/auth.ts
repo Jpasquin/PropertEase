@@ -30,6 +30,10 @@ export const useAuthStore = defineStore('auth', {
       if (this.user) return this.user.accountType == 'broker';
       return false;
     },
+    isAdmin(): boolean {
+      if (this.user) return this.user.accountType == 'admin';
+      return false;
+    }
   },
 
   actions: {

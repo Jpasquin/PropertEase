@@ -1,10 +1,19 @@
 <template>
-  <q-layout view="lHh Lpr lFf">
-    <q-header class="border-4 border-black bg-white" style="border-bottom: 1px solid #e9e9e9">
-      <q-toolbar class="h-[80px] px-6 min-w-[400px] max-w-[1800px] justify-center sm:justify-start m-auto">
-        <div class="text-[#2AAA8A] font-bold text-3xl tracking-[-1.5px] cursor-pointer" @click="$router.push('/')">
+  <q-layout view="lHh LpR lFf">
+    <q-header
+      class="border-4 border-black bg-white"
+      style="border-bottom: 1px solid #e9e9e9"
+    >
+      <q-toolbar
+        class="h-[80px] px-6 min-w-[400px] max-w-[1800px] justify-center sm:justify-start m-auto"
+      >
+        <div
+          class="text-[#2AAA8A] font-bold text-3xl tracking-[-1.5px] cursor-pointer"
+          @click="$router.push('/')"
+        >
           PropertEase
         </div>
+
         <div class="absolute right-0 mr-[24px]" v-if="showDiv">
           <!--<filter-search />-->
           <q-btn v-if="!authStore.isSignedIn" flat no-caps rounded
@@ -35,17 +44,44 @@
             </q-menu>
           </q-btn>
         </div>
-
-        <q-footer v-if="!showDiv" class="border-4 border-black bg-white" style="border-top: 1px solid #e9e9e9">
-          <q-toolbar class="h-[80px] px-6 min-w-[400px] m-auto text-black">
-          </q-toolbar>
-        </q-footer>
       </q-toolbar>
     </q-header>
 
     <q-page-container>
       <router-view />
     </q-page-container>
+
+    <!-- footer -->
+    <div class="h-[300px] w-full bg-#f9fafb min-w-[400px]">
+      <div class="container mx-auto flex justify-between">
+        <div class="text-center w-1/3">
+          <h2 class="text-lg font-semibold">About Us</h2>
+          <p class="mt-2">Learn more about our company</p>
+          <a href="#" class="text-blue-300 hover:underline">Read More</a>
+        </div>
+
+        <div class="text-center w-1/3">
+          <h2 class="text-lg font-semibold">FAQ</h2>
+          <p class="mt-2">Get answers to frequently asked questions</p>
+          <a href="#" class="text-blue-300 hover:underline">Visit FAQ</a>
+        </div>
+
+        <div class="text-center w-1/3">
+          <h2 class="text-lg font-semibold">Brokers</h2>
+          <p class="mt-2">Apply to become a broker</p>
+          <a href="#" class="text-blue-300 hover:underline">See More</a>
+        </div>
+      </div>
+    </div>
+
+    <q-footer
+      v-if="!showDiv"
+      class="border-4 border-black bg-white"
+      style="border-top: 1px solid #e9e9e9"
+    >
+      <q-toolbar class="h-[80px] px-6 min-w-[400px] m-auto text-black">
+      </q-toolbar>
+    </q-footer>
   </q-layout>
 </template>
 
