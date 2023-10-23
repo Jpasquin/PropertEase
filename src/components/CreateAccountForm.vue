@@ -57,15 +57,16 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, reactive } from 'vue';
 import { useAuthStore } from 'stores/auth';
-import UserInterface from '../interfaces/user';
+import User from '../interfaces/user';
 const authStore = useAuthStore();
 
-const userData: User = ref({
+const userData: User = reactive({
   firstName: '',
   lastName: '',
   email: '',
+  accountType: 'user',
 });
 
 const password = ref('');
@@ -73,6 +74,6 @@ const confirmPassword = ref('');
 const agreeTermsAndPolicy = ref(false);
 
 const onCreateAccount = async () => {
-  authStore.createUser(userData.value, password.value);
+  authStore.createUser(userData, password.value);
 };
 </script>

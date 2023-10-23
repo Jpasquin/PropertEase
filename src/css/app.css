@@ -1,1 +1,7 @@
 /* app global css */
+.text-customteal {
+    color: #2AAA8A !important;
+  }
+  .bg-customteal {
+    background: #2AAA8A !important;
+  }
