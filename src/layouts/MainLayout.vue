@@ -16,36 +16,29 @@
 
         <div class="absolute right-0 mr-[24px]" v-if="showDiv">
           <!--<filter-search />-->
-          <q-btn
-            v-if="!authStore.isSignedIn"
-            flat
-            no-caps
-            rounded
-            class="text-black mr-2 border-solid border-1 border-[#2AAA8A]"
-            label="Buy, Sell or Rent a home"
-            @click="$router.push('/signin')"
-          />
+          <q-btn v-if="!authStore.isSignedIn" flat no-caps rounded
+            class="text-black mr-2 border-solid border-1 border-[#2AAA8A]" label="Buy, Sell or Rent a home"
+            @click="$router.push('/signin')" />
 
-          <q-btn
-            v-if="authStore.isSignedIn"
-            flat
-            no-caps
-            round
-            class="text-black mr-2 border-solid border-1 border-[#2AAA8A]"
-            :label="userInitials ?? ''"
-          >
+          <q-btn v-if="authStore.isSignedIn" flat no-caps round
+            class="text-black mr-2 border-solid border-1 border-[#2AAA8A]" :label="userInitials ?? ''">
             <q-menu>
               <q-list style="min-width: 200px">
-                <q-item
-                  clickable
-                  v-close-popup
-                  @click="$router.push('/settings')"
-                >
+                <q-item clickable v-close-popup @click="$router.push('/settings')">
                   <q-item-section>Settings</q-item-section>
                 </q-item>
                 <q-separator />
                 <q-item clickable v-close-popup @click="authStore.signOutUser">
                   <q-item-section>Sign out</q-item-section>
+                </q-item>
+                <q-separator />
+                <q-item v-if="authStore.isBroker" clickable v-close-popup @click="$router.push('/broker')">
+                  <q-item-section>View my Listings</q-item-section>
+                </q-item>
+                <q-separator />
+
+                <q-item v-if="authStore.isBroker" clickable v-close-popup @click="$router.push('/add')">
+                  <q-item-section>Add Listing</q-item-section>
                 </q-item>
               </q-list>
             </q-menu>

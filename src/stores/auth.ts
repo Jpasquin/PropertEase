@@ -33,7 +33,7 @@ export const useAuthStore = defineStore('auth', {
     isAdmin(): boolean {
       if (this.user) return this.user.accountType == 'admin';
       return false;
-    },
+    }
   },
 
   actions: {

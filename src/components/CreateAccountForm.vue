@@ -5,23 +5,53 @@
     </div>
 
     <div class="grid grid-cols-1 gap-2">
-      <q-input outlined color="black" label="First name" v-model="userData.firstName" />
+      <q-input
+        outlined
+        color="black"
+        label="First name"
+        v-model="userData.firstName"
+      />
 
-      <q-input outlined color="black" label="Last name" v-model="userData.lastName" />
+      <q-input
+        outlined
+        color="black"
+        label="Last name"
+        v-model="userData.lastName"
+      />
 
       <q-splitter class="py-2" horizontal />
 
       <q-input outlined color="black" label="Email" v-model="userData.email" />
 
-      <q-input outlined color="black" label="Password" type="password" v-model="password" />
+      <q-input
+        outlined
+        color="black"
+        label="Password"
+        type="password"
+        v-model="password"
+      />
 
-      <q-input outlined color="black" label="Confirm password" type="password" v-model="confirmPassword" />
+      <q-input
+        outlined
+        color="black"
+        label="Confirm password"
+        type="password"
+        v-model="confirmPassword"
+      />
 
-      <q-checkbox color="black" label="I accept the Terms of Service and Privacy Policy" v-model="agreeTermsAndPolicy" />
+      <q-checkbox
+        color="black"
+        label="I accept the Terms of Service and Privacy Policy"
+        v-model="agreeTermsAndPolicy"
+      />
 
-      <q-btn flat no-caps
+      <q-btn
+        flat
+        no-caps
         class="h-[48px] rounded-md text-base text-white bg-gradient-to-r from-[#2AAA6A] from-33% via-[#2AAA8A] via-66% to-[#2AAAAA] to-100%"
-        label="Create account" @click="onCreateAccount" />
+        label="Create account"
+        @click="onCreateAccount"
+      />
     </div>
   </div>
 </template>
@@ -36,6 +66,7 @@ const userData: User = reactive({
   firstName: '',
   lastName: '',
   email: '',
+  accountType: 'user',
 });
 
 const password = ref('');
