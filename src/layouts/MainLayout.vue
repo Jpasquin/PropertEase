@@ -14,11 +14,7 @@
           PropertEase
         </div>
 
-        <div
-          class="absolute right-0 mr-[24px]" 
-          v-if="showDiv"
-        >
-          <!--<filter-search />-->
+        <div class="absolute right-0 mr-[24px]" v-if="showDiv">
           <q-btn
             v-if="!authStore.isSignedIn"
             flat
@@ -39,36 +35,68 @@
           >
             <q-menu>
               <q-list style="min-width: 200px">
-                <q-item
-                  clickable
-                  v-close-popup
-                  @click="$router.push('/settings')"
-                >
+                <q-item v-if="authStore.isBroker" clickable v-close-popup @click="$router.push('/broker')">
+                  <q-item-section>View my Listings</q-item-section>
+                </q-item>
+                <q-separator />
+
+                <q-item v-if="authStore.isBroker" clickable v-close-popup @click="$router.push('/add')">
+                  <q-item-section>Add Listing</q-item-section>
+                </q-item>
+                <q-separator />
+
+                <q-item clickable v-close-popup @click="$router.push('/settings')">
                   <q-item-section>Settings</q-item-section>
                 </q-item>
                 <q-separator />
                 <q-item clickable v-close-popup @click="authStore.signOutUser">
                   <q-item-section>Sign out</q-item-section>
                 </q-item>
+
               </q-list>
             </q-menu>
           </q-btn>
         </div>
-
-        <q-footer
-          v-if="!showDiv"
-          class="border-4 border-black bg-white"
-          style="border-top: 1px solid #e9e9e9"
-        >
-          <q-toolbar class="h-[80px] px-6 min-w-[400px] m-auto text-black">
-          </q-toolbar>
-        </q-footer>
       </q-toolbar>
+      <q-separator />
+
+
     </q-header>
 
     <q-page-container class="px-4">
       <router-view />
     </q-page-container>
+
+    <div class="h-[300px] w-full bg-#f9fafb min-w-[400px]">
+      <div class="container mx-auto flex justify-between">
+        <div class="text-center w-1/3">
+          <h2 class="text-lg font-semibold">About Us</h2>
+          <p class="mt-2">Learn more about our company</p>
+          <a href="#" class="text-blue-300 hover:underline">Read More</a>
+        </div>
+
+        <div class="text-center w-1/3">
+          <h2 class="text-lg font-semibold">FAQ</h2>
+          <p class="mt-2">Get answers to frequently asked questions</p>
+          <a href="#" class="text-blue-300 hover:underline">Visit FAQ</a>
+        </div>
+
+        <div class="text-center w-1/3">
+          <h2 class="text-lg font-semibold">Brokers</h2>
+          <p class="mt-2">Apply to become a broker</p>
+          <a href="#" class="text-blue-300 hover:underline">See More</a>
+        </div>
+      </div>
+    </div>
+
+    <q-footer
+      v-if="!showDiv"
+      class="border-4 border-black bg-white"
+      style="border-top: 1px solid #e9e9e9"
+    >
+      <q-toolbar class="h-[80px] px-6 min-w-[400px] m-auto text-black">
+      </q-toolbar>
+    </q-footer>
   </q-layout>
 </template>
 
