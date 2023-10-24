@@ -17,16 +17,16 @@ const routes: RouteRecordRaw[] = [
     children: [{ path: '', component: () => import('pages/SettingsPage.vue') }],
   },
   {
-    path: '/brokerapp',
-    component: () => import('layouts/MainLayout.vue'),
-    children: [
-      { path: '', component: () => import('pages/BrokerApplication.vue') },
-    ],
-  },
-  {
     path: '/broker',
     component: () => import('layouts/MainLayout.vue'),
     children: [{ path: '', component: () => import('pages/BrokerPage.vue') }],
+  },
+  {
+    path: '/brokerApp',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      { path: '', component: () => import('pages/BrokerApplicationForm.vue') },
+    ],
   },
   // Always leave this as last one,
   // but you can also remove it
