@@ -17,6 +17,13 @@ const routes: RouteRecordRaw[] = [
     children: [{ path: '', component: () => import('pages/SettingsPage.vue') }],
   },
   {
+    path: '/brokerapp',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      { path: '', component: () => import('pages/BrokerApplication.vue') },
+    ],
+  },
+  {
     path: '/broker',
     component: () => import('layouts/MainLayout.vue'),
     children: [{ path: '', component: () => import('pages/BrokerPage.vue') }],
