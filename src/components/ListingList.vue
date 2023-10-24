@@ -1,10 +1,17 @@
 <template>
   <filter-search class="fixed top-[64px] z-[999] py-2" />
 
-  <div class="p-6 absolute top-[58px] w-full">
-
-    <transition-group name="fade" tag="div" class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-      <listing-item v-for="(item, index) in listAmount" :key="index" :listing="listings[index]" />
+  <div class="p-6 relative top-[58px] w-full mb-100px">
+    <transition-group
+      name="fade"
+      tag="div"
+      class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4"
+    >
+      <listing-item
+        v-for="(item, index) in listAmount"
+        :key="index"
+        :listing="listings[index]"
+      />
     </transition-group>
   </div>
 </template>
@@ -41,8 +48,7 @@ onMounted(async () => {
 .fade-enter,
 .fade-leave-to
 
-/* .fade-leave-active in <2.1.8 */
-  {
+/* .fade-leave-active in <2.1.8 */ {
   opacity: 0;
 }
 </style>
