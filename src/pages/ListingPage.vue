@@ -2,9 +2,22 @@
   <q-page class="row items-center justify-evenly">
     <div class="p-6 absolute top-0 w-full grid grid-cols-1 gap-2">
       <div class="font-medium text-[26px] pb-4">
-        Luxury home near Old Port, beautiful view
+        <span v-if="!authStore.isBroker">
+          Luxury home near Old Port, beautiful view
+        </span>
 
-        <div class="font-normal text-base opacity-80"
+        <q-input
+          v-if="authStore.isBroker"
+          outlined
+          color="black"
+          label="Title"
+          class="mb-4 text-xl"
+          v-model="listing.title"
+        />
+
+        <div
+          v-if="!authStore.isBroker"
+          class="font-normal text-base opacity-80"
         >
           {{ dataHandling.propertyTitle(listing?.propertyType, listing?.province, listing?.city) }}
         </div>
@@ -56,34 +69,86 @@
 
       <div
         key="listingPrice"
-        class="font-medium text-[22px] pt-4"
+        class="font-medium text-[26px] pt-4"
       >
         {{ dataHandling.formatCurrency(listing?.price) + ' CAD' || 'Price' }}
+
+        <q-btn v-if="authStore.isBroker" dense flat icon="edit">
+          <q-popup-edit v-model="listing.price" title="Price" color="black" buttons persistent v-slot="scope">
+            <q-input color="black" v-model="scope.value" type="number" dense autofocus />
+          </q-popup-edit>
+        </q-btn>
       </div>
 
       <q-separator class="my-4" />
 
       <div class="grid grid-cols-2 gap-8">
-        <div>
+        <div ref="fixedDivRef">
           <div
-            ref="fixedDivRef"
+            v-if="!authStore.isBroker"
             key="listingDescription"
             class="font-normal text-base pb-2 opacity-80"
           >
             {{ listing?.description }}
+            {{ listing?.description }}
+            {{ listing?.description }}
+            {{ listing?.description }}
+            {{ listing?.description }}
+            {{ listing?.description }}
+            {{ listing?.description }}
+            {{ listing?.description }}
           </div>
+
+          <q-input
+            v-if="authStore.isBroker"
+            outlined
+            autogrow
+            color="black"
+            label="Description"
+            class="mb-4 text-base"
+            v-model="listing.description"
+          />
 
           <q-separator class="my-4" />
 
           <div
-            key="listingDescription"
+            key="listingDetails"
+            v-if="!authStore.isBroker"
             class="font-medium text-[22px] pb-2"
           >
             What this place offers
           </div>
+
+          <div
+            key="listingDetailsEdit"
+            v-if="authStore.isBroker"
+            class="font-medium text-[22px] pb-2"
+          >
+            Property details
+          </div>
         </div>
 
-        <div>
+        <div
+          v-if="authStore.isBroker"
+          class="grid grid-cols-2 gap-2"
+        >
+          <q-btn
+            flat
+            no-caps
+            class="h-[48px] w-full rounded-md text-base text-black bg-[#ededed]"
+            label="Cancel"
+            @click="router.back()"
+          />
+
+          <q-btn
+            flat
+            no-caps
+            class="h-[48px] w-full rounded-md text-base text-white bg-gradient-to-r from-[#2AAA6A] from-33% via-[#2AAA8A] via-66% to-[#2AAAAA] to-100%"
+            label="Save Changes"
+          />
+        </div>
+
+        <div v-if="!authStore.isBroker">
           <div
             class="fixedDiv"
             :class="fixedStyle"
@@ -130,7 +195,7 @@
               outlined
               color="black"
               label="Amount CAD"
-              tye="number"
+              type="number"
               class="mb-4"
             />
 
@@ -158,16 +223,27 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAppStore } from 'stores/app'
+import { useAuthStore } from 'stores/auth'
 import useDataHandling from '../services/dataHandling'
 import ListingImage from 'components/ListingImage.vue'
 
 const appStore = useAppStore()
+const authStore = useAuthStore()
 const dataHandling = useDataHandling()
-const listing = ref(null)
+
+const route = useRoute()
+const router = useRouter()
+const listing = ref({})
 const fixedDivRef = ref(null)
 const date = ref(null)
 
+const name = ref('')
 const shouldBeFixed = ref(false);
+
+const propertyTypeOptions = ref([
+  { value: 'condo' },
+  { value: 'house' }
+])
 
 const checkScrollPosition = () => {
     // Get the div's position from the top of the page
@@ -184,8 +260,6 @@ const checkScrollPosition = () => {
 onMounted(async () => {
   window.addEventListener('scroll', checkScrollPosition);
   checkScrollPosition();
-  const route = useRoute()
-  const router = useRouter()
   // Check if "id" exists and is not empty
   const id = route.query.id
   if (!id || id === '') {

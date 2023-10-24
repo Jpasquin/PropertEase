@@ -67,7 +67,7 @@
       <router-view />
     </q-page-container>
 
-    <div class="h-[300px] w-full bg-#f9fafb min-w-[400px]">
+    <div v-if="false" class="h-[300px] w-full bg-#f9fafb min-w-[400px]">
       <div class="container mx-auto flex justify-between">
         <div class="text-center w-1/3">
           <h2 class="text-lg font-semibold">About Us</h2>

@@ -1,4 +1,4 @@
-import { equalTo, get, getDatabase, orderByChild, query, ref, } from 'firebase/database';
+import { child, equalTo, get, getDatabase, orderByChild, query, ref, } from 'firebase/database';
 import { getStorage, ref as firebaseRef, getDownloadURL, } from 'firebase/storage';
 import { defineStore } from 'pinia';
 import Filter from '../interfaces/filter';
