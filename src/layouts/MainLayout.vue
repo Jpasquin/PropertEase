@@ -173,10 +173,6 @@ const userInitials = computed(() => {
   return null;
 });
 
-const showAppModal = () => {
-  showModal = true;
-};
-
 onMounted(() => {
   window.addEventListener('resize', updateWidth);
 });
