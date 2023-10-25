@@ -1,9 +1,6 @@
 <template>
   <q-layout view="lHh Lpr lFf">
-    <q-header
-      class="border-4 border-black bg-white"
-      style="border-bottom: 1px solid #e9e9e9"
-    >
+    <q-header class="border-4 border-black bg-white">
       <q-toolbar
         class="h-[64px] px-6 min-w-[400px] max-w-[1800px] justify-center sm:justify-start m-auto"
       >
