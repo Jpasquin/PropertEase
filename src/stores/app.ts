@@ -26,12 +26,12 @@ export const useAppStore = defineStore('app', {
   actions: {
     async revokeBroker(userId: string) {
       const db = getDatabase();
-      
+
       // Reference to the specific user by their userId
       const brokerUserRef = ref(db, 'users/' + userId);
-      
+
       // Set accountType to null (which effectively deletes it)
-      await update(brokerUserRef, { accountType: null });
+      await update(brokerUserRef, { accountType: 'user' });
     },
 
     async getBrokers() {
@@ -61,44 +61,44 @@ export const useAppStore = defineStore('app', {
 
     async getBrokerApplications() {
       const db = getDatabase();
-    
+
       // Reference to the 'brokerApplications' in the database
       const brokerApplicationsRef = ref(db, 'brokerApplications/');
-    
+
       // Query for getting the broker applications (assuming you want to query by 'accountType' again)
       const brokerApplicationsQuery = query(brokerApplicationsRef);
       const brokerApplicationsSnapshot = await get(brokerApplicationsQuery);
-    
+
       // Convert the snapshot to an array of objects
       const applications: any = [];
       brokerApplicationsSnapshot.forEach((childSnapshot) => {
         const applicationId = childSnapshot.key; // This will give you the ID
         const applicationData = childSnapshot.val();
-    
+
         // Add the ID to the listing object
         applicationData.id = applicationId;
-    
+
         applications.push(applicationData);
       });
-    
+
       return applications;
     },
 
-    async updateOrDeleteBrokerApplication (userId: string, approved: boolean) {
+    async updateOrDeleteBrokerApplication(userId: string, approved: boolean) {
       const db = getDatabase();
-      
+
       // If approved, update the user's account type to 'broker'
       if (approved) {
         const userRef = ref(db, `users/${userId}`);
         await update(userRef, {
-          accountType: 'broker'
+          accountType: 'broker',
         });
       }
-    
+
       // Remove the corresponding application from brokerApplications
       const brokerApplicationRef = ref(db, `brokerApplications/${userId}`);
       await remove(brokerApplicationRef);
-    },    
+    },
 
     async getListings(filter: Filter) {
       const db = getDatabase();

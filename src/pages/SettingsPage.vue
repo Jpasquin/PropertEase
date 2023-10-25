@@ -1,13 +1,21 @@
 <template>
   <q-page class="row items-center justify-evenly">
-    <div class="border-solid border-2 border-[#d8d8d8] rounded-lg p-2 min-w-[600px]" v-if="authStore.isAdmin">
+    <div
+      class="border-solid border-2 border-[#d8d8d8] rounded-lg p-2 min-w-[600px]"
+      v-if="authStore.isAdmin"
+    >
       <div class="font-medium text-3xl px-2 py-4">Brokers</div>
       <q-table flat :rows="rows" :columns="columns" row-key="name">
-        
         <template v-slot:body-cell-firstName="props">
           <q-td key="firstName" :props="props">
             {{ props.row.firstName }}
-            <q-popup-edit v-model="props.row.firstName" title="Change First name" buttons persistent v-slot="scope">
+            <q-popup-edit
+              v-model="props.row.firstName"
+              title="Change First name"
+              buttons
+              persistent
+              v-slot="scope"
+            >
               <q-input v-model="scope.value" dense autofocus />
             </q-popup-edit>
           </q-td>
@@ -16,7 +24,13 @@
         <template v-slot:body-cell-lastName="props">
           <q-td key="lastName" :props="props">
             {{ props.row.lastName }}
-            <q-popup-edit v-model="props.row.lastName" title="Change Last name" buttons persistent v-slot="scope">
+            <q-popup-edit
+              v-model="props.row.lastName"
+              title="Change Last name"
+              buttons
+              persistent
+              v-slot="scope"
+            >
               <q-input v-model="scope.value" dense autofocus />
             </q-popup-edit>
           </q-td>
@@ -25,19 +39,33 @@
         <template v-slot:body-cell-revoke="props">
           <q-td :props="props">
             <!-- Display delete button only if current row's id is NOT in brokerApplicationIds -->
-            <q-btn v-if="!brokerApplicationIds?.includes(props.row.id)" flat icon="delete" @click="revokeBroker(props.row)" />
-            <q-btn v-if="brokerApplicationIds?.includes(props.row.id)" flat icon="check" @click="acceptOrDeclineApplication(props.row, true)" />
-            <q-btn v-if="brokerApplicationIds?.includes(props.row.id)" flat icon="close" @click="acceptOrDeclineApplication(props.row)"/>
+            <q-btn
+              v-if="!brokerApplicationIds?.includes(props.row.id)"
+              flat
+              icon="delete"
+              @click="revokeBroker(props.row)"
+            />
+            <q-btn
+              v-if="brokerApplicationIds?.includes(props.row.id)"
+              flat
+              icon="check"
+              @click="acceptOrDeclineApplication(props.row, true)"
+            />
+            <q-btn
+              v-if="brokerApplicationIds?.includes(props.row.id)"
+              flat
+              icon="close"
+              @click="acceptOrDeclineApplication(props.row)"
+            />
           </q-td>
         </template>
-
       </q-table>
     </div>
   </q-page>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, getCurrentInstance } from 'vue';
 import { useAppStore } from 'stores/app';
 import { useAuthStore } from 'src/stores/auth';
 
@@ -93,7 +121,7 @@ onMounted(async () => {
   brokerApplications.forEach((item) => {
     brokerApplicationIds.value.push(item.id); // populate the ids ref
     rows.value.push({
-      email: item.email,  // Assuming brokerApplications also have 'email', 'firstName', etc.
+      email: item.email, // Assuming brokerApplications also have 'email', 'firstName', etc.
       firstName: item.firstName,
       lastName: item.lastName,
       id: item.id,
@@ -104,7 +132,7 @@ onMounted(async () => {
 
 const revokeBroker = async (row) => {
   // Find the index of the row with the given id
-  const rowIndex = rows.value.findIndex(r => r.id === row.id);
+  const rowIndex = rows.value.findIndex((r) => r.id === row.id);
   // If the row is found, remove it
   if (rowIndex !== -1) {
     rows.value.splice(rowIndex, 1);
@@ -114,11 +142,12 @@ const revokeBroker = async (row) => {
 
 const acceptOrDeclineApplication = async (row, approved) => {
   // Find the index of the row with the given id
-  const rowIndex = rows.value.findIndex(r => r.id === row.id);
+  const rowIndex = rows.value.findIndex((r) => r.id === row.id);
   // If the row is found, remove it
   if (rowIndex !== -1) {
     rows.value.splice(rowIndex, 1);
   }
   await appStore.updateOrDeleteBrokerApplication(row.id, approved);
-}
+  location.reload();
+};
 </script>
