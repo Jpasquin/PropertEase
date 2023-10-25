@@ -1,6 +1,18 @@
 <template>
   <q-layout view="lHh Lpr lFf">
-    <q-header class="border-4 border-black bg-white" style="border-bottom: 1px solid #e9e9e9">
+    <q-header
+      class="border-4 border-black bg-white"
+
+    >
+      <q-toolbar
+        class="h-[64px] px-6 min-w-[400px] max-w-[1800px] justify-center sm:justify-start m-auto"
+      >
+        <div
+          class="text-[#2AAA8A] font-bold text-3xl tracking-[-1.5px] cursor-pointer"
+          @click="$router.push('/')"
+        >
+=========
+    <q-header class="border-4 border-black bg-white">
       <q-toolbar class="h-[64px] px-6 min-w-[400px] max-w-[1800px] justify-center sm:justify-start m-auto">
         <div class="text-[#2AAA8A] font-bold text-3xl tracking-[-1.5px] cursor-pointer" @click="$router.push('/')">
           PropertEase
@@ -8,25 +20,51 @@
 
         <div class="absolute right-0 mr-[24px]" v-if="showDiv">
           <!--<filter-search />-->
-          <q-btn v-if="!authStore.isSignedIn" flat no-caps rounded
-            class="text-black mr-2 border-solid border-1 border-[#2AAA8A]" label="Buy, Sell or Rent a home"
-            @click="$router.push('/signin')" />
+          <q-btn
+            v-if="!authStore.isSignedIn"
+            flat
+            no-caps
+            rounded
+            class="text-black mr-2 border-solid border-1 border-[#2AAA8A]"
+            label="Buy, Sell or Rent a home"
+            @click="$router.push('/signin')"
+          />
 
-          <q-btn v-if="authStore.isSignedIn" flat no-caps round
-            class="text-black mr-2 border-solid border-1 border-[#2AAA8A]" :label="userInitials ?? ''">
+          <q-btn
+            v-if="authStore.isSignedIn"
+            flat
+            no-caps
+            round
+            class="text-black mr-2 border-solid border-1 border-[#2AAA8A]"
+            :label="userInitials ?? ''"
+          >
             <q-menu>
               <q-list style="min-width: 200px">
-                <q-item v-if="authStore.isBroker" clickable v-close-popup @click="$router.push('/broker')">
+                <q-item
+                  v-if="authStore.isBroker"
+                  clickable
+                  v-close-popup
+                  @click="$router.push('/broker')"
+                >
                   <q-item-section>View my Listings</q-item-section>
                 </q-item>
                 <q-separator />
 
-                <q-item v-if="authStore.isBroker" clickable v-close-popup @click="$router.push('/add')">
+                <q-item
+                  v-if="authStore.isBroker"
+                  clickable
+                  v-close-popup
+                  @click="$router.push('/add')"
+                >
                   <q-item-section>Add Listing</q-item-section>
                 </q-item>
                 <q-separator />
 
-                <q-item clickable v-close-popup @click="$router.push('/settings')">
+                <q-item
+                  clickable
+                  v-close-popup
+                  @click="$router.push('/settings')"
+                >
                   <q-item-section>Settings</q-item-section>
                 </q-item>
                 <q-separator />
@@ -49,41 +87,65 @@
     <footer class="bg-gray-100 shadow dark:bg-gray-900">
       <div class="w-full max-w-screen-xl mx-auto p-4 md:py-8">
         <div class="sm:flex sm:items-center sm:justify-between">
-          <div class="text-[#2AAA8A] font-bold text-3xl tracking-[-1.5px] cursor-pointer" @click="$router.push('/')">
+          <div
+            class="text-[#2AAA8A] font-bold text-3xl tracking-[-1.5px] cursor-pointer"
+            @click="$router.push('/')"
+          >
             PropertEase
           </div>
-          <ul class="flex flex-wrap items-center mb-6 text-sm font-medium text-gray-500 sm:mb-0 dark:text-gray-400">
+          <ul
+            class="flex flex-wrap items-center mb-6 text-sm font-medium text-gray-500 sm:mb-0 dark:text-gray-400"
+          >
             <li>
-              <div class="mr-4 hover:underline md:mr-6 cursor-pointer" @click="$router.push('/brokerApp')">
+              <div
+                class="mr-4 hover:underline md:mr-6 cursor-pointer"
+                @click="$router.push('/brokerApp')"
+              >
                 Become a Broker
               </div>
             </li>
             <li>
-              <div class="mr-4 hover:underline md:mr-6 cursor-pointer" @click="$router.push('/')">
+              <div
+                class="mr-4 hover:underline md:mr-6 cursor-pointer"
+                @click="$router.push('/')"
+              >
                 About
               </div>
             </li>
             <li>
-              <div class="mr-4 hover:underline md:mr-6 cursor-pointer" @click="$router.push('/')">
+              <div
+                class="mr-4 hover:underline md:mr-6 cursor-pointer"
+                @click="$router.push('/')"
+              >
                 Privacy Policy
               </div>
             </li>
             <li>
-              <div class="mr-4 hover:underline md:mr-6 cursor-pointer" @click="$router.push('/')">
+              <div
+                class="mr-4 hover:underline md:mr-6 cursor-pointer"
+                @click="$router.push('/')"
+              >
                 Licensing
               </div>
             </li>
             <li>
-              <div class="mr-4 hover:underline md:mr-6 cursor-pointer" @click="$router.push('/')">
+              <div
+                class="mr-4 hover:underline md:mr-6 cursor-pointer"
+                @click="$router.push('/')"
+              >
                 Contact
               </div>
             </li>
           </ul>
         </div>
-        <hr class="my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8" />
-        <span class="block text-sm text-gray-500 sm:text-center dark:text-gray-400">© 2023 <a href="#"
-            class="hover:underline">PropertEase</a>. All
-          Rights Reserved.</span>
+        <hr
+          class="my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8"
+        />
+        <span
+          class="block text-sm text-gray-500 sm:text-center dark:text-gray-400"
+          >© 2023 <a href="#" class="hover:underline">PropertEase</a>. All
+          Rights Reserved.</span
+        >
       </div>
     </footer>
   </q-layout>
