@@ -130,7 +130,6 @@ export const useAuthStore = defineStore('auth', {
 
     async createApp(application: BrokerApp) {
       const auth = getAuth();
-      console.log('Creating app with data:' + application.email);
       try {
         // Add user to Realtime Database
         const db = getDatabase();
