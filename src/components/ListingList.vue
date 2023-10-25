@@ -1,5 +1,5 @@
 <template>
-  <filter-search class="fixed top-[64px] z-[999] py-2" />
+  
 
   <div class="p-6 absolute top-[58px] w-full">
 
@@ -14,7 +14,6 @@ import { ref, onMounted } from 'vue';
 import { useAppStore } from 'stores/app';
 import Filter from '../interfaces/filter';
 import ListingItem from 'components/ListingItem.vue';
-import FilterSearch from 'components/FilterSearch.vue';
 
 const props = defineProps<{
   amount: number;

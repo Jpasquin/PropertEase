@@ -9,7 +9,7 @@
       no-caps
       rounded
       unelevated
-      toggle-color="black"
+      toggle-color="customteal"
       color="white"
       text-color="black"
       :options="[
@@ -198,7 +198,6 @@
 
 <script setup lang="ts">
 import { ref, onMounted, watchEffect } from 'vue';
-import db from '../boot/firebaseConnection';
 import ListingItem from '../components/ListingItem.vue';
 
 const prompt = ref(false);
@@ -215,61 +214,6 @@ const amenitiesOptions = [
   // Add more amenities options as needed
 ];
 
-const listings = ref([]); // This will hold the filtered listings
-
-// Function to fetch listings based on filters
-const fetchListings = async () => {
-  const listingsRef = db.ref('listings');
-  let query = listingsRef;
-
-  // Filter by type (buy or rent)
-  query = query.orderByChild('type').equalTo(type.value);
-
-  // Filter by location (city and province)
-  if (location.value) {
-    query = query.orderByChild('city').equalTo(location.value);
-  }
-
-  // Filter by min/max price
-  if (minPrice.value) {
-    query = query.orderByChild('price').startAt(minPrice.value);
-  }
-
-  if (maxPrice.value) {
-    query = query.endAt(maxPrice.value);
-  }
-
-  // Filter by bedrooms/bathrooms
-  if (bedrooms.value) {
-    query = query.orderByChild('bedrooms').equalTo(bedrooms.value);
-  }
-
-  if (bathrooms.value) {
-    query = query.orderByChild('baths').equalTo(bathrooms.value);
-  }
-
-  // Similar conditions can be added for other filters
-
-  const snapshot = await query.once('value').catch((error) => {
-    console.error('Error fetching listings:', error);
-  });
-
-  if (snapshot) {
-    const data = snapshot.val();
-    if (data) {
-      listings.value = Object.values(data);
-    } else {
-      listings.value = [];
-    }
-  }
-};
-
-onMounted(fetchListings);
-
-watchEffect(() => {
-  // Watch for changes in filter values and update the listings
-  fetchListings();
-});
 </script>
 
 <style scoped>
