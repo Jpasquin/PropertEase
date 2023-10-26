@@ -40,7 +40,7 @@
                 </q-item>
                 <q-separator />
 
-                <q-item v-if="authStore.isBroker" clickable v-close-popup @click="$router.push('/add')">
+                <q-item v-if="authStore.isBroker" clickable v-close-popup @click="navigateAndReload('/listing')">
                   <q-item-section>Add Listing</q-item-section>
                 </q-item>
                 <q-separator />
@@ -104,7 +104,10 @@
 import { ref, onMounted, onUnmounted, computed } from 'vue';
 import { useAuthStore } from 'stores/auth';
 import FilterSearch from '../components/FilterSearch.vue';
+import { useRoute, useRouter } from 'vue-router';
 
+const route = useRoute()
+const router = useRouter()
 const authStore = useAuthStore();
 
 const windowWidth = ref(window.innerWidth);
@@ -123,6 +126,12 @@ const userInitials = computed(() => {
   }
   return null;
 });
+
+const navigateAndReload = async (route) => {
+  console.log('hello')
+  await router.push(route + '?id=new');
+  window.location.reload();
+}
 
 onMounted(() => {
   window.addEventListener('resize', updateWidth);

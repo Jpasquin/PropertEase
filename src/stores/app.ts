@@ -15,6 +15,10 @@ export const useAppStore = defineStore('app', {
   },
 
   actions: {
+    async removeImages(images: string[]) {
+      console.log(images);
+    },
+
     async getBrokers() {
       const db = getDatabase();
       const brokerListRef = ref(db, 'users/');

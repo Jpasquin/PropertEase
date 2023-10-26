@@ -1,8 +1,8 @@
 <template>
   <q-img
     no-spinner
-    v-if="!!listingId"
-    :src="currentImageUrl[imageIndex || 0]"
+    v-if="!!listingId || src"
+    :src="src ?  src : currentImageUrl[imageIndex || 0]"
     alt="Listing Image"
     class="absolute inset-0 object-cover w-full h-full"
     ratio="1x1"
@@ -15,8 +15,9 @@ import { ref, defineProps, computed } from 'vue'
 import { useAppStore } from 'stores/app'
 
 const props = defineProps<{
-  listingId: string;
+  listingId?: string;
   imageIndex?: any;
+  src?: any;
 }>()
 
 const appStore = useAppStore()

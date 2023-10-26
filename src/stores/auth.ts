@@ -56,6 +56,8 @@ export const useAuthStore = defineStore('auth', {
             if (userSnapshot.exists()) {
               console.log(userSnapshot.val()); // Log the related user data
               this.user = userSnapshot.val();
+              if (this.user)
+                this.user.userId = userSnapshot.key || undefined;
               // If needed, store this data in local state or perform other tasks
               // Example:
               // this.relatedUserData = userSnapshot.val();
