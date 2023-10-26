@@ -2,7 +2,7 @@
   <q-layout view="lHh Lpr lFf">
     <q-header class="border-4 border-black bg-white">
       <q-toolbar
-        class="h-[64px] px-6 min-w-[400px] max-w-[1800px] justify-center sm:justify-start m-auto"
+        class="h-[64px] px-6 min-w-[400px] max-w-[1200px] justify-center sm:justify-start m-auto"
       >
         <div
           class="text-[#2AAA8A] font-bold text-3xl tracking-[-1.5px] cursor-pointer"
@@ -12,7 +12,6 @@
         </div>
 
         <div class="absolute right-0 mr-[24px]" v-if="showDiv">
-          <!--<filter-search />-->
           <q-btn
             v-if="!authStore.isSignedIn"
             flat
@@ -28,7 +27,7 @@
             flat
             no-caps
             round
-            class="text-black mr-2 border-solid border-1 border-[#2AAA8A]"
+            class="text-black mr-4 border-solid border-1 border-[#2AAA8A]"
             :label="userInitials ?? ''"
           >
             <q-menu>
@@ -72,7 +71,7 @@
       <q-separator />
     </q-header>
 
-    <q-page-container>
+    <q-page-container class="px-4">
       <router-view />
     </q-page-container>
 
@@ -149,6 +148,7 @@
 import { ref, onMounted, onUnmounted, computed, defineComponent } from 'vue';
 import { useAuthStore } from 'stores/auth';
 import FilterSearch from '../components/FilterSearch.vue';
+import { useRoute, useRouter } from 'vue-router';
 import BrokerApplicationForm from 'src/pages/BrokerApplicationForm.vue';
 
 const authStore = useAuthStore();
@@ -173,6 +173,15 @@ const userInitials = computed(() => {
   }
   return null;
 });
+
+const navigateAndReload = async (route) => {
+  console.log('hello');
+  await router.push(route + '?id=new');
+  window.location.reload();
+};
+const showAppModal = () => {
+  showModal = true;
+};
 
 onMounted(() => {
   window.addEventListener('resize', updateWidth);

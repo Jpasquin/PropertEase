@@ -1,9 +1,11 @@
+
 import {
   equalTo,
   get,
   getDatabase,
   orderByChild,
   query,
+  child,
   ref,
   remove,
   update,
@@ -21,9 +23,17 @@ export const useAppStore = defineStore('app', {
     listings: null,
   }),
 
-  getters: {},
+  getters: {
+    getImageURL() {
+      return 'https://firebasestorage.googleapis.com/v0/b/propertease-5ff7d.appspot.com/o/'
+    }
+  },
 
   actions: {
+    async removeImages(images: string[]) {
+      console.log(images);
+    },
+
     async revokeBroker(userId: string) {
       const db = getDatabase();
 
@@ -103,29 +113,33 @@ export const useAppStore = defineStore('app', {
     async getListings(filter: Filter) {
       const db = getDatabase();
       const listingListRef = ref(db, 'listings/');
-
-      // Query listings with type set to "buy"
       const buyListingsQuery = query(
         listingListRef,
         orderByChild('type'),
         equalTo(filter.type)
       );
       const listingListSnapshot = await get(buyListingsQuery);
-
-      // Convert the snapshot to an array of objects
+    
       const listings: any = [];
       listingListSnapshot.forEach((childSnapshot) => {
-        const listingId = childSnapshot.key; // This will give you the ID, e.g., "001"
+        const listingId = childSnapshot.key;
         const listingData = childSnapshot.val();
-
-        // Add the ID to the listing object
         listingData.id = listingId;
-
-        listings.push(listingData);
+    
+        const isCityMatch = filter.city == null || (listingData.city != null && listingData.city.toLowerCase().includes(filter.city.toLowerCase()));
+        const isProvinceMatch = filter.province == null || (listingData.province != null && listingData.province.toLowerCase() === filter.province.toLowerCase());
+    
+        const isPriceMatch = 
+          (filter.minMaxPrice?.min == null || listingData.price >= filter.minMaxPrice.min) &&
+          (filter.minMaxPrice?.max == null || listingData.price <= filter.minMaxPrice.max);
+    
+        if (isCityMatch && isProvinceMatch && isPriceMatch) {
+          listings.push(listingData);
+        }
       });
-
+    
       return listings;
-    },
+    },    
 
     async getListingsBroker(broker: string) {
       const db = getDatabase();
@@ -152,6 +166,28 @@ export const useAppStore = defineStore('app', {
       });
 
       return listings;
+    },
+
+    async getListing(listingId: string) {
+      const db = getDatabase();
+      const listingListRef = ref(db, 'listings/');
+      const specificListingRef = child(listingListRef, listingId);
+    
+      try {
+        const snapshot = await get(specificListingRef);
+        
+        if (snapshot.exists()) {
+          const listing = snapshot.val();
+          listing.id = snapshot.key;
+          return listing;
+        } else {
+          console.error(`No listing found with id: ${listingId}`);
+          return null;
+        }
+      } catch (error) {
+        console.error('Error fetching listing:', error);
+        return null;
+      }
     },
 
     async getListingImage(listingId: string): Promise<string> {

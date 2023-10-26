@@ -1,7 +1,5 @@
 <template>
-  <filter-search class="fixed top-[64px] z-[999] py-2" />
-
-  <div class="p-6 relative top-[58px] w-full mb-100px">
+  <div class="p-6 relative w-full mb-100px">
     <transition-group
       name="fade"
       tag="div"
@@ -17,11 +15,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import { useAppStore } from 'stores/app';
 import Filter from '../interfaces/filter';
 import ListingItem from 'components/ListingItem.vue';
-import FilterSearch from 'components/FilterSearch.vue';
 
 const props = defineProps<{
   amount: number;
@@ -32,10 +29,14 @@ const appStore = useAppStore();
 const listings = ref([]);
 const listAmount = ref(props.amount);
 
-onMounted(async () => {
+const getListings = async () => {
   listings.value = await appStore.getListings(props.filter);
   listAmount.value = listings.value.length;
-});
+};
+
+onMounted(getListings);
+
+watch(() => props.filter, getListings, { deep: true });
 </script>
 
 <style scoped>
