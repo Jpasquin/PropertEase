@@ -5,7 +5,6 @@
       v-if="authStore.isAdmin"
     >
       <div class="font-medium text-3xl px-2 py-4">Brokers</div>
-
       <q-table flat :rows="rows" :columns="columns" row-key="name">
         <template v-slot:body-cell-firstName="props">
           <q-td key="firstName" :props="props">
@@ -39,7 +38,25 @@
 
         <template v-slot:body-cell-revoke="props">
           <q-td :props="props">
-            <q-btn flat icon="delete" @click="revokeBroker(props.row)" />
+            <!-- Display delete button only if current row's id is NOT in brokerApplicationIds -->
+            <q-btn
+              v-if="!brokerApplicationIds?.includes(props.row.id)"
+              flat
+              icon="delete"
+              @click="revokeBroker(props.row)"
+            />
+            <q-btn
+              v-if="brokerApplicationIds?.includes(props.row.id)"
+              flat
+              icon="check"
+              @click="acceptOrDeclineApplication(props.row, true)"
+            />
+            <q-btn
+              v-if="brokerApplicationIds?.includes(props.row.id)"
+              flat
+              icon="close"
+              @click="acceptOrDeclineApplication(props.row)"
+            />
           </q-td>
         </template>
       </q-table>
@@ -48,7 +65,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, getCurrentInstance } from 'vue';
 import { useAppStore } from 'stores/app';
 import { useAuthStore } from 'src/stores/auth';
 
@@ -79,24 +96,58 @@ const columns = [
     sortable: true,
   },
   { name: 'revoke', field: 'revoke', align: 'left', label: '' },
+  { name: 'accept', field: 'accept', align: 'left', label: '' },
+  { name: 'decline', field: 'decline', align: 'left', label: '' },
 ];
 
 const rows = ref([]);
+const brokerApplicationIds = ref([]);
 
 onMounted(async () => {
+  // Fetching brokers
   const brokers = await appStore.getBrokers();
-
   brokers.forEach((item) => {
     rows.value.push({
       email: item.email,
       firstName: item.firstName,
       lastName: item.lastName,
+      id: item.id,
+      revoke: '',
+    });
+  });
+
+  // Fetching broker applications
+  const brokerApplications = await appStore.getBrokerApplications();
+  brokerApplications.forEach((item) => {
+    brokerApplicationIds.value.push(item.id); // populate the ids ref
+    rows.value.push({
+      email: item.email, // Assuming brokerApplications also have 'email', 'firstName', etc.
+      firstName: item.firstName,
+      lastName: item.lastName,
+      id: item.id,
       revoke: '',
     });
   });
 });
 
-const revokeBroker = (row) => {
-  console.log('Revoking broker:', row.email);
+const revokeBroker = async (row) => {
+  // Find the index of the row with the given id
+  const rowIndex = rows.value.findIndex((r) => r.id === row.id);
+  // If the row is found, remove it
+  if (rowIndex !== -1) {
+    rows.value.splice(rowIndex, 1);
+  }
+  await appStore.revokeBroker(row.id);
+};
+
+const acceptOrDeclineApplication = async (row, approved) => {
+  // Find the index of the row with the given id
+  const rowIndex = rows.value.findIndex((r) => r.id === row.id);
+  // If the row is found, remove it
+  if (rowIndex !== -1) {
+    rows.value.splice(rowIndex, 1);
+  }
+  await appStore.updateOrDeleteBrokerApplication(row.id, approved);
+  location.reload();
 };
 </script>

@@ -1,5 +1,19 @@
-import { child, equalTo, get, getDatabase, orderByChild, query, ref, } from 'firebase/database';
-import { getStorage, ref as firebaseRef, getDownloadURL, } from 'firebase/storage';
+
+import {
+  equalTo,
+  get,
+  getDatabase,
+  orderByChild,
+  query,
+  ref,
+  remove,
+  update,
+} from 'firebase/database';
+import {
+  getStorage,
+  ref as firebaseRef,
+  getDownloadURL,
+} from 'firebase/storage';
 import { defineStore } from 'pinia';
 import Filter from '../interfaces/filter';
 
@@ -19,11 +33,20 @@ export const useAppStore = defineStore('app', {
       console.log(images);
     },
 
+    async revokeBroker(userId: string) {
+      const db = getDatabase();
+
+      // Reference to the specific user by their userId
+      const brokerUserRef = ref(db, 'users/' + userId);
+
+      // Set accountType to null (which effectively deletes it)
+      await update(brokerUserRef, { accountType: 'user' });
+    },
+
     async getBrokers() {
       const db = getDatabase();
       const brokerListRef = ref(db, 'users/');
 
-      // Query listings with type set to "buy"
       const brokerQuery = query(
         brokerListRef,
         orderByChild('accountType'),
@@ -42,8 +65,48 @@ export const useAppStore = defineStore('app', {
 
         brokers.push(brokerData);
       });
-      console.log(brokers);
       return brokers;
+    },
+
+    async getBrokerApplications() {
+      const db = getDatabase();
+
+      // Reference to the 'brokerApplications' in the database
+      const brokerApplicationsRef = ref(db, 'brokerApplications/');
+
+      // Query for getting the broker applications (assuming you want to query by 'accountType' again)
+      const brokerApplicationsQuery = query(brokerApplicationsRef);
+      const brokerApplicationsSnapshot = await get(brokerApplicationsQuery);
+
+      // Convert the snapshot to an array of objects
+      const applications: any = [];
+      brokerApplicationsSnapshot.forEach((childSnapshot) => {
+        const applicationId = childSnapshot.key; // This will give you the ID
+        const applicationData = childSnapshot.val();
+
+        // Add the ID to the listing object
+        applicationData.id = applicationId;
+
+        applications.push(applicationData);
+      });
+
+      return applications;
+    },
+
+    async updateOrDeleteBrokerApplication(userId: string, approved: boolean) {
+      const db = getDatabase();
+
+      // If approved, update the user's account type to 'broker'
+      if (approved) {
+        const userRef = ref(db, `users/${userId}`);
+        await update(userRef, {
+          accountType: 'broker',
+        });
+      }
+
+      // Remove the corresponding application from brokerApplications
+      const brokerApplicationRef = ref(db, `brokerApplications/${userId}`);
+      await remove(brokerApplicationRef);
     },
 
     async getListings(filter: Filter) {
@@ -70,7 +133,6 @@ export const useAppStore = defineStore('app', {
         listings.push(listingData);
       });
 
-      console.log(listings);
       return listings;
     },
 
@@ -78,7 +140,6 @@ export const useAppStore = defineStore('app', {
       const db = getDatabase();
       const listingListRef = ref(db, 'listings/');
 
-      console.log('User id: ' + broker);
       // Query listings with the broker id"
       const brokerListingsQuery = query(
         listingListRef,
@@ -99,7 +160,6 @@ export const useAppStore = defineStore('app', {
         listings.push(listingData);
       });
 
-      console.log(listings);
       return listings;
     },
 
@@ -128,7 +188,6 @@ export const useAppStore = defineStore('app', {
     async getListingImage(listingId: string): Promise<string> {
       const storage = getStorage();
       const imagePath = `listings-images/${listingId}.webp?alt=media`;
-      console.log(imagePath);
       const imageRef = firebaseRef(storage, imagePath);
 
       try {

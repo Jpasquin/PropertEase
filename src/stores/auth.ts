@@ -14,8 +14,11 @@ import {
   orderByChild,
   equalTo,
   query,
+  push,
 } from 'firebase/database';
 import User from '../interfaces/user';
+import BrokerApp from 'src/interfaces/brokerApp';
+import { log } from 'console';
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
@@ -33,7 +36,7 @@ export const useAuthStore = defineStore('auth', {
     isAdmin(): boolean {
       if (this.user) return this.user.accountType == 'admin';
       return false;
-    }
+    },
   },
 
   actions: {
@@ -124,6 +127,23 @@ export const useAuthStore = defineStore('auth', {
         return user.uid;
       } else {
         return null;
+      }
+    },
+
+    async createApp(application: BrokerApp) {
+      const auth = getAuth();
+      try {
+        // Add user to Realtime Database
+        const db = getDatabase();
+
+        await set(
+          ref(db, 'brokerApplications/' + auth.currentUser?.uid),
+          application
+        );
+
+        window.location.href = '/';
+      } catch (error) {
+        console.log(error);
       }
     },
   },

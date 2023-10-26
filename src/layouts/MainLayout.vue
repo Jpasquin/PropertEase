@@ -1,11 +1,8 @@
 <template>
   <q-layout view="lHh Lpr lFf">
-    <q-header
-      class="border-4 border-black bg-white"
-      style="border-bottom: 1px solid #e9e9e9"
-    >
+    <q-header class="border-4 border-black bg-white">
       <q-toolbar
-        class="h-[80px] px-10 min-w-[400px] max-w-[1200px] justify-center sm:justify-start m-auto"
+        class="h-[64px] px-6 min-w-[400px] max-w-[1800px] justify-center sm:justify-start m-auto"
       >
         <div
           class="text-[#2AAA8A] font-bold text-3xl tracking-[-1.5px] cursor-pointer"
@@ -35,7 +32,12 @@
           >
             <q-menu>
               <q-list style="min-width: 200px">
-                <q-item v-if="authStore.isBroker" clickable v-close-popup @click="$router.push('/broker')">
+                <q-item
+                  v-if="authStore.isBroker"
+                  clickable
+                  v-close-popup
+                  @click="$router.push('/broker')"
+                >
                   <q-item-section>View my Listings</q-item-section>
                 </q-item>
                 <q-separator />
@@ -45,72 +47,114 @@
                 </q-item>
                 <q-separator />
 
-                <q-item clickable v-close-popup @click="$router.push('/settings')">
+                <q-item
+                  clickable
+                  v-close-popup
+                  @click="$router.push('/settings')"
+                >
                   <q-item-section>Settings</q-item-section>
                 </q-item>
                 <q-separator />
                 <q-item clickable v-close-popup @click="authStore.signOutUser">
                   <q-item-section>Sign out</q-item-section>
                 </q-item>
-
               </q-list>
             </q-menu>
           </q-btn>
         </div>
       </q-toolbar>
       <q-separator />
-
-
     </q-header>
 
     <q-page-container class="px-4">
       <router-view />
     </q-page-container>
 
-    <div v-if="false" class="h-[300px] w-full bg-#f9fafb min-w-[400px]">
-      <div class="container mx-auto flex justify-between">
-        <div class="text-center w-1/3">
-          <h2 class="text-lg font-semibold">About Us</h2>
-          <p class="mt-2">Learn more about our company</p>
-          <a href="#" class="text-blue-300 hover:underline">Read More</a>
+    <!-- footer -->
+    <footer class="bg-gray-100 shadow dark:bg-gray-900">
+      <div class="w-full max-w-screen-xl mx-auto p-4 md:py-8">
+        <div class="sm:flex sm:items-center sm:justify-between">
+          <div
+            class="text-[#2AAA8A] font-bold text-3xl tracking-[-1.5px] cursor-pointer"
+            @click="$router.push('/')"
+          >
+            PropertEase
+          </div>
+          <ul
+            class="flex flex-wrap items-center mb-6 text-sm font-medium text-gray-500 sm:mb-0 dark:text-gray-400"
+          >
+            <li>
+              <div
+                class="mr-4 hover:underline md:mr-6 cursor-pointer"
+                @click="$router.push('/brokerApp')"
+                v-if="!authStore.isBroker"
+              >
+                Become a Broker
+              </div>
+            </li>
+            <li>
+              <div
+                class="mr-4 hover:underline md:mr-6 cursor-pointer"
+                @click="$router.push('/')"
+              >
+                About
+              </div>
+            </li>
+            <li>
+              <div
+                class="mr-4 hover:underline md:mr-6 cursor-pointer"
+                @click="$router.push('/')"
+              >
+                Privacy Policy
+              </div>
+            </li>
+            <li>
+              <div
+                class="mr-4 hover:underline md:mr-6 cursor-pointer"
+                @click="$router.push('/')"
+              >
+                Licensing
+              </div>
+            </li>
+            <li>
+              <div
+                class="mr-4 hover:underline md:mr-6 cursor-pointer"
+                @click="$router.push('/')"
+              >
+                Contact
+              </div>
+            </li>
+          </ul>
         </div>
-
-        <div class="text-center w-1/3">
-          <h2 class="text-lg font-semibold">FAQ</h2>
-          <p class="mt-2">Get answers to frequently asked questions</p>
-          <a href="#" class="text-blue-300 hover:underline">Visit FAQ</a>
-        </div>
-
-        <div class="text-center w-1/3">
-          <h2 class="text-lg font-semibold">Brokers</h2>
-          <p class="mt-2">Apply to become a broker</p>
-          <a href="#" class="text-blue-300 hover:underline">See More</a>
-        </div>
+        <hr
+          class="my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8"
+        />
+        <span
+          class="block text-sm text-gray-500 sm:text-center dark:text-gray-400"
+          >© 2023 <a href="#" class="hover:underline">PropertEase</a>. All
+          Rights Reserved.</span
+        >
       </div>
-    </div>
-
-    <q-footer
-      v-if="!showDiv"
-      class="border-4 border-black bg-white"
-      style="border-top: 1px solid #e9e9e9"
-    >
-      <q-toolbar class="h-[80px] px-6 min-w-[400px] m-auto text-black">
-      </q-toolbar>
-    </q-footer>
+    </footer>
   </q-layout>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, computed } from 'vue';
+import { ref, onMounted, onUnmounted, computed, defineComponent } from 'vue';
 import { useAuthStore } from 'stores/auth';
 import FilterSearch from '../components/FilterSearch.vue';
 import { useRoute, useRouter } from 'vue-router';
+import BrokerApplicationForm from 'src/pages/BrokerApplicationForm.vue';
 
 const route = useRoute()
 const router = useRouter()
 const authStore = useAuthStore();
 
 const windowWidth = ref(window.innerWidth);
+
+const props = defineProps([]);
+
+const components = defineComponent([BrokerApplicationForm]);
 
 const updateWidth = () => {
   windowWidth.value = window.innerWidth;
@@ -132,6 +176,9 @@ const navigateAndReload = async (route) => {
   await router.push(route + '?id=new');
   window.location.reload();
 }
+const showAppModal = () => {
+  showModal = true;
+};
 
 onMounted(() => {
   window.addEventListener('resize', updateWidth);
