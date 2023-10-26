@@ -96,6 +96,38 @@
         </template>
       </q-table>
     </div>
+
+    <div
+      class="border-solid border-2 border-[#d8d8d8] rounded-lg p-2 min-w-[600px]"
+      v-if="authStore.isBroker"
+    >
+      <div class="font-medium text-3xl px-2 py-4">Visits</div>
+      <q-table flat :rows="visitRows" :columns="visitColumns" row-key="name">
+        <template v-slot:body-cell-revoke="props">
+          <q-td :props="props">
+            <!-- Display delete button only if current row's id is NOT in brokerApplicationIds -->
+            <q-btn
+              v-if="props.row.confirmed"
+              flat
+              icon="delete"
+              @click="deleteVisit(props.row)"
+            />
+            <q-btn
+              v-if="!props.row.confirmed"
+              flat
+              icon="check"
+              @click="acceptOrDeclineVisit(props.row, true)"
+            />
+            <q-btn
+              v-if="!props.row.confirmed"
+              flat
+              icon="close"
+              @click="acceptOrDeclineVisit(props.row)"
+            />
+          </q-td>
+        </template>
+      </q-table>
+    </div>
   </q-page>
 </template>
 
@@ -136,7 +168,29 @@ const columns = [
   { name: 'decline', field: 'decline', align: 'left', label: '' },
 ];
 
+const visitColumns = [
+  {
+    name: 'email',
+    field: 'email',
+    required: true,
+    label: 'Email',
+    align: 'left',
+    sortable: true,
+  },
+  {
+    name: 'date',
+    field: 'date',
+    align: 'left',
+    label: 'Date',
+    sortable: true,
+  },
+  { name: 'revoke', field: 'revoke', align: 'left', label: '' },
+  { name: 'accept', field: 'accept', align: 'left', label: '' },
+  { name: 'decline', field: 'decline', align: 'left', label: '' },
+];
+
 const rows = ref([]);
+const visitRows = ref([]);
 const brokerApplicationIds = ref([]);
 
 const userChanges = ref({
@@ -158,6 +212,17 @@ onMounted(async () => {
     });
   });
 
+  const visitsByBroker = await appStore.getVisitsByBroker(authStore.user.userId);
+  visitsByBroker.forEach((item) => {
+    visitRows.value.push({
+      email: item.email,
+      date: item.date,
+      id: item.id,
+      confirmed: item.confirmed,
+      revoke: '',
+    });
+  });
+  console.log(visitsByBroker)
   // Fetching broker applications
   const brokerApplications = await appStore.getBrokerApplications();
   brokerApplications.forEach((item) => {
@@ -197,5 +262,21 @@ const saveUserChanges = async () => {
   savingUserChanges.value = true;
   await appStore.updateUser(userChanges.value);
   savingUserChanges.value = false;
+};
+
+const acceptOrDeclineVisit = async (row, approved) => {
+  // Find the index of the row with the given id
+  const rowIndex = rows.value.findIndex((r) => r.id === row.id);
+  // If the row is found, remove it
+  if (rowIndex !== -1) {
+    rows.value.splice(rowIndex, 1);
+  }
+  await appStore.approveOrDeclineVisit(row.id, approved);
+  location.reload();
+};
+
+const deleteVisit = async (row) => {
+  await appStore.deleteVisit(row.id)
+  location.reload();
 }
 </script>

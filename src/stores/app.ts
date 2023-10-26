@@ -9,6 +9,7 @@ import {
   ref,
   remove,
   update,
+  push,
 } from 'firebase/database';
 import {
   getStorage,
@@ -30,6 +31,79 @@ export const useAppStore = defineStore('app', {
   },
 
   actions: {
+    async createVisitRequest(visit: any) {
+      const db = getDatabase();
+      const visitsRef = ref(db, 'visits/');
+    
+      try {
+        await push(visitsRef, visit);
+        console.log('Visit added successfully');
+      } catch (error) {
+        console.error('Error adding visit: ', error);
+      }
+    },
+
+    async approveOrDeclineVisit(visitId: string, approved: any) {
+      const db = getDatabase();
+      const visitRef = ref(db, `visits/${visitId}`);
+    
+      if (approved) {
+        try {
+          await update(visitRef, { confirmed: true });
+          console.log('Visit approved successfully');
+        } catch (error) {
+          console.error('Error approving visit: ', error);
+          throw error;
+        }
+      } else {
+        try {
+          await remove(visitRef);
+          console.log('Visit declined and deleted successfully');
+        } catch (error) {
+          console.error('Error deleting visit: ', error);
+          throw error;
+        }
+      }
+    },
+
+    async deleteVisit(visitId: string) {
+      const db = getDatabase();
+      const visitRef = ref(db, `visits/${visitId}`);
+    
+      try {
+        await remove(visitRef);
+        console.log('Visit deleted successfully');
+      } catch (error) {
+        console.error('Error deleting visit: ', error);
+        throw error; // Re-throw the error to handle it in the calling function
+      }
+    },
+
+    async getVisitsByBroker(brokerId: string) {
+      const db = getDatabase();
+      const visitsRef = ref(db, 'visits');
+      const brokerVisitsQuery = query(visitsRef, orderByChild('brokerId'), equalTo(brokerId));
+    
+      try {
+        const snapshot = await get(brokerVisitsQuery);
+        if (snapshot.exists()) {
+          const visits: any = [];
+          snapshot.forEach((childSnapshot) => {
+            const visitData = childSnapshot.val();
+            visitData.id = childSnapshot.key; // Save the unique key of the visit
+            visits.push(visitData);
+          });
+          return visits;
+        } else {
+          console.log('No visits found for the given brokerId');
+          return [];
+        }
+      } catch (error) {
+        console.error('Error fetching visits: ', error);
+        throw error; // Re-throw the error to handle it in the calling function
+      }
+    },
+
     async removeImages(images: string[]) {
       console.log(images);
     },
@@ -155,7 +229,7 @@ export const useAppStore = defineStore('app', {
       });
     
       return listings;
-    },    
+    }, 
 
     async getListingsBroker(broker: string) {
       const db = getDatabase();
