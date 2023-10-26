@@ -456,7 +456,9 @@ const saveChanges = async () => {
     const token = await generateAndVerifyUID();
     listing.value.id = token;
     listing.value.type = 'buy';
+    listing.value.propertyType = 'house';
     listing.value.broker = authStore.user.userId;
+    listing.value.province = listing.value.province.value;
     const newListingRef = databaseRef(db, `listings/${token}`);
     await set(newListingRef, listing.value);
 

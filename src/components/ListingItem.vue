@@ -89,13 +89,14 @@ const formatCurrency = (value: number) => {
 }
 
 const propertyTitle = (propertyType: string) => {
+  console.log('penis')
   let propertyTitle;
   switch (propertyType) {
     case 'condo':
       propertyTitle = 'Condo in ';
       break;
     case 'house':
-      propertyTitle = 'Home in ';
+      propertyTitle = 'House in ';
       break;
     default:
       propertyTitle = 'Home in ';
