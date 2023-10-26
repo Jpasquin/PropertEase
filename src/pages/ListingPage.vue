@@ -1,6 +1,6 @@
 <template>
-  <q-page class="row items-center justify-evenly">
-    <div class="p-6 absolute top-0 w-full grid grid-cols-1 gap-2">
+  <q-page>
+    <div class="p-6 top-0 w-full grid grid-cols-1 gap-2">
       <div class="font-medium text-[26px] pb-4">
         <span v-if="!isAssociatedBroker">
           {{ listing.title }}
@@ -227,7 +227,10 @@
               flat
               no-caps
               class="h-[48px] w-full mb-4 rounded-md text-base text-white bg-gradient-to-r from-[#2AAA6A] from-33% via-[#2AAA8A] via-66% to-[#2AAAAA] to-100%"
-              label="Request a Visit"
+              :label="requestSent ? 'Request Sent!' : 'Request a Visit'"
+              @click="requestVisit"
+              :loading="requestLoading"
+              :disabled="requestSent"
             />
 
             <div
@@ -301,6 +304,8 @@ const selectedFiles = ref<File[]>([]);
 const selectedImagesDataUrl = ref<string[]>([]);
 const currentIndex = ref(null);
 const saving = ref(false)
+const requestLoading = ref(false);
+const requestSent = ref(false);
 
 const provinces = ref([
   { label: 'Alberta', value: 'AB' },
@@ -390,6 +395,27 @@ const generateAndVerifyUID = async () => {
     exists = await checkUIDExists(uid);
   }
   return uid;
+};
+
+const requestVisit = async () => {
+  console.log(authStore.user)
+  if (authStore.user) {
+    if (date.value) {
+      requestLoading.value = true;
+      await appStore.createVisitRequest({
+        date: date.value,
+        listingId: listing.value.id,
+        brokerId: listing.value.broker,
+        userId: authStore.user.userId,
+        email: authStore.user.email,
+        confirmed: false
+      });
+      requestLoading.value = false;
+      requestSent.value = true;
+    }
+  } else {
+    router.push('/signin');
+  }
 };
 
 const saveChanges = async () => {
