@@ -351,13 +351,13 @@ onMounted(async () => {
 })
 
 const isAssociatedBrokerOpacity = computed(() => {
-    if (authStore.user.userId === listing.value?.broker) {
+    if (authStore.user?.userId === listing.value?.broker) {
     return ' hover:opacity-50';
   }
     return '';
 })
 const isAssociatedBroker = computed(() => {
-  if (authStore.user.userId === listing.value?.broker) {
+  if (authStore.user?.userId === listing.value?.broker) {
     return true;
   } else if (route.query.id === 'new') {
     return true;
