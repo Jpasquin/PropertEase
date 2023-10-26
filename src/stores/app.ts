@@ -113,29 +113,33 @@ export const useAppStore = defineStore('app', {
     async getListings(filter: Filter) {
       const db = getDatabase();
       const listingListRef = ref(db, 'listings/');
-
-      // Query listings with type set to "buy"
       const buyListingsQuery = query(
         listingListRef,
         orderByChild('type'),
         equalTo(filter.type)
       );
       const listingListSnapshot = await get(buyListingsQuery);
-
-      // Convert the snapshot to an array of objects
+    
       const listings: any = [];
       listingListSnapshot.forEach((childSnapshot) => {
-        const listingId = childSnapshot.key; // This will give you the ID, e.g., "001"
+        const listingId = childSnapshot.key;
         const listingData = childSnapshot.val();
-
-        // Add the ID to the listing object
         listingData.id = listingId;
-
-        listings.push(listingData);
+    
+        const isCityMatch = filter.city == null || (listingData.city != null && listingData.city.toLowerCase().includes(filter.city.toLowerCase()));
+        const isProvinceMatch = filter.province == null || (listingData.province != null && listingData.province.toLowerCase() === filter.province.toLowerCase());
+    
+        const isPriceMatch = 
+          (filter.minMaxPrice?.min == null || listingData.price >= filter.minMaxPrice.min) &&
+          (filter.minMaxPrice?.max == null || listingData.price <= filter.minMaxPrice.max);
+    
+        if (isCityMatch && isProvinceMatch && isPriceMatch) {
+          listings.push(listingData);
+        }
       });
-
+    
       return listings;
-    },
+    },    
 
     async getListingsBroker(broker: string) {
       const db = getDatabase();

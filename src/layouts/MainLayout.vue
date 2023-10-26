@@ -2,7 +2,7 @@
   <q-layout view="lHh Lpr lFf">
     <q-header class="border-4 border-black bg-white">
       <q-toolbar
-        class="h-[64px] px-6 min-w-[400px] max-w-[1800px] justify-center sm:justify-start m-auto"
+        class="h-[64px] px-6 min-w-[400px] max-w-[1200px] justify-center sm:justify-start m-auto"
       >
         <div
           class="text-[#2AAA8A] font-bold text-3xl tracking-[-1.5px] cursor-pointer"
