@@ -93,6 +93,7 @@
               <div
                 class="mr-4 hover:underline md:mr-6 cursor-pointer"
                 @click="$router.push('/brokerApp')"
+                v-if="!authStore.isBroker"
               >
                 Become a Broker
               </div>
