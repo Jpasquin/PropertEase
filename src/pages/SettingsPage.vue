@@ -1,5 +1,40 @@
 <template>
   <q-page class="row items-center justify-evenly">
+    <div class="grid grid-cols-1 gap-4 min-w-[600px]">
+      <q-input
+        outlined
+        color="black"
+        label="First name"
+        v-model="userChanges.firstName"
+      />
+
+      <q-input
+        outlined
+        color="black"
+        label="Last name"
+        v-model="userChanges.lastName"
+      />
+      
+      <div>
+        <q-btn
+          flat
+          no-caps
+          class="bg-black text-white rounded-lg py-2! px-4! float-right"
+          label="Save Changes"
+          @click="saveUserChanges"
+          :loading="savingUserChanges"
+        />
+
+        <q-btn
+          flat
+          no-caps
+          class="bg-[#ededed] text-black rounded-lg py-2! px-4! float-right mr-2"
+          label="Cancel"
+          @click="userChanges.firstName = authStore.user.firstName, userChanges.lastName = authStore.user.lastName"
+        />
+      </div>
+    </div>
+
     <div
       class="border-solid border-2 border-[#d8d8d8] rounded-lg p-2 min-w-[600px]"
       v-if="authStore.isAdmin"
@@ -71,6 +106,7 @@ import { useAuthStore } from 'src/stores/auth';
 
 const appStore = useAppStore();
 const authStore = useAuthStore();
+const savingUserChanges = ref(false);
 
 const columns = [
   {
@@ -102,6 +138,12 @@ const columns = [
 
 const rows = ref([]);
 const brokerApplicationIds = ref([]);
+
+const userChanges = ref({
+  userId: authStore.user.userId,
+  firstName: authStore.user.firstName,
+  lastName: authStore.user.lastName
+});
 
 onMounted(async () => {
   // Fetching brokers
@@ -150,4 +192,10 @@ const acceptOrDeclineApplication = async (row, approved) => {
   await appStore.updateOrDeleteBrokerApplication(row.id, approved);
   location.reload();
 };
+
+const saveUserChanges = async () => {
+  savingUserChanges.value = true;
+  await appStore.updateUser(userChanges.value);
+  savingUserChanges.value = false;
+}
 </script>

@@ -34,6 +34,22 @@ export const useAppStore = defineStore('app', {
       console.log(images);
     },
 
+    async  updateUser(userChanges: any) {
+      const db = getDatabase();
+      const userRef = ref(db, `users/${userChanges.userId}`);
+    
+      try {
+        await update(userRef, {
+          firstName: userChanges.firstName,
+          lastName: userChanges.lastName,
+        });
+        console.log('User updated successfully');
+      } catch (error) {
+        console.error('Error updating user: ', error);
+        throw error; // Re-throw the error to handle it in the calling function if needed
+      }
+    },
+
     async revokeBroker(userId: string) {
       const db = getDatabase();
 
