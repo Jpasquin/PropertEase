@@ -100,7 +100,7 @@
         <q-dialog v-model="prompt" class="rounded-lg">
           <q-card class="rounded-3xl! min-w-[350px]! w-full px-4">
             <q-card-section>
-              <div class="text-3xl">Filters</div>
+              <div class="text-3xl font-medium">Filters</div>
             </q-card-section>
 
             <q-card-section>
