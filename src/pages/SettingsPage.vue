@@ -2,6 +2,7 @@
   <q-page class="row items-center justify-evenly">
     <div class="grid grid-cols-1 gap-4 min-w-[600px]">
       <q-input
+        ref="firstNameInput"
         outlined
         color="black"
         label="First name"
@@ -9,6 +10,7 @@
       />
 
       <q-input
+        ref="lastNameInput"
         outlined
         color="black"
         label="Last name"
@@ -194,15 +196,15 @@ const visitRows = ref([]);
 const brokerApplicationIds = ref([]);
 
 const userChanges = ref({
-  userId: authStore.user.userId,
-  firstName: authStore.user.firstName,
-  lastName: authStore.user.lastName
+  userId: authStore.user?.userId,
+  firstName: authStore.user?.firstName,
+  lastName: authStore.user?.lastName
 });
 
 onMounted(async () => {
   // Fetching brokers
   const brokers = await appStore.getBrokers();
-  brokers.forEach((item) => {
+  brokers?.forEach((item) => {
     rows.value.push({
       email: item.email,
       firstName: item.firstName,
@@ -212,8 +214,8 @@ onMounted(async () => {
     });
   });
 
-  const visitsByBroker = await appStore.getVisitsByBroker(authStore.user.userId);
-  visitsByBroker.forEach((item) => {
+  const visitsByBroker = await appStore.getVisitsByBroker(authStore.user?.userId);
+  visitsByBroker?.forEach((item) => {
     visitRows.value.push({
       email: item.email,
       date: item.date,
@@ -225,7 +227,7 @@ onMounted(async () => {
   console.log(visitsByBroker)
   // Fetching broker applications
   const brokerApplications = await appStore.getBrokerApplications();
-  brokerApplications.forEach((item) => {
+  brokerApplications?.forEach((item) => {
     brokerApplicationIds.value.push(item.id); // populate the ids ref
     rows.value.push({
       email: item.email, // Assuming brokerApplications also have 'email', 'firstName', etc.
