@@ -9,4 +9,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - run: npm install -g @quasar/cli && npm install && quasar build
+      - run: npm install -g @quasar/cli && npm install
+
+      - name: Run Unit Tests
+        run: npm run test:unit:ci
+
+      - name: Build Project
+        run: quasar build
+
