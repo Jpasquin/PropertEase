@@ -27,6 +27,27 @@
           v-model="application.email"
         />
 
+        <q-input
+          outlined
+          color="black"
+          label="Phone number"
+          v-model="application.phone"
+        />
+
+        <q-input
+          outlined
+          color="black"
+          label="License number"
+          v-model="application.license"
+        />
+
+        <q-input
+          outlined
+          color="black"
+          label="Agency"
+          v-model="application.agency"
+        />
+
         <q-btn
           flat
           no-caps
@@ -49,6 +70,9 @@ const application: BrokerApp = reactive({
   firstName: '',
   lastName: '',
   email: '',
+  phone: '',
+  license: '',
+  agency: '',
 });
 
 const submitApplication = async () => {
