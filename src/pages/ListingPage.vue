@@ -290,20 +290,56 @@
 
             <q-separator class="my-4" />
 
-            <q-input
-              outlined
-              color="black"
-              label="Amount CAD"
-              type="number"
-              class="mb-4"
-            />
-
             <q-btn
-              flat
-              no-caps
-              class="h-[48px] w-full mb-4 rounded-md text-base text-white bg-gradient-to-r from-[#2AAA6A] from-33% via-[#2AAA8A] via-66% to-[#2AAAAA] to-100%"
-              label="Send an Offer"
-            />
+                flat
+                no-caps
+                class="h-[48px] w-full mb-4 rounded-md text-base text-white bg-gradient-to-r from-[#2AAA6A] from-33% via-[#2AAA8A] via-66% to-[#2AAAAA] to-100%"
+                @click="openOfferModal"
+                :label="requestSent ? 'Offer Sent!' : 'Send an Offer'"
+              />
+
+              <q-dialog v-model="offerModal" persistent full-width>
+              <q-card>
+                <q-card-section>
+                  Broker information
+                    <q-input v-model="brokerLicense" label="License number" />
+                    <q-input v-model="brokerAgency" label="Agency" />
+                </q-card-section>
+
+                <q-card-section>
+                  Buyer information
+                  <q-input v-model="buyerFName" label="First name" />
+                  <q-input v-model="buyerLName" label="Last name" />
+                  <q-input v-model="buyerEmail" label="Email" />
+                </q-card-section>
+
+                <q-card-section>
+                  Address of the immovable
+                  <!-- doesn't work like intended -->
+                  <q-input v-model="addressImmovable" readonly />
+                </q-card-section>
+
+                <q-card-section>
+                  Price and dates
+                  <q-input v-model="buyerPrice" label="Price" />
+                  <!-- add calendar popup selector for the last 2 options -->
+                  <q-input v-model="dateSale" label="Deed of sale date" />
+                  <q-input v-model="dateOccupy" label="Occupancy of premises date" />
+                </q-card-section>
+
+                <q-card-actions align="right">
+                  <q-btn
+                    label="Submit Offer"
+                    color="primary"
+                    @click="submitOffer"
+                  />
+                  <q-btn
+                    label="Cancel"
+                    @click="closeOfferModal"
+                  />
+                </q-card-actions>
+              </q-card>
+            </q-dialog>
 
             <div class="font-normal text-base pb-2 opacity-80">
               Please exercise caution before submitting an offer to purchase a
@@ -382,6 +418,37 @@ const provinces = ref([
   { label: 'Saskatchewan', value: 'SK' },
   { label: 'Yukon', value: 'YT' },
 ]);
+
+
+const offerModal = ref(false);
+
+
+const brokerLicense = ref('');
+const brokerAgency = ref('');
+const buyerFName = ref('');
+const buyerLName = ref('');
+const buyerEmail = ref('');
+const addressImmovable = ref(listing.value.address);
+const buyerPrice = ref('');
+const dateSale = ref('');
+const dateOccupy = ref('');
+
+const openOfferModal = () => {
+  offerModal.value = true;
+};
+
+const closeOfferModal = () => {
+  offerModal.value = false;
+};
+
+const submitOffer = () => {
+  // Implement the logic to submit the offer with the collected data
+  // You can access the input values as brokerLicense.value, buyerFName.value, etc.
+  
+  // After submitting, you can close the modal and update the UI accordingly
+  closeOfferModal();
+  requestSent.value = true;
+};
 
 const checkScrollPosition = () => {
   // Get the div's position from the top of the page
