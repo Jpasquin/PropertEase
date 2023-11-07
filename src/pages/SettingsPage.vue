@@ -16,7 +16,7 @@
         label="Last name"
         v-model="userChanges.lastName"
       />
-      
+
       <div>
         <q-btn
           flat
@@ -32,7 +32,10 @@
           no-caps
           class="bg-[#ededed] text-black rounded-lg py-2! px-4! float-right mr-2"
           label="Cancel"
-          @click="userChanges.firstName = authStore.user.firstName, userChanges.lastName = authStore.user.lastName"
+          @click="
+            (userChanges.firstName = authStore.user.firstName),
+              (userChanges.lastName = authStore.user.lastName)
+          "
         />
       </div>
     </div>
@@ -100,7 +103,7 @@
     </div>
 
     <div
-      class="border-solid border-2 border-[#d8d8d8] rounded-lg p-2 min-w-[600px]"
+      class="border-solid border-2 border-[#d8d8d8] rounded-lg p-2 min-w-[600px] mt-[50px]"
       v-if="authStore.isBroker"
     >
       <div class="font-medium text-3xl px-2 py-4">Visits</div>
@@ -127,9 +130,134 @@
               @click="acceptOrDeclineVisit(props.row)"
             />
           </q-td>
+
+          <q-dialog v-model="offerModal" persistent full-width>
+            <q-card>
+              <q-card-section>
+                Broker information
+                <q-input v-model="brokerLicense" label="License number" />
+                <q-input v-model="brokerAgency" label="Agency" />
+              </q-card-section>
+
+              <q-card-section>
+                Buyer information
+                <q-input v-model="buyerFName" label="First name" />
+                <q-input v-model="buyerLName" label="Last name" />
+                <q-input v-model="buyerEmail" label="Email" />
+              </q-card-section>
+
+              <q-card-section>
+                Address of the immovable
+                <!-- doesn't work like intended -->
+                <q-input v-model="addressImmovable" readonly />
+              </q-card-section>
+
+              <q-card-section>
+                Price and dates
+                <q-input v-model="buyerPrice" label="Price" />
+                <!-- add calendar popup selector for the last 2 options -->
+                <q-input v-model="dateSale" label="Deed of sale date" />
+                <q-input
+                  v-model="dateOccupy"
+                  label="Occupancy of premises date"
+                />
+              </q-card-section>
+
+              <q-card-actions align="right">
+                <q-btn
+                  label="Submit Offer"
+                  color="primary"
+                  @click="submitOffer"
+                />
+                <q-btn label="Cancel" @click="closeOfferModal" />
+              </q-card-actions>
+            </q-card>
+          </q-dialog>
         </template>
       </q-table>
     </div>
+    <div
+      class="border-solid border-2 border-[#d8d8d8] rounded-lg p-2 min-w-[600px] mt-[50px] mb-[50px]"
+      v-if="authStore.isBroker"
+    >
+      <div class="font-medium text-3xl px-2 py-4">Offers</div>
+      <q-table
+        flat
+        :rows="offerRows"
+        :columns="offerColumns"
+        row-key="name"
+        @row-click="onRowClick"
+      >
+        <template v-slot:body-cell-revoke="props">
+          <q-td :props="props">
+            <!-- Display delete button only if current row's id is NOT in brokerApplicationIds -->
+            <q-btn
+              v-if="props.row.confirmed"
+              flat
+              icon="delete"
+              @click="deleteOffer(props.row)"
+            />
+            <q-btn
+              v-if="!props.row.confirmed"
+              flat
+              icon="check"
+              @click="acceptOrDeclineOffer(props.row, true)"
+            />
+            <q-btn
+              v-if="!props.row.confirmed"
+              flat
+              icon="close"
+              @click="acceptOrDeclineOffer(props.row)"
+            />
+          </q-td>
+        </template>
+      </q-table>
+    </div>
+    <q-dialog v-model="offerModal">
+      <q-card style="width: 50vw">
+        <q-card-section>
+          Broker information
+          <q-input
+            v-model="currentOffer.brokerLicense"
+            label="License number"
+            readonly
+          />
+          <q-input
+            v-model="currentOffer.brokerAgency"
+            label="Agency"
+            readonly
+          />
+        </q-card-section>
+
+        <q-card-section>
+          Buyer information
+          <q-input v-model="currentOffer.buyerFName" label="First name" />
+          <q-input v-model="currentOffer.buyerLName" label="Last name" />
+          <q-input v-model="currentOffer.buyerEmail" label="Email" />
+        </q-card-section>
+
+        <q-card-section>
+          Address of the immovable
+          <!-- doesn't work like intended -->
+          <q-input v-model="currentOffer.address" readonly />
+        </q-card-section>
+
+        <q-card-section>
+          Price and dates
+          <q-input v-model="currentOffer.buyerPrice" label="Price" />
+          <!-- add calendar popup selector for the last 2 options -->
+          <q-input v-model="currentOffer.dateSale" label="Deed of sale date" />
+          <q-input
+            v-model="currentOffer.dateOccupy"
+            label="Occupancy of premises date"
+          />
+        </q-card-section>
+
+        <q-card-actions align="right">
+          <q-btn label="Cancel" @click="closeOfferModal" />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </q-page>
 </template>
 
@@ -141,6 +269,7 @@ import { useAuthStore } from 'src/stores/auth';
 const appStore = useAppStore();
 const authStore = useAuthStore();
 const savingUserChanges = ref(false);
+const offerModal = ref(false);
 
 const columns = [
   {
@@ -191,15 +320,61 @@ const visitColumns = [
   { name: 'decline', field: 'decline', align: 'left', label: '' },
 ];
 
+const offerColumns = [
+  {
+    name: 'buyerFName',
+    field: 'buyerFName',
+    align: 'left',
+    label: 'First name',
+    sortable: true,
+  },
+  {
+    name: 'buyerLName',
+    field: 'buyerLName',
+    align: 'left',
+    label: 'Last name',
+    sortable: true,
+  },
+  {
+    name: 'buyerPrice',
+    field: 'buyerPrice',
+    align: 'left',
+    label: 'Price',
+    sortable: true,
+  },
+  {
+    name: 'dateSale',
+    field: 'dateSale',
+    align: 'left',
+    label: 'Date',
+    sortable: true,
+  },
+  { name: 'revoke', field: 'revoke', align: 'left', label: '' },
+  { name: 'accept', field: 'accept', align: 'left', label: '' },
+  { name: 'decline', field: 'decline', align: 'left', label: '' },
+];
+
 const rows = ref([]);
 const visitRows = ref([]);
 const brokerApplicationIds = ref([]);
+const offerRows = ref([]);
+const currentOffer = ref([]);
 
 const userChanges = ref({
   userId: authStore.user?.userId,
   firstName: authStore.user?.firstName,
-  lastName: authStore.user?.lastName
+  lastName: authStore.user?.lastName,
 });
+
+const onRowClick = (event, row) => {
+  offerModal.value = true;
+  currentOffer.value = row;
+  console.log(currentOffer);
+};
+
+const closeOfferModal = () => {
+  offerModal.value = false;
+};
 
 onMounted(async () => {
   // Fetching brokers
@@ -214,7 +389,9 @@ onMounted(async () => {
     });
   });
 
-  const visitsByBroker = await appStore.getVisitsByBroker(authStore.user?.userId);
+  const visitsByBroker = await appStore.getVisitsByBroker(
+    authStore.user?.userId
+  );
   visitsByBroker?.forEach((item) => {
     visitRows.value.push({
       email: item.email,
@@ -224,7 +401,32 @@ onMounted(async () => {
       revoke: '',
     });
   });
-  console.log(visitsByBroker)
+  console.log(visitsByBroker);
+
+  const offersByBroker = await appStore.getOffersByBroker(
+    authStore.user?.userId
+  );
+  offersByBroker?.forEach((item) => {
+    offerRows.value.push({
+      address: item.address,
+      id: item.id,
+      brokerAgency: item.brokerAgency,
+      brokerFName: item.brokerFName,
+      brokerLName: item.brokerLName,
+      brokerLicense: item.brokerLicense,
+      buyerEmail: item.buyerEmail,
+      buyerFName: item.buyerFName,
+      buyerLName: item.buyerLName,
+      buyerPrice: item.buyerPrice,
+      dateOccupy: item.dateOccupy,
+      dateSale: item.dateSale,
+      confirmed: item.confirmed,
+      revoke: '',
+    });
+  });
+  console.log(offersByBroker);
+  console.log(offerRows);
+
   // Fetching broker applications
   const brokerApplications = await appStore.getBrokerApplications();
   brokerApplications?.forEach((item) => {
@@ -278,7 +480,24 @@ const acceptOrDeclineVisit = async (row, approved) => {
 };
 
 const deleteVisit = async (row) => {
-  await appStore.deleteVisit(row.id)
+  await appStore.deleteVisit(row.id);
   location.reload();
-}
+};
+
+const acceptOrDeclineOffer = async (row, approved) => {
+  console.log(row);
+  // Find the index of the row with the given id
+  const rowIndex = offerRows.value.findIndex((r) => r.id === row.id);
+  // If the row is found, remove it
+  if (rowIndex !== -1) {
+    offerRows.value.splice(rowIndex, 1);
+  }
+  await appStore.approveOrDeclineOffer(row.id, approved);
+  location.reload();
+};
+
+const deleteOffer = async (row) => {
+  await appStore.deleteOffer(row.id);
+  location.reload();
+};
 </script>
