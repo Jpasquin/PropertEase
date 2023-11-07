@@ -291,19 +291,21 @@
             <q-separator class="my-4" />
 
             <q-btn
-                flat
-                no-caps
-                class="h-[48px] w-full mb-4 rounded-md text-base text-white bg-gradient-to-r from-[#2AAA6A] from-33% via-[#2AAA8A] via-66% to-[#2AAAAA] to-100%"
-                @click="openOfferModal"
-                :label="requestSent ? 'Offer Sent!' : 'Send an Offer'"
-              />
+              flat
+              no-caps
+              class="h-[48px] w-full mb-4 rounded-md text-base text-white bg-gradient-to-r from-[#2AAA6A] from-33% via-[#2AAA8A] via-66% to-[#2AAAAA] to-100%"
+              @click="openOfferModal"
+              :label="requestSent ? 'Offer Sent!' : 'Send an Offer'"
+            />
 
-              <q-dialog v-model="offerModal" persistent full-width>
+            <q-dialog v-model="offerModal" persistent full-width>
               <q-card>
                 <q-card-section>
                   Broker information
-                    <q-input v-model="brokerLicense" label="License number" />
-                    <q-input v-model="brokerAgency" label="Agency" />
+                  <q-input v-model="brokerFName" label="First Name" />
+                  <q-input v-model="brokerLName" label="Last Name" />
+                  <q-input v-model="brokerLicense" label="License number" />
+                  <q-input v-model="brokerAgency" label="Agency" />
                 </q-card-section>
 
                 <q-card-section>
@@ -316,7 +318,7 @@
                 <q-card-section>
                   Address of the immovable
                   <!-- doesn't work like intended -->
-                  <q-input v-model="addressImmovable" readonly />
+                  <q-input v-model="listing.address" readonly />
                 </q-card-section>
 
                 <q-card-section>
@@ -324,7 +326,10 @@
                   <q-input v-model="buyerPrice" label="Price" />
                   <!-- add calendar popup selector for the last 2 options -->
                   <q-input v-model="dateSale" label="Deed of sale date" />
-                  <q-input v-model="dateOccupy" label="Occupancy of premises date" />
+                  <q-input
+                    v-model="dateOccupy"
+                    label="Occupancy of premises date"
+                  />
                 </q-card-section>
 
                 <q-card-actions align="right">
@@ -333,10 +338,7 @@
                     color="primary"
                     @click="submitOffer"
                   />
-                  <q-btn
-                    label="Cancel"
-                    @click="closeOfferModal"
-                  />
+                  <q-btn label="Cancel" @click="closeOfferModal" />
                 </q-card-actions>
               </q-card>
             </q-dialog>
@@ -399,7 +401,7 @@ const shouldBeFixed = ref(false);
 const selectedFiles = ref<File[]>([]);
 const selectedImagesDataUrl = ref<string[]>([]);
 const currentIndex = ref(null);
-const saving = ref(false)
+const saving = ref(false);
 const requestLoading = ref(false);
 const requestSent = ref(false);
 
@@ -419,16 +421,15 @@ const provinces = ref([
   { label: 'Yukon', value: 'YT' },
 ]);
 
-
 const offerModal = ref(false);
 
-
+const brokerFName = ref('');
+const brokerLName = ref('');
 const brokerLicense = ref('');
 const brokerAgency = ref('');
 const buyerFName = ref('');
 const buyerLName = ref('');
 const buyerEmail = ref('');
-const addressImmovable = ref(listing.value.address);
 const buyerPrice = ref('');
 const dateSale = ref('');
 const dateOccupy = ref('');
@@ -441,10 +442,25 @@ const closeOfferModal = () => {
   offerModal.value = false;
 };
 
-const submitOffer = () => {
+const submitOffer = async () => {
   // Implement the logic to submit the offer with the collected data
   // You can access the input values as brokerLicense.value, buyerFName.value, etc.
-  
+  if (authStore.user) {
+    await appStore.createOffer({
+      brokerFName: brokerFName.value,
+      brokerLName: brokerLName.value,
+      brokerLicense: brokerLicense.value,
+      brokerAgency: brokerAgency.value,
+      buyerFName: buyerFName.value,
+      buyerLName: buyerLName.value,
+      buyerEmail: buyerEmail.value,
+      buyerPrice: buyerPrice.value,
+      dateSale: dateSale.value,
+      dateOccupy: dateOccupy.value,
+      address: listing.value.address,
+      confirmed: false,
+    });
+  }
   // After submitting, you can close the modal and update the UI accordingly
   closeOfferModal();
   requestSent.value = true;
@@ -526,7 +542,7 @@ const generateAndVerifyUID = async () => {
 };
 
 const requestVisit = async () => {
-  console.log(authStore.user)
+  console.log(authStore.user);
   if (authStore.user) {
     if (date.value) {
       requestLoading.value = true;
@@ -536,7 +552,7 @@ const requestVisit = async () => {
         brokerId: listing.value.broker,
         userId: authStore.user.userId,
         email: authStore.user.email,
-        confirmed: false
+        confirmed: false,
       });
       requestLoading.value = false;
       requestSent.value = true;

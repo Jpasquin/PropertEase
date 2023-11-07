@@ -1,4 +1,3 @@
-
 import {
   equalTo,
   get,
@@ -26,15 +25,15 @@ export const useAppStore = defineStore('app', {
 
   getters: {
     getImageURL() {
-      return 'https://firebasestorage.googleapis.com/v0/b/propertease-5ff7d.appspot.com/o/'
-    }
+      return 'https://firebasestorage.googleapis.com/v0/b/propertease-5ff7d.appspot.com/o/';
+    },
   },
 
   actions: {
     async createVisitRequest(visit: any) {
       const db = getDatabase();
       const visitsRef = ref(db, 'visits/');
-    
+
       try {
         await push(visitsRef, visit);
         console.log('Visit added successfully');
@@ -46,7 +45,7 @@ export const useAppStore = defineStore('app', {
     async approveOrDeclineVisit(visitId: string, approved: any) {
       const db = getDatabase();
       const visitRef = ref(db, `visits/${visitId}`);
-    
+
       if (approved) {
         try {
           await update(visitRef, { confirmed: true });
@@ -69,7 +68,7 @@ export const useAppStore = defineStore('app', {
     async deleteVisit(visitId: string) {
       const db = getDatabase();
       const visitRef = ref(db, `visits/${visitId}`);
-    
+
       try {
         await remove(visitRef);
         console.log('Visit deleted successfully');
@@ -82,8 +81,12 @@ export const useAppStore = defineStore('app', {
     async getVisitsByBroker(brokerId: string) {
       const db = getDatabase();
       const visitsRef = ref(db, 'visits');
-      const brokerVisitsQuery = query(visitsRef, orderByChild('brokerId'), equalTo(brokerId));
-    
+      const brokerVisitsQuery = query(
+        visitsRef,
+        orderByChild('brokerId'),
+        equalTo(brokerId)
+      );
+
       try {
         const snapshot = await get(brokerVisitsQuery);
         if (snapshot.exists()) {
@@ -104,14 +107,27 @@ export const useAppStore = defineStore('app', {
       }
     },
 
+    async createOffer(offer: any) {
+      console.log('hello');
+      const db = getDatabase();
+      const offerRef = ref(db, 'offers/');
+
+      try {
+        await push(offerRef, offer);
+        console.log('Offer added successfully');
+      } catch (error) {
+        console.error('Error adding offer: ', error);
+      }
+    },
+
     async removeImages(images: string[]) {
       console.log(images);
     },
 
-    async  updateUser(userChanges: any) {
+    async updateUser(userChanges: any) {
       const db = getDatabase();
       const userRef = ref(db, `users/${userChanges.userId}`);
-    
+
       try {
         await update(userRef, {
           firstName: userChanges.firstName,
@@ -209,27 +225,36 @@ export const useAppStore = defineStore('app', {
         equalTo(filter.type)
       );
       const listingListSnapshot = await get(buyListingsQuery);
-    
+
       const listings: any = [];
       listingListSnapshot.forEach((childSnapshot) => {
         const listingId = childSnapshot.key;
         const listingData = childSnapshot.val();
         listingData.id = listingId;
-    
-        const isCityMatch = filter.city == null || (listingData.city != null && listingData.city.toLowerCase().includes(filter.city.toLowerCase()));
-        const isProvinceMatch = filter.province == null || (listingData.province != null && listingData.province.toLowerCase() === filter.province.toLowerCase());
-    
-        const isPriceMatch = 
-          (filter.minMaxPrice?.min == null || listingData.price >= filter.minMaxPrice.min) &&
-          (filter.minMaxPrice?.max == null || listingData.price <= filter.minMaxPrice.max);
-    
+
+        const isCityMatch =
+          filter.city == null ||
+          (listingData.city != null &&
+            listingData.city.toLowerCase().includes(filter.city.toLowerCase()));
+        const isProvinceMatch =
+          filter.province == null ||
+          (listingData.province != null &&
+            listingData.province.toLowerCase() ===
+              filter.province.toLowerCase());
+
+        const isPriceMatch =
+          (filter.minMaxPrice?.min == null ||
+            listingData.price >= filter.minMaxPrice.min) &&
+          (filter.minMaxPrice?.max == null ||
+            listingData.price <= filter.minMaxPrice.max);
+
         if (isCityMatch && isProvinceMatch && isPriceMatch) {
           listings.push(listingData);
         }
       });
-    
+
       return listings;
-    }, 
+    },
 
     async getListingsBroker(broker: string) {
       const db = getDatabase();
@@ -262,10 +287,10 @@ export const useAppStore = defineStore('app', {
       const db = getDatabase();
       const listingListRef = ref(db, 'listings/');
       const specificListingRef = child(listingListRef, listingId);
-    
+
       try {
         const snapshot = await get(specificListingRef);
-        
+
         if (snapshot.exists()) {
           const listing = snapshot.val();
           listing.id = snapshot.key;
