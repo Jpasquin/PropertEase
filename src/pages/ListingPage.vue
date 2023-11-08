@@ -298,49 +298,162 @@
               :label="requestSent ? 'Offer Sent!' : 'Send an Offer'"
             />
 
-            <q-dialog v-model="offerModal" persistent full-width>
-              <q-card>
-                <q-card-section>
-                  Broker information
-                  <q-input v-model="brokerFName" label="First Name" />
-                  <q-input v-model="brokerLName" label="Last Name" />
-                  <q-input v-model="brokerLicense" label="License number" />
-                  <q-input v-model="brokerAgency" label="Agency" />
-                </q-card-section>
+            <q-dialog
+              v-model="offerModal"
+              transition-show="slide-up"
+              transition-hide="slide-down"
+            >
+              <div class="q-pa-md" style="width: 50%">
+                <q-stepper
+                  v-model="step"
+                  vertical
+                  color="primary"
+                  done-color="teal-10"
+                  active-color="teal"
+                  inactive-color="teal-3"
+                  animated
+                >
+                  <q-step
+                    :name="1"
+                    title="Broker information"
+                    icon="settings"
+                    :done="step > 1"
+                  >
+                    <q-input
+                      v-model="brokerFName"
+                      rounded
+                      outlined
+                      color="teal"
+                      label="First Name"
+                      class="q-mb-md"
+                    />
+                    <q-input
+                      v-model="brokerLName"
+                      rounded
+                      outlined
+                      color="teal"
+                      label="Last Name"
+                      class="q-mb-md"
+                    />
+                    <q-input
+                      v-model="brokerLicense"
+                      rounded
+                      outlined
+                      color="teal"
+                      label="License number"
+                      class="q-mb-md"
+                    />
+                    <q-input
+                      v-model="brokerAgency"
+                      rounded
+                      outlined
+                      color="teal"
+                      label="Agency"
+                      class="q-mb-md"
+                    />
 
-                <q-card-section>
-                  Buyer information
-                  <q-input v-model="buyerFName" label="First name" />
-                  <q-input v-model="buyerLName" label="Last name" />
-                  <q-input v-model="buyerEmail" label="Email" />
-                </q-card-section>
+                    <q-stepper-navigation>
+                      <q-btn @click="step = 2" color="teal" label="Continue" />
+                    </q-stepper-navigation>
+                  </q-step>
 
-                <q-card-section>
-                  Address of the immovable
-                  <!-- doesn't work like intended -->
-                  <q-input v-model="listing.address" readonly />
-                </q-card-section>
+                  <q-step
+                    :name="2"
+                    title="Buyer information"
+                    icon="create_new_folder"
+                    :done="step > 2"
+                  >
+                    <q-input
+                      v-model="buyerFName"
+                      rounded
+                      outlined
+                      color="teal"
+                      label="First name"
+                      class="q-mb-md"
+                    />
+                    <q-input
+                      v-model="buyerLName"
+                      rounded
+                      outlined
+                      color="teal"
+                      label="Last name"
+                      class="q-mb-md"
+                    />
+                    <q-input
+                      v-model="buyerEmail"
+                      rounded
+                      outlined
+                      color="teal"
+                      label="Email"
+                      class="q-mb-md"
+                    />
 
-                <q-card-section>
-                  Price and dates
-                  <q-input v-model="buyerPrice" label="Price" />
-                  <!-- add calendar popup selector for the last 2 options -->
-                  <q-input v-model="dateSale" label="Deed of sale date" />
-                  <q-input
-                    v-model="dateOccupy"
-                    label="Occupancy of premises date"
-                  />
-                </q-card-section>
+                    <q-stepper-navigation>
+                      <q-btn @click="step = 4" color="teal" label="Continue" />
+                      <q-btn
+                        flat
+                        @click="step = 1"
+                        color="teal"
+                        label="Back"
+                        class="q-ml-sm"
+                      />
+                    </q-stepper-navigation>
+                  </q-step>
 
-                <q-card-actions align="right">
-                  <q-btn
-                    label="Submit Offer"
-                    color="primary"
-                    @click="submitOffer"
-                  />
-                  <q-btn label="Cancel" @click="closeOfferModal" />
-                </q-card-actions>
-              </q-card>
+                  <q-step
+                    :name="3"
+                    title="Address of the Immovable"
+                    :caption="listing.address"
+                    icon="assignment"
+                    disable
+                  >
+                  </q-step>
+
+                  <q-step :name="4" title="Price and dates" icon="add_comment">
+                    <q-input
+                      v-model="buyerPrice"
+                      rounded
+                      outlined
+                      color="teal"
+                      label="Price"
+                      class="q-mb-md"
+                    />
+                    <q-input
+                      v-model="dateSale"
+                      label="Deed of sale date"
+                      type="date"
+                      rounded
+                      outlined
+                      color="teal"
+                      class="q-mb-md"
+                    />
+                    <q-input
+                      v-model="dateOccupy"
+                      label="Occupancy of premises date"
+                      type="date"
+                      rounded
+                      outlined
+                      color="teal"
+                      class="q-mb-md"
+                    />
+
+                    <q-stepper-navigation>
+                      <q-btn
+                        label="Submit Offer"
+                        color="teal"
+                        @click="submitOffer"
+                      />
+                      <q-btn
+                        flat
+                        @click="step = 2"
+                        color="teal"
+                        label="Back"
+                        class="q-ml-sm"
+                      />
+                    </q-stepper-navigation>
+                  </q-step>
+                </q-stepper>
+              </div>
             </q-dialog>
 
             <div class="font-normal text-base pb-2 opacity-80">
@@ -422,6 +535,7 @@ const provinces = ref([
 ]);
 
 const offerModal = ref(false);
+const step = ref(1);
 
 const brokerFName = ref('');
 const brokerLName = ref('');
@@ -445,22 +559,20 @@ const closeOfferModal = () => {
 const submitOffer = async () => {
   // Implement the logic to submit the offer with the collected data
   // You can access the input values as brokerLicense.value, buyerFName.value, etc.
-  if (authStore.user) {
-    await appStore.createOffer({
-      brokerFName: brokerFName.value,
-      brokerLName: brokerLName.value,
-      brokerLicense: brokerLicense.value,
-      brokerAgency: brokerAgency.value,
-      buyerFName: buyerFName.value,
-      buyerLName: buyerLName.value,
-      buyerEmail: buyerEmail.value,
-      buyerPrice: buyerPrice.value,
-      dateSale: dateSale.value,
-      dateOccupy: dateOccupy.value,
-      address: listing.value.address,
-      confirmed: false,
-    });
-  }
+  await appStore.createOffer({
+    brokerFName: brokerFName.value,
+    brokerLName: brokerLName.value,
+    brokerLicense: brokerLicense.value,
+    brokerAgency: brokerAgency.value,
+    buyerFName: buyerFName.value,
+    buyerLName: buyerLName.value,
+    buyerEmail: buyerEmail.value,
+    buyerPrice: buyerPrice.value,
+    dateSale: dateSale.value,
+    dateOccupy: dateOccupy.value,
+    address: listing.value.address,
+    confirmed: false,
+  });
   // After submitting, you can close the modal and update the UI accordingly
   closeOfferModal();
   requestSent.value = true;
