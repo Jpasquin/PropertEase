@@ -406,10 +406,11 @@ onMounted(async () => {
   const offersByBroker = await appStore.getOffersByBroker(
     authStore.user?.userId
   );
+  console.log('this is the current userID ' + authStore.user?.userId);
   offersByBroker?.forEach((item) => {
     offerRows.value.push({
       address: item.address,
-      id: item.id,
+      id: authStore.user?.userId,
       brokerAgency: item.brokerAgency,
       brokerFName: item.brokerFName,
       brokerLName: item.brokerLName,
@@ -424,8 +425,8 @@ onMounted(async () => {
       revoke: '',
     });
   });
-  console.log(offersByBroker);
-  console.log(offerRows);
+  console.log('We have reached the offerbybroker ' + offersByBroker);
+  console.log('We have reached the offer rows ' + offerRows.value);
 
   // Fetching broker applications
   const brokerApplications = await appStore.getBrokerApplications();

@@ -276,10 +276,10 @@
               flat
               no-caps
               class="h-[48px] w-full mb-4 rounded-md text-base text-white bg-gradient-to-r from-[#2AAA6A] from-33% via-[#2AAA8A] via-66% to-[#2AAAAA] to-100%"
-              :label="requestSent ? 'Request Sent!' : 'Request a Visit'"
+              :label="visitSent ? 'Request Sent!' : 'Request a Visit'"
               @click="requestVisit"
-              :loading="requestLoading"
-              :disabled="requestSent"
+              :loading="visitLoading"
+              :disabled="visitSent"
             />
 
             <div class="font-normal text-base pb-2 opacity-80">
@@ -295,7 +295,9 @@
               no-caps
               class="h-[48px] w-full mb-4 rounded-md text-base text-white bg-gradient-to-r from-[#2AAA6A] from-33% via-[#2AAA8A] via-66% to-[#2AAAAA] to-100%"
               @click="openOfferModal"
-              :label="requestSent ? 'Offer Sent!' : 'Send an Offer'"
+              :label="offerSent ? 'Offer Sent!' : 'Send an Offer'"
+              :loading="offerLoading"
+              :disabled="offerSent"
             />
 
             <q-dialog
@@ -515,8 +517,10 @@ const selectedFiles = ref<File[]>([]);
 const selectedImagesDataUrl = ref<string[]>([]);
 const currentIndex = ref(null);
 const saving = ref(false);
-const requestLoading = ref(false);
-const requestSent = ref(false);
+const visitLoading = ref(false);
+const visitSent = ref(false);
+const offerLoading = ref(false);
+const offerSent = ref(false);
 
 const provinces = ref([
   { label: 'Alberta', value: 'AB' },
@@ -549,7 +553,11 @@ const dateSale = ref('');
 const dateOccupy = ref('');
 
 const openOfferModal = () => {
-  offerModal.value = true;
+  if (authStore.user) {
+    offerModal.value = true;
+  } else {
+    router.push('/signin');
+  }
 };
 
 const closeOfferModal = () => {
@@ -557,8 +565,7 @@ const closeOfferModal = () => {
 };
 
 const submitOffer = async () => {
-  // Implement the logic to submit the offer with the collected data
-  // You can access the input values as brokerLicense.value, buyerFName.value, etc.
+  offerLoading.value = true;
   await appStore.createOffer({
     brokerFName: brokerFName.value,
     brokerLName: brokerLName.value,
@@ -571,11 +578,13 @@ const submitOffer = async () => {
     dateSale: dateSale.value,
     dateOccupy: dateOccupy.value,
     address: listing.value.address,
+    brokerID: listing.value.broker,
     confirmed: false,
   });
-  // After submitting, you can close the modal and update the UI accordingly
+
   closeOfferModal();
-  requestSent.value = true;
+  offerLoading.value = false;
+  offerSent.value = true;
 };
 
 const checkScrollPosition = () => {
@@ -657,7 +666,7 @@ const requestVisit = async () => {
   console.log(authStore.user);
   if (authStore.user) {
     if (date.value) {
-      requestLoading.value = true;
+      visitLoading.value = true;
       await appStore.createVisitRequest({
         date: date.value,
         listingId: listing.value.id,
@@ -666,8 +675,8 @@ const requestVisit = async () => {
         email: authStore.user.email,
         confirmed: false,
       });
-      requestLoading.value = false;
-      requestSent.value = true;
+      visitLoading.value = false;
+      visitSent.value = true;
     }
   } else {
     router.push('/signin');
