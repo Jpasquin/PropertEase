@@ -31,7 +31,7 @@
           flat
           no-caps
           class="h-[48px] rounded-md text-base text-white bg-gradient-to-r from-[#2AAA6A] from-33% via-[#2AAA8A] via-66% to-[#2AAAAA] to-100%"
-          label="Send Request"
+          label="Submit Application"
           @click="submitApplication"
         />
       </div>
