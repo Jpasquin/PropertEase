@@ -45,7 +45,7 @@ export const useAppStore = defineStore('app', {
     async approveOrDeclineVisit(visitId: string, approved: any) {
       const db = getDatabase();
       const visitRef = ref(db, `visits/${visitId}`);
-      
+
       if (approved) {
         try {
           await update(visitRef, { confirmed: true });
@@ -142,7 +142,6 @@ export const useAppStore = defineStore('app', {
       }
     },
 
-
     async getOffersByBroker(brokerId: string) {
       const db = getDatabase();
       const visitsRef = ref(db, 'offers');
@@ -169,7 +168,9 @@ export const useAppStore = defineStore('app', {
       } catch (error) {
         console.error('Error fetching offers: ', error);
         throw error; // Re-throw the error to handle it in the calling function
-        
+      }
+    },
+
     async createOffer(offer: any) {
       console.log('hello');
       const db = getDatabase();
@@ -180,7 +181,6 @@ export const useAppStore = defineStore('app', {
         console.log('Offer added successfully');
       } catch (error) {
         console.error('Error adding offer: ', error);
-
       }
     },
 
