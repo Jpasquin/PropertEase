@@ -379,7 +379,7 @@ const closeOfferModal = () => {
 onMounted(async () => {
   // Fetching brokers
   const brokers = await appStore.getBrokers();
-  brokers?.forEach((item) => {
+  brokers?.forEach((item: any) => {
     rows.value.push({
       email: item.email,
       firstName: item.firstName,
@@ -392,7 +392,7 @@ onMounted(async () => {
   const visitsByBroker = await appStore.getVisitsByBroker(
     authStore.user?.userId
   );
-  visitsByBroker?.forEach((item) => {
+  visitsByBroker?.forEach((item: any) => {
     visitRows.value.push({
       email: item.email,
       date: item.date,
@@ -406,7 +406,7 @@ onMounted(async () => {
   const offersByBroker = await appStore.getOffersByBroker(
     authStore.user?.userId
   );
-  offersByBroker?.forEach((item) => {
+  offersByBroker?.forEach((item: any) => {
     offerRows.value.push({
       address: item.address,
       id: item.id,

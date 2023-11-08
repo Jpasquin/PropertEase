@@ -549,7 +549,11 @@ const dateSale = ref('');
 const dateOccupy = ref('');
 
 const openOfferModal = () => {
-  offerModal.value = true;
+  if (authStore.user) {
+    offerModal.value = true;
+  } else {
+    router.push('/signin');
+  }
 };
 
 const closeOfferModal = () => {

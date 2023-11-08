@@ -155,6 +155,7 @@ export const useAppStore = defineStore('app', {
       try {
         const snapshot = await get(brokerVisitsQuery);
         if (snapshot.exists()) {
+          console.log('snapshot exists');
           const offers: any = [];
           snapshot.forEach((childSnapshot) => {
             const offerData = childSnapshot.val();
@@ -169,7 +170,10 @@ export const useAppStore = defineStore('app', {
       } catch (error) {
         console.error('Error fetching offers: ', error);
         throw error; // Re-throw the error to handle it in the calling function
-        
+      }
+
+    },
+
     async createOffer(offer: any) {
       console.log('hello');
       const db = getDatabase();
