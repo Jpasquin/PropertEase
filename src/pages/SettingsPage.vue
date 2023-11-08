@@ -379,7 +379,7 @@ const closeOfferModal = () => {
 onMounted(async () => {
   // Fetching brokers
   const brokers = await appStore.getBrokers();
-  brokers?.forEach((item: any) => {
+  brokers?.forEach((item) => {
     rows.value.push({
       email: item.email,
       firstName: item.firstName,
@@ -392,7 +392,7 @@ onMounted(async () => {
   const visitsByBroker = await appStore.getVisitsByBroker(
     authStore.user?.userId
   );
-  visitsByBroker?.forEach((item: any) => {
+  visitsByBroker?.forEach((item) => {
     visitRows.value.push({
       email: item.email,
       date: item.date,
@@ -406,10 +406,11 @@ onMounted(async () => {
   const offersByBroker = await appStore.getOffersByBroker(
     authStore.user?.userId
   );
-  offersByBroker?.forEach((item: any) => {
+  console.log('this is the current userID ' + authStore.user?.userId);
+  offersByBroker?.forEach((item) => {
     offerRows.value.push({
       address: item.address,
-      id: item.id,
+      id: authStore.user?.userId,
       brokerAgency: item.brokerAgency,
       brokerFName: item.brokerFName,
       brokerLName: item.brokerLName,
@@ -424,8 +425,8 @@ onMounted(async () => {
       revoke: '',
     });
   });
-  console.log(offersByBroker);
-  console.log(offerRows);
+  console.log('We have reached the offerbybroker ' + offersByBroker);
+  console.log('We have reached the offer rows ' + offerRows.value);
 
   // Fetching broker applications
   const brokerApplications = await appStore.getBrokerApplications();

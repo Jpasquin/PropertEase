@@ -144,8 +144,9 @@ export const useAppStore = defineStore('app', {
 
 
     async getOffersByBroker(brokerId: string) {
+      console.log('In the getOfferByBroker, this is the brokerId ' + brokerId);
       const db = getDatabase();
-      const visitsRef = ref(db, 'offers');
+      const visitsRef = ref(db, 'offers/');
       const brokerVisitsQuery = query(
         visitsRef,
         orderByChild('brokerId'),
@@ -154,6 +155,7 @@ export const useAppStore = defineStore('app', {
 
       try {
         const snapshot = await get(brokerVisitsQuery);
+        console.log(brokerVisitsQuery);
         if (snapshot.exists()) {
           console.log('snapshot exists');
           const offers: any = [];
