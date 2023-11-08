@@ -36,13 +36,13 @@
                   v-if="authStore.isBroker"
                   clickable
                   v-close-popup
-                  @click="$router.push('/broker')"
+                  @click="navigateAndReload('/brokers?id=' + authStore?.user?.userId)"
                 >
                   <q-item-section>View my Listings</q-item-section>
                 </q-item>
                 <q-separator />
 
-                <q-item v-if="authStore.isBroker" clickable v-close-popup @click="navigateAndReload('/listing')">
+                <q-item v-if="authStore.isBroker" clickable v-close-popup @click="navigateAndReload('/listing?id=new')">
                   <q-item-section>Add Listing</q-item-section>
                 </q-item>
                 <q-separator />
@@ -172,8 +172,7 @@ const userInitials = computed(() => {
 });
 
 const navigateAndReload = async (route) => {
-  console.log('hello')
-  await router.push(route + '?id=new');
+  await router.push(route );
   window.location.reload();
 }
 const showAppModal = () => {

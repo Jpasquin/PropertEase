@@ -134,6 +134,26 @@ export const useAppStore = defineStore('app', {
       await update(brokerUserRef, { accountType: 'user' });
     },
 
+    async getBroker(brokerId: string) {
+      const db = getDatabase();
+      // Create a reference to the specific broker's data
+      const brokerRef = ref(db, 'users/' + brokerId);
+    
+      // Retrieve the snapshot for the specific broker
+      const brokerSnapshot = await get(brokerRef);
+    
+      if (brokerSnapshot.exists()) {
+        const brokerData = brokerSnapshot.val();
+        // Add the ID to the broker object
+        brokerData.id = brokerId;
+        return brokerData;
+      } else {
+        // Handle the case where the broker does not exist
+        console.log("No broker found with ID: " + brokerId);
+        return null; // or throw an error or return a default value
+      }
+    },
+
     async getBrokers() {
       const db = getDatabase();
       const brokerListRef = ref(db, 'users/');

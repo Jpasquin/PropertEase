@@ -1,13 +1,21 @@
 <template>
   <div class="w-full bg-white">
     <q-toolbar
-      class="border-4 border-black bg-white min-w-[400px] max-w-[1200px] flex justify-between"
+      class="border-4 border-black bg-white min-w-[400px] max-w-[1200px] flex"
     >
       <q-btn-toggle v-model="currentFilter.type" class="border-solid border-1 border-black" no-caps rounded
         unelevated toggle-color="black" color="white" text-color="black" :options="[
           { label: 'Buy', value: 'buy' },
           { label: 'Rent', value: 'rent' }
         ]" />
+      
+      <div
+        class="ml-3 font-medium hover:text-[#2AAA8A] cursor-pointer"
+        v-if="currentFilter.type === 'buy'"
+        @click="$router.push('/brokers')"
+      >
+        Search for Brokers
+      </div>
 
       <div class="scrolling-container" v-if="false">
         <!-- Content goes here -->
@@ -95,7 +103,7 @@
         label="Filters"
         icon-left="true"
         @click="prompt = true"
-        class="text-medium text-black rounded-lg"
+        class="text-medium text-black rounded-lg m-auto mr-0"
       />
         <q-dialog v-model="prompt" class="rounded-lg">
           <q-card class="rounded-3xl! min-w-[350px]! w-full px-4">

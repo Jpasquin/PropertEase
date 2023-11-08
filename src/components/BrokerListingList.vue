@@ -1,5 +1,5 @@
 <template>
-  <div class="p-6 absolute top-0 w-full">
+  <div class="p-6 pt-0 top-0 w-full">
     <transition-group name="fade" tag="div" class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
       <listing-item v-for="(item, index) in listAmount" :key="index" :listing="listings[index]" />
     </transition-group>
@@ -14,21 +14,17 @@ import { useAuthStore } from 'stores/auth';
 import ListingItem from 'components/ListingItem.vue';
 
 const props = defineProps<{
-  amount: number;
+  brokerId: string;
 }>()
 
 const appStore = useAppStore();
 const authStore = useAuthStore();
 const listings = ref([]);
-const listAmount = ref(props.amount);
+const listAmount = ref(null);
 const userToken = ref('');
 
 onMounted(async () => {
-  const userId = await authStore.getUser();
-  if (userId) {
-    userToken.value = userId;
-  }
-  listings.value = await appStore.getListingsBroker(userToken.value);
+  listings.value = await appStore.getListingsBroker(props.brokerId);
   listAmount.value = listings.value.length;
 })
 </script>
