@@ -94,8 +94,11 @@ export const useAppStore = defineStore('app', {
     },
 
     async approveOrDeclineOffer(offerId: string, approved: any) {
+      console.log('Store log')
+      console.log(offerId)
       const db = getDatabase();
       const offerRef = ref(db, `offers/${offerId}`);
+      console.log(offerRef)
       if (approved) {
         try {
           await update(offerRef, { confirmed: true });

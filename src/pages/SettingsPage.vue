@@ -158,13 +158,13 @@
               v-if="!props.row.confirmed"
               flat
               icon="check"
-              @click="acceptOrDeclineOffer(props.row, true)"
+              @click.stop="acceptOrDeclineOffer(props.row, true)"
             />
             <q-btn
               v-if="!props.row.confirmed"
               flat
               icon="close"
-              @click="acceptOrDeclineOffer(props.row, false)"
+              @click.stop="acceptOrDeclineOffer(props.row, false)"
             />
           </q-td>
         </template>
@@ -370,16 +370,14 @@ onMounted(async () => {
       revoke: '',
     });
   });
-  console.log(visitsByBroker);
 
   const offersByBroker = await appStore.getOffersByBroker(
     authStore.user?.userId
   );
-  console.log('this is the current userID ' + authStore.user?.userId);
   offersByBroker?.forEach((item) => {
     offerRows.value.push({
       address: item.address,
-      id: authStore.user?.userId,
+      id: item.id,
       brokerAgency: item.brokerAgency,
       brokerFName: item.brokerFName,
       brokerLName: item.brokerLName,
@@ -394,8 +392,6 @@ onMounted(async () => {
       revoke: '',
     });
   });
-  console.log('We have reached the offerbybroker ' + offersByBroker);
-  console.log('We have reached the offer rows ' + offerRows.value);
 
   // Fetching broker applications
   const brokerApplications = await appStore.getBrokerApplications();
@@ -455,14 +451,13 @@ const deleteVisit = async (row) => {
 };
 
 const acceptOrDeclineOffer = async (row, approved) => {
-  console.log(row);
   // Find the index of the row with the given id
   const rowIndex = offerRows.value.findIndex((r) => r.id === row.id);
   // If the row is found, remove it
   if (rowIndex !== -1) {
     offerRows.value.splice(rowIndex, 1);
   }
-  await appStore.approveOrDeclineOffer(row.id, approved);
+  const response = await appStore.approveOrDeclineOffer(row.id, approved);
   location.reload();
 };
 
