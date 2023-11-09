@@ -231,9 +231,17 @@
 
         <q-card-section>
           Buyer information
-          <q-input v-model="currentOffer.buyerFName" label="First name" />
-          <q-input v-model="currentOffer.buyerLName" label="Last name" />
-          <q-input v-model="currentOffer.buyerEmail" label="Email" />
+          <q-input
+            readonly
+            v-model="currentOffer.buyerFName"
+            label="First name"
+          />
+          <q-input
+            readonly
+            v-model="currentOffer.buyerLName"
+            label="Last name"
+          />
+          <q-input readonly v-model="currentOffer.buyerEmail" label="Email" />
         </q-card-section>
 
         <q-card-section>
@@ -244,10 +252,15 @@
 
         <q-card-section>
           Price and dates
-          <q-input v-model="currentOffer.buyerPrice" label="Price" />
+          <q-input v-model="currentOffer.buyerPrice" label="Price" readonly />
           <!-- add calendar popup selector for the last 2 options -->
-          <q-input v-model="currentOffer.dateSale" label="Deed of sale date" />
           <q-input
+            v-model="currentOffer.dateSale"
+            label="Deed of sale date"
+            readonly
+          />
+          <q-input
+            readonly
             v-model="currentOffer.dateOccupy"
             label="Occupancy of premises date"
           />
