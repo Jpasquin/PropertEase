@@ -578,10 +578,10 @@ const submitOffer = async () => {
     dateSale: dateSale.value,
     dateOccupy: dateOccupy.value,
     address: listing.value.address,
-    brokerID: listing.value.broker,
+    brokerId: listing.value.broker,
     confirmed: false,
   });
-
+  
   closeOfferModal();
   offerLoading.value = false;
   offerSent.value = true;

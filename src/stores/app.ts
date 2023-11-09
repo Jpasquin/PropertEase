@@ -65,6 +65,7 @@ export const useAppStore = defineStore('app', {
       }
     },
 
+    // used for when the visit has already been approved
     async deleteVisit(visitId: string) {
       const db = getDatabase();
       const visitRef = ref(db, `visits/${visitId}`);
@@ -78,6 +79,7 @@ export const useAppStore = defineStore('app', {
       }
     },
 
+    // used for when the offer has already been approved
     async deleteOffer(offerId: string) {
       const db = getDatabase();
       const offerRef = ref(db, `offers/${offerId}`);

@@ -127,52 +127,9 @@
               v-if="!props.row.confirmed"
               flat
               icon="close"
-              @click="acceptOrDeclineVisit(props.row)"
+              @click="acceptOrDeclineVisit(props.row, false)"
             />
           </q-td>
-
-          <q-dialog v-model="offerModal" persistent full-width>
-            <q-card>
-              <q-card-section>
-                Broker information
-                <q-input v-model="brokerLicense" label="License number" />
-                <q-input v-model="brokerAgency" label="Agency" />
-              </q-card-section>
-
-              <q-card-section>
-                Buyer information
-                <q-input v-model="buyerFName" label="First name" />
-                <q-input v-model="buyerLName" label="Last name" />
-                <q-input v-model="buyerEmail" label="Email" />
-              </q-card-section>
-
-              <q-card-section>
-                Address of the immovable
-                <!-- doesn't work like intended -->
-                <q-input v-model="addressImmovable" readonly />
-              </q-card-section>
-
-              <q-card-section>
-                Price and dates
-                <q-input v-model="buyerPrice" label="Price" />
-                <!-- add calendar popup selector for the last 2 options -->
-                <q-input v-model="dateSale" label="Deed of sale date" />
-                <q-input
-                  v-model="dateOccupy"
-                  label="Occupancy of premises date"
-                />
-              </q-card-section>
-
-              <q-card-actions align="right">
-                <q-btn
-                  label="Submit Offer"
-                  color="primary"
-                  @click="submitOffer"
-                />
-                <q-btn label="Cancel" @click="closeOfferModal" />
-              </q-card-actions>
-            </q-card>
-          </q-dialog>
         </template>
       </q-table>
     </div>
@@ -207,7 +164,7 @@
               v-if="!props.row.confirmed"
               flat
               icon="close"
-              @click="acceptOrDeclineOffer(props.row)"
+              @click="acceptOrDeclineOffer(props.row, false)"
             />
           </q-td>
         </template>
@@ -217,40 +174,30 @@
       <q-card style="width: 50vw">
         <q-card-section>
           Broker information
+          <q-input v-model="currentOffer.brokerFName" label="First name" readonly/>
+          <q-input v-model="currentOffer.brokerLName" label="Last name" readonly/>
           <q-input
-            v-model="currentOffer.brokerLicense"
-            label="License number"
-            readonly
-          />
-          <q-input
-            v-model="currentOffer.brokerAgency"
-            label="Agency"
-            readonly
-          />
+            v-model="currentOffer.brokerLicense" label="License number" readonly />
+          <q-input v-model="currentOffer.brokerAgency" label="Agency" readonly />
         </q-card-section>
 
         <q-card-section>
           Buyer information
-          <q-input v-model="currentOffer.buyerFName" label="First name" />
-          <q-input v-model="currentOffer.buyerLName" label="Last name" />
-          <q-input v-model="currentOffer.buyerEmail" label="Email" />
+          <q-input v-model="currentOffer.buyerFName" label="First name" readonly />
+          <q-input v-model="currentOffer.buyerLName" label="Last name" readonly />
+          <q-input v-model="currentOffer.buyerEmail" label="Email" readonly />
         </q-card-section>
 
         <q-card-section>
           Address of the immovable
-          <!-- doesn't work like intended -->
-          <q-input v-model="currentOffer.address" readonly />
+          <q-input v-model="currentOffer.address" label="Address" readonly />
         </q-card-section>
 
         <q-card-section>
           Price and dates
-          <q-input v-model="currentOffer.buyerPrice" label="Price" />
-          <!-- add calendar popup selector for the last 2 options -->
-          <q-input v-model="currentOffer.dateSale" label="Deed of sale date" />
-          <q-input
-            v-model="currentOffer.dateOccupy"
-            label="Occupancy of premises date"
-          />
+          <q-input v-model="currentOffer.buyerPrice" label="Price" readonly />
+          <q-input v-model="currentOffer.dateSale" label="Deed of sale date" readonly />
+          <q-input v-model="currentOffer.dateOccupy" label="Occupancy of premises date" readonly />
         </q-card-section>
 
         <q-card-actions align="right">
