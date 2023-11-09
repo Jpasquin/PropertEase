@@ -22,9 +22,9 @@ const routes: RouteRecordRaw[] = [
     children: [{ path: '', component: () => import('pages/SettingsPage.vue') }],
   },
   {
-    path: '/broker',
+    path: '/brokers',
     component: () => import('layouts/MainLayout.vue'),
-    children: [{ path: '', component: () => import('pages/BrokerPage.vue') }],
+    children: [{ path: '', component: () => import('pages/BrokersPage.vue') }],
   },
   {
     path: '/brokerApp',

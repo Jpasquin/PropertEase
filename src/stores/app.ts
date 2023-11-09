@@ -65,6 +65,7 @@ export const useAppStore = defineStore('app', {
       }
     },
 
+    // used for when the visit has already been approved
     async deleteVisit(visitId: string) {
       const db = getDatabase();
       const visitRef = ref(db, `visits/${visitId}`);
@@ -78,6 +79,7 @@ export const useAppStore = defineStore('app', {
       }
     },
 
+    // used for when the offer has already been approved
     async deleteOffer(offerId: string) {
       const db = getDatabase();
       const offerRef = ref(db, `offers/${offerId}`);
@@ -217,6 +219,26 @@ export const useAppStore = defineStore('app', {
       await update(brokerUserRef, { accountType: 'user' });
     },
 
+    async getBroker(brokerId: string) {
+      const db = getDatabase();
+      // Create a reference to the specific broker's data
+      const brokerRef = ref(db, 'users/' + brokerId);
+    
+      // Retrieve the snapshot for the specific broker
+      const brokerSnapshot = await get(brokerRef);
+    
+      if (brokerSnapshot.exists()) {
+        const brokerData = brokerSnapshot.val();
+        // Add the ID to the broker object
+        brokerData.id = brokerId;
+        return brokerData;
+      } else {
+        // Handle the case where the broker does not exist
+        console.log("No broker found with ID: " + brokerId);
+        return null; // or throw an error or return a default value
+      }
+    },
+
     async getBrokers() {
       const db = getDatabase();
       const brokerListRef = ref(db, 'users/');
@@ -269,17 +291,33 @@ export const useAppStore = defineStore('app', {
 
     async updateOrDeleteBrokerApplication(userId: string, approved: boolean) {
       const db = getDatabase();
-
+      const brokerApplicationRef = ref(db, `brokerApplications/${userId}`);
       // If approved, update the user's account type to 'broker'
       if (approved) {
         const userRef = ref(db, `users/${userId}`);
+
+        // Fetch the broker application data
+        const brokerApplicationSnapshot = await get(brokerApplicationRef);
+        const brokerApplicationData = brokerApplicationSnapshot.val();
+
+        if (brokerApplicationData) {
+          // Extract info from the broker application
+          const { phone, license, agency } = brokerApplicationData;
+
+          // Update user's account type to 'broker' and add phone number
+          await update(userRef, {
+            phone: phone, // Add the phone number to the user object
+            license: license,
+            agency: agency,
+          });
+        }
+
         await update(userRef, {
           accountType: 'broker',
         });
       }
 
       // Remove the corresponding application from brokerApplications
-      const brokerApplicationRef = ref(db, `brokerApplications/${userId}`);
       await remove(brokerApplicationRef);
     },
 
