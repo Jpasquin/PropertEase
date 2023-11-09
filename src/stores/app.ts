@@ -271,17 +271,33 @@ export const useAppStore = defineStore('app', {
 
     async updateOrDeleteBrokerApplication(userId: string, approved: boolean) {
       const db = getDatabase();
-
+      const brokerApplicationRef = ref(db, `brokerApplications/${userId}`);
       // If approved, update the user's account type to 'broker'
       if (approved) {
         const userRef = ref(db, `users/${userId}`);
+
+        // Fetch the broker application data
+        const brokerApplicationSnapshot = await get(brokerApplicationRef);
+        const brokerApplicationData = brokerApplicationSnapshot.val();
+
+        if (brokerApplicationData) {
+          // Extract info from the broker application
+          const { phone, license, agency } = brokerApplicationData;
+
+          // Update user's account type to 'broker' and add phone number
+          await update(userRef, {
+            phone: phone, // Add the phone number to the user object
+            license: license,
+            agency: agency,
+          });
+        }
+
         await update(userRef, {
           accountType: 'broker',
         });
       }
 
       // Remove the corresponding application from brokerApplications
-      const brokerApplicationRef = ref(db, `brokerApplications/${userId}`);
       await remove(brokerApplicationRef);
     },
 
