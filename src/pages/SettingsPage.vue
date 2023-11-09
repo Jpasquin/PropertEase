@@ -1,6 +1,6 @@
 <template>
   <q-page class="row items-center justify-evenly">
-    <div class="grid grid-cols-1 gap-4 min-w-[600px]">
+    <div class="grid grid-cols-1 gap-4 min-w-[600px] mt-4">
       <q-input
         ref="firstNameInput"
         outlined
