@@ -106,7 +106,7 @@ const formatPhoneNumber = (phoneNumber) => {
 }
 
 const checkBroker = async () => {
-  const id = route.query.id;
+  const id = route?.query?.id;
   if (id) {
     try {
       // Make an API call to get the broker by ID

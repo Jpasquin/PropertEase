@@ -589,13 +589,14 @@ const submitOffer = async () => {
 
 const checkScrollPosition = () => {
   // Get the div's position from the top of the page
-  const divPosition = fixedDivRef.value.getBoundingClientRect().top;
-
-  // Check if the scroll position has reached the div's position
-  if (divPosition <= 102) {
-    shouldBeFixed.value = true;
-  } else {
-    shouldBeFixed.value = false;
+  if (fixedDivRef.value) {
+    const divPosition = fixedDivRef.value.getBoundingClientRect().top;
+    // Check if the scroll position has reached the div's position
+    if (divPosition <= 102) {
+      shouldBeFixed.value = true;
+    } else {
+      shouldBeFixed.value = false;
+    }
   }
 };
 
@@ -605,16 +606,16 @@ onMounted(async () => {
   window.addEventListener('scroll', checkScrollPosition);
   checkScrollPosition();
   // Check if "id" exists and is not empty
-  const id = route.query.id;
+  const id = route?.query.id;
   if (!id || id === '') {
-    router.push('/');
+    router?.push('/');
   } else if (id === 'new' && authStore.isBroker) {
     console.log('new listing');
   } else {
     listing.value = await appStore.getListing(id);
     console.log(listing.value.broker);
     if (!listing.value) {
-      router.push('/');
+      router?.push('/');
     }
   }
 });
