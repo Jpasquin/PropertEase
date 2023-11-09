@@ -1,7 +1,7 @@
 # PropertEase ([Link](https://propertease-5ff7d.web.app))
 
 ### [Meeting Minutes](https://docs.google.com/document/d/1fAs3DRg0vzcju0SPYCO5jQVp3JQgr2mX9F3wEzdK4c8/edit?usp=sharing)
-### [Sprint Planning](https://docs.google.com/document/d/1AWSJw1WR9Cif5JsjOVZ7un6dJYMlg5lRNgvT5fZ6fSY/edit)
+### [Sprint Planning](https://docs.google.com/document/d/1H0YSSF9653HxJRnDzqFTT1_qtsoiBGjJTNg-ZdQE2hU/edit)
 ### [Contribution Log](https://docs.google.com/spreadsheets/d/1zzdhYC-tlj-8haEgOCKvL_3sBwnYYgP96RVW1nIbsQI/edit#gid=1386834576)
 ### [User Stories](https://docs.google.com/document/d/1C_qaazkOoA4voUydYpOeJQQqoFUSTETEa56SImrKguc/edit?usp=sharing)
 ### [User Stories #2](https://docs.google.com/document/d/1ytCwxEeEto3_IaKGqEW9cDVT33r3SRAmKiei9FF4YrA/edit?usp=sharing)
