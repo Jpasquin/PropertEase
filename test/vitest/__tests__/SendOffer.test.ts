@@ -17,6 +17,7 @@ describe('ListingPage', () => {
         // other mocks and global configs
       },
     });
+    const submitOfferSpy = vi.spyOn(wrapper.vm, 'submitOffer');
 
     // Wait for any initial asynchronous operations
     await flushPromises();
@@ -34,6 +35,7 @@ describe('ListingPage', () => {
     wrapper.vm.buyerPrice = 100000;
     wrapper.vm.dateSale = '2023/11/22';
     wrapper.vm.dateOccupy = '2023/11/22';
+    wrapper.vm.submitOffer();
 
     await flushPromises();
     await wrapper.vm.$nextTick();
@@ -49,6 +51,7 @@ describe('ListingPage', () => {
     expect(wrapper.vm.buyerPrice).toBe(100000);
     expect(wrapper.vm.dateSale).toBe('2023/11/22');
     expect(wrapper.vm.dateOccupy).toBe('2023/11/22');
+    expect(submitOfferSpy).toHaveBeenCalled();
   });
 });
 

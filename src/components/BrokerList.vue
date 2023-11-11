@@ -71,7 +71,7 @@ const navigateAndReload = (brokerId) => {
 // Computed property for filtered brokers
 const filteredBrokers = computed(() => {
   const filterLower = props.filter?.toLowerCase();
-  return brokers.value.filter((broker) => {
+  return brokers.value?.filter((broker) => {
     const firstNameLower = broker.firstName?.toLowerCase();
     const lastNameLower = broker.lastName?.toLowerCase();
     return (
