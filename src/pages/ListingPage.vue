@@ -463,6 +463,32 @@
               property. Ensure you've reviewed all details and consulted with a
               broker or legal advisor.
             </div>
+
+            <q-separator class="my-4" />
+
+            <q-btn
+            flat
+            no-caps
+            class="h-[48px] w-full mb-4 rounded-md text-base text-white bg-gradient-to-r from-[#2AAA6A] from-33% via-[#2AAA8A] via-66% to-[#2AAAAA] to-100%"
+            @click="openMortgageCalculator"
+            label="Mortgage Calculator"
+            />
+
+            <div class="font-normal text-base pb-2 opacity-80">
+              To use the mortgage calculator, enter the loan's principal amount, the annual interest rate provided by your lender, and the loan term in years. Once these details are filled in, click to calculate.
+            </div>
+
+            <q-dialog v-model="dialogVisible">
+              <q-card>
+                <q-card-section>
+                  <q-input v-model="principal" :label="listing.price" :value="listing.price" readonly />
+                  <q-input v-model="annualRate" label="Annual Rate" />
+                  <q-input v-model="loanTerm" label="Loan Term" />
+                  <q-btn label="Calculate" @click="calculateAndDisplay" />
+                </q-card-section>
+              </q-card>
+            </q-dialog>
+            
           </div>
         </div>
       </div>
@@ -586,6 +612,33 @@ const submitOffer = async () => {
   offerLoading.value = false;
   offerSent.value = true;
 };
+
+const dialogVisible = ref(false);
+const principal = ref(listing.value.price);
+const annualRate = ref<number | null>(null);
+const loanTerm = ref<number | null>(null);
+const monthlyPayment = ref<number | null>(null);
+
+const openMortgageCalculator = () => {
+  dialogVisible.value = true;
+}
+
+const calculateAndDisplay = async () => {
+  console.log('Pricipal Payment:', principal);
+  console.log('Annual rate  Payment:', annualRate);
+  console.log('Loan term Payment:', loanTerm);
+  try {
+    if (principal.value !== null && annualRate.value !== null && loanTerm.value !== null) {
+      const result = await appStore.calculateMortgage(principal.value, annualRate.value, loanTerm.value);
+      monthlyPayment.value = result;
+      console.log('Monthly Payment:', result);
+    } else {
+      console.error('Please fill in all fields.');
+    }
+  } catch (error) {
+    console.error('Failed to calculate mortgage:', error);
+  }
+}
 
 const checkScrollPosition = () => {
   // Get the div's position from the top of the page
