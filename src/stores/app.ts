@@ -94,11 +94,11 @@ export const useAppStore = defineStore('app', {
     },
 
     async approveOrDeclineOffer(offerId: string, approved: any) {
-      console.log('Store log')
-      console.log(offerId)
+      console.log('Store log');
+      console.log(offerId);
       const db = getDatabase();
       const offerRef = ref(db, `offers/${offerId}`);
-      console.log(offerRef)
+      console.log(offerRef);
       if (approved) {
         try {
           await update(offerRef, { confirmed: true });
@@ -180,7 +180,7 @@ export const useAppStore = defineStore('app', {
     },
 
     async createOffer(offer: any) {
-      console.log('hello');
+      console.log(offer.senderID);
       const db = getDatabase();
       const offerRef = ref(db, 'offers/');
 
@@ -226,10 +226,10 @@ export const useAppStore = defineStore('app', {
       const db = getDatabase();
       // Create a reference to the specific broker's data
       const brokerRef = ref(db, 'users/' + brokerId);
-    
+
       // Retrieve the snapshot for the specific broker
       const brokerSnapshot = await get(brokerRef);
-    
+
       if (brokerSnapshot.exists()) {
         const brokerData = brokerSnapshot.val();
         // Add the ID to the broker object
@@ -237,7 +237,7 @@ export const useAppStore = defineStore('app', {
         return brokerData;
       } else {
         // Handle the case where the broker does not exist
-        console.log("No broker found with ID: " + brokerId);
+        console.log('No broker found with ID: ' + brokerId);
         return null; // or throw an error or return a default value
       }
     },
