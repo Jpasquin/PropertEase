@@ -305,6 +305,7 @@
               transition-show="slide-up"
               transition-hide="slide-down"
             >
+              
               <div class="q-pa-md" style="width: 50%">
                 <q-stepper
                   v-model="step"
@@ -315,6 +316,7 @@
                   inactive-color="teal-3"
                   animated
                 >
+                <div class="q-pa-md text-[#2AAA8A] font-bold text-3xl tracking-[-1.5px] cursor-pointer">Send an Offer </div>
                   <q-step
                     :name="1"
                     title="Broker information"
@@ -479,16 +481,52 @@
             </div>
 
             <q-dialog v-model="dialogVisible">
+              <div class="q-pa-md" style="width: 50%">
               <q-card>
                 <q-card-section>
-                  <q-input v-model="principal" :label="listing.price" :value="listing.price" readonly />
-                  <q-input v-model="annualRate" label="Annual Rate" />
-                  <q-input v-model="loanTerm" label="Loan Term" />
-                  <q-btn label="Calculate" @click="calculateAndDisplay" />
+                  <div class="text-[#2AAA8A] font-bold text-3xl tracking-[-1.5px] cursor-pointer"> Mortgage Calculator </div>
+                </q-card-section>
+                <q-card-section>
+                  Principal Amount
+                  <q-input 
+                      v-model="principal" 
+                      :placeholder="listing.price"
+                      type="number" 
+                      rounded
+                      outlined 
+                      color="teal"
+                      class="q-mb-md" 
+                      readonly />
+                  <div class="row items-start example-container">
+                    <div class="example-cell q-pa-md" tabindex="0">
+                      Annual Rate (%) 
+                      <q-input
+                          v-model="annualRate" 
+                          placeholder="%"
+                          type="number" 
+                          rounded
+                          outlined
+                          color="teal"
+                          class="q-mb-md" />
+                    </div>
+                    <div class="example-cell q-pa-md" tabindex="0">
+                    Loan Term
+                    <q-input 
+                        v-model="loanTerm" 
+                        placeholder="Years" 
+                        type="number" 
+                        rounded
+                        outlined
+                        color="teal"
+                        class="q-mb-md"/>
+                    </div>
+                  </div>
+                  <q-btn label="Calculate" color="teal" @click="calculateAndDisplay" />
                 </q-card-section>
               </q-card>
+              </div>
             </q-dialog>
-            
+
           </div>
         </div>
       </div>
@@ -614,7 +652,7 @@ const submitOffer = async () => {
 };
 
 const dialogVisible = ref(false);
-const principal = ref(listing.value.price);
+const principal = ref('');
 const annualRate = ref<number | null>(null);
 const loanTerm = ref<number | null>(null);
 const monthlyPayment = ref<number | null>(null);
@@ -624,12 +662,13 @@ const openMortgageCalculator = () => {
 }
 
 const calculateAndDisplay = async () => {
-  console.log('Pricipal Payment:', principal);
+  console.log('Pricipal Payment:', listing.value.price);
   console.log('Annual rate  Payment:', annualRate);
   console.log('Loan term Payment:', loanTerm);
   try {
-    if (principal.value !== null && annualRate.value !== null && loanTerm.value !== null) {
-      const result = await appStore.calculateMortgage(principal.value, annualRate.value, loanTerm.value);
+    if (annualRate.value !== undefined && annualRate.value !== null &&
+        loanTerm.value !== undefined && loanTerm.value !== null) {
+      const result = await appStore.calculateMortgage(listing.value.price, annualRate.value, loanTerm.value);
       monthlyPayment.value = result;
       console.log('Monthly Payment:', result);
     } else {
@@ -638,26 +677,11 @@ const calculateAndDisplay = async () => {
   } catch (error) {
     console.error('Failed to calculate mortgage:', error);
   }
-}
-
-const checkScrollPosition = () => {
-  // Get the div's position from the top of the page
-  if (fixedDivRef.value) {
-    const divPosition = fixedDivRef.value.getBoundingClientRect().top;
-    // Check if the scroll position has reached the div's position
-    if (divPosition <= 102) {
-      shouldBeFixed.value = true;
-    } else {
-      shouldBeFixed.value = false;
-    }
-  }
 };
 
 let storage;
 onMounted(async () => {
   storage = getStorage();
-  window.addEventListener('scroll', checkScrollPosition);
-  checkScrollPosition();
   // Check if "id" exists and is not empty
   const id = route?.query.id;
   if (!id || id === '') {
@@ -921,10 +945,6 @@ const removeListing = async () => {
   }
   router.back();
 };
-
-onUnmounted(() => {
-  window.removeEventListener('scroll', checkScrollPosition);
-});
 
 const fixedStyle = computed(() => {
   return shouldBeFixed.value ? 'fixed w-full top-[104px]' : 'w-full!';
