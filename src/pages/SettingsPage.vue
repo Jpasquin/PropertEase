@@ -175,6 +175,16 @@
         <q-card-section>
           Broker information
           <q-input
+            v-model="currentOffer.brokerFName"
+            label="First Name"
+            readonly
+          />
+          <q-input
+            v-model="currentOffer.brokerLName"
+            label="Last Name"
+            readonly
+          />
+          <q-input
             v-model="currentOffer.brokerLicense"
             label="License number"
             readonly
@@ -227,6 +237,46 @@
         </q-card-actions>
       </q-card>
     </q-dialog>
+
+    <div
+      class="border-solid border-2 border-[#d8d8d8] rounded-lg p-2 min-w-[600px] mb-[50px]"
+      v-if="authStore.isBroker"
+    >
+      <div class="font-medium text-3xl px-2 py-4">Pending Sent Offers</div>
+      <q-table
+        flat
+        :rows="pendingOfferRows"
+        :columns="pendingOfferColumns"
+        row-key="name"
+        @row-click="onRowClick"
+      >
+        <template v-slot:body-cell-revoke="props">
+          <q-td :props="props">
+            <!-- Display delete button only if current row's id is NOT in brokerApplicationIds -->
+          </q-td>
+        </template>
+      </q-table>
+    </div>
+
+    <div
+      class="border-solid border-2 border-[#d8d8d8] rounded-lg p-2 min-w-[600px] mb-[50px]"
+      v-if="authStore.isBroker"
+    >
+      <div class="font-medium text-3xl px-2 py-4">Confirmed Offers</div>
+      <q-table
+        flat
+        :rows="confirmedOfferRows"
+        :columns="confirmedOfferColumns"
+        row-key="name"
+        @row-click="onRowClick"
+      >
+        <template v-slot:body-cell-revoke="props">
+          <q-td :props="props">
+            <!-- Display delete button only if current row's id is NOT in brokerApplicationIds -->
+          </q-td>
+        </template>
+      </q-table>
+    </div>
   </q-page>
 </template>
 
@@ -323,11 +373,81 @@ const offerColumns = [
   { name: 'decline', field: 'decline', align: 'left', label: '' },
 ];
 
+const pendingOfferColumns = [
+  {
+    name: 'buyerFName',
+    field: 'buyerFName',
+    align: 'left',
+    label: 'First name',
+    sortable: true,
+  },
+  {
+    name: 'buyerLName',
+    field: 'buyerLName',
+    align: 'left',
+    label: 'Last name',
+    sortable: true,
+  },
+  {
+    name: 'buyerPrice',
+    field: 'buyerPrice',
+    align: 'left',
+    label: 'Price',
+    sortable: true,
+  },
+  {
+    name: 'dateSale',
+    field: 'dateSale',
+    align: 'left',
+    label: 'Date',
+    sortable: true,
+  },
+];
+
+const confirmedOfferColumns = [
+  {
+    name: 'buyerFName',
+    field: 'buyerFName',
+    align: 'left',
+    label: 'First name',
+    sortable: true,
+  },
+  {
+    name: 'buyerLName',
+    field: 'buyerLName',
+    align: 'left',
+    label: 'Last name',
+    sortable: true,
+  },
+  {
+    name: 'buyerPrice',
+    field: 'buyerPrice',
+    align: 'left',
+    label: 'Price',
+    sortable: true,
+  },
+  {
+    name: 'dateSale',
+    field: 'dateSale',
+    align: 'left',
+    label: 'Date',
+    sortable: true,
+  },
+  {
+    name: 'decision',
+    field: 'decision',
+    align: 'left',
+    label: 'Decision',
+  },
+];
+
 const rows = ref([]);
 const visitRows = ref([]);
 const brokerApplicationIds = ref([]);
 const offerRows = ref([]);
+const pendingOfferRows = ref([]);
 const currentOffer = ref([]);
+const confirmedOfferRows = ref([]);
 
 const userChanges = ref({
   userId: authStore.user?.userId,
@@ -389,6 +509,50 @@ onMounted(async () => {
       dateOccupy: item.dateOccupy,
       dateSale: item.dateSale,
       confirmed: item.confirmed,
+      revoke: '',
+    });
+  });
+
+  const offersByBrokerSender = await appStore.getOffersByBrokerSender(
+    authStore.user?.userId
+  );
+  offersByBrokerSender?.forEach((item) => {
+    pendingOfferRows.value.push({
+      address: item.address,
+      id: item.id,
+      brokerAgency: item.brokerAgency,
+      brokerFName: item.brokerFName,
+      brokerLName: item.brokerLName,
+      brokerLicense: item.brokerLicense,
+      buyerEmail: item.buyerEmail,
+      buyerFName: item.buyerFName,
+      buyerLName: item.buyerLName,
+      buyerPrice: item.buyerPrice,
+      dateOccupy: item.dateOccupy,
+      dateSale: item.dateSale,
+      confirmed: item.confirmed,
+      revoke: '',
+    });
+  });
+
+  const confirmedOffersByBrokerSender =
+    await appStore.getConfirmedOffersByBrokerSender(authStore.user?.userId);
+  confirmedOffersByBrokerSender?.forEach((item) => {
+    confirmedOfferRows.value.push({
+      address: item.address,
+      id: item.id,
+      brokerAgency: item.brokerAgency,
+      brokerFName: item.brokerFName,
+      brokerLName: item.brokerLName,
+      brokerLicense: item.brokerLicense,
+      buyerEmail: item.buyerEmail,
+      buyerFName: item.buyerFName,
+      buyerLName: item.buyerLName,
+      buyerPrice: item.buyerPrice,
+      dateOccupy: item.dateOccupy,
+      dateSale: item.dateSale,
+      confirmed: item.confirmed,
+      decision: item.accepted ? 'Accepted' : 'Declined',
       revoke: '',
     });
   });
