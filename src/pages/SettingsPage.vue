@@ -1,175 +1,298 @@
 <template>
   <q-page class="row items-center justify-evenly">
-    <div class="grid grid-cols-1 gap-4 min-w-[600px] mt-4">
-      <q-input
-        ref="firstNameInput"
-        outlined
-        color="black"
-        label="First name"
-        v-model="userChanges.firstName"
-      />
-
-      <q-input
-        ref="lastNameInput"
-        outlined
-        color="black"
-        label="Last name"
-        v-model="userChanges.lastName"
-      />
-
-      <div>
-        <q-btn
-          flat
-          no-caps
-          class="bg-black text-white rounded-lg py-2! px-4! float-right"
-          label="Save Changes"
-          @click="saveUserChanges"
-          :loading="savingUserChanges"
-        />
-
-        <q-btn
-          flat
-          no-caps
-          class="bg-[#ededed] text-black rounded-lg py-2! px-4! float-right mr-2"
-          label="Cancel"
-          @click="
-            (userChanges.firstName = authStore.user.firstName),
-              (userChanges.lastName = authStore.user.lastName)
-          "
-        />
-      </div>
-    </div>
-
-    <div
-      class="border-solid border-2 border-[#d8d8d8] rounded-lg p-2 min-w-[600px]"
-      v-if="authStore.isAdmin"
-    >
-      <div class="font-medium text-3xl px-2 py-4">Brokers</div>
-      <q-table flat :rows="rows" :columns="columns" row-key="name">
-        <template v-slot:body-cell-firstName="props">
-          <q-td key="firstName" :props="props">
-            {{ props.row.firstName }}
-            <q-popup-edit
-              v-model="props.row.firstName"
-              title="Change First name"
-              buttons
-              persistent
-              v-slot="scope"
-            >
-              <q-input v-model="scope.value" dense autofocus />
-            </q-popup-edit>
-          </q-td>
-        </template>
-
-        <template v-slot:body-cell-lastName="props">
-          <q-td key="lastName" :props="props">
-            {{ props.row.lastName }}
-            <q-popup-edit
-              v-model="props.row.lastName"
-              title="Change Last name"
-              buttons
-              persistent
-              v-slot="scope"
-            >
-              <q-input v-model="scope.value" dense autofocus />
-            </q-popup-edit>
-          </q-td>
-        </template>
-
-        <template v-slot:body-cell-revoke="props">
-          <q-td :props="props">
-            <!-- Display delete button only if current row's id is NOT in brokerApplicationIds -->
-            <q-btn
-              v-if="!brokerApplicationIds?.includes(props.row.id)"
-              flat
-              icon="delete"
-              @click="revokeBroker(props.row)"
-            />
-            <q-btn
-              v-if="brokerApplicationIds?.includes(props.row.id)"
-              flat
-              icon="check"
-              @click="acceptOrDeclineApplication(props.row, true)"
-            />
-            <q-btn
-              v-if="brokerApplicationIds?.includes(props.row.id)"
-              flat
-              icon="close"
-              @click="acceptOrDeclineApplication(props.row)"
-            />
-          </q-td>
-        </template>
-      </q-table>
-    </div>
-
-    <div
-      class="border-solid border-2 border-[#d8d8d8] rounded-lg p-2 min-w-[600px] mt-[50px]"
-      v-if="authStore.isBroker"
-    >
-      <div class="font-medium text-3xl px-2 py-4">Visits</div>
-      <q-table flat :rows="visitRows" :columns="visitColumns" row-key="name">
-        <template v-slot:body-cell-revoke="props">
-          <q-td :props="props">
-            <!-- Display delete button only if current row's id is NOT in brokerApplicationIds -->
-            <q-btn
-              v-if="props.row.confirmed"
-              flat
-              icon="delete"
-              @click="deleteVisit(props.row)"
-            />
-            <q-btn
-              v-if="!props.row.confirmed"
-              flat
-              icon="check"
-              @click="acceptOrDeclineVisit(props.row, true)"
-            />
-            <q-btn
-              v-if="!props.row.confirmed"
-              flat
-              icon="close"
-              @click="acceptOrDeclineVisit(props.row, false)"
-            />
-          </q-td>
-        </template>
-      </q-table>
-    </div>
-    <div
-      class="border-solid border-2 border-[#d8d8d8] rounded-lg p-2 min-w-[600px] mt-[50px] mb-[50px]"
-      v-if="authStore.isBroker"
-    >
-      <div class="font-medium text-3xl px-2 py-4">Offers</div>
-      <q-table
-        flat
-        :rows="offerRows"
-        :columns="offerColumns"
-        row-key="name"
-        @row-click="onRowClick"
+    <q-list bordered class="q-pa-md min-w-[700px] mt-6">
+      <!-- Account Details -->
+      <q-expansion-item
+        expand-separator
+        icon="person"
+        label="Account settings"
+        caption="Edit Your Account Details"
       >
-        <template v-slot:body-cell-revoke="props">
-          <q-td :props="props">
-            <!-- Display delete button only if current row's id is NOT in brokerApplicationIds -->
-            <q-btn
-              v-if="props.row.confirmed"
-              flat
-              icon="delete"
-              @click="deleteOffer(props.row)"
-            />
-            <q-btn
-              v-if="!props.row.confirmed"
-              flat
-              icon="check"
-              @click.stop="acceptOrDeclineOffer(props.row, true)"
-            />
-            <q-btn
-              v-if="!props.row.confirmed"
-              flat
-              icon="close"
-              @click.stop="acceptOrDeclineOffer(props.row, false)"
-            />
-          </q-td>
-        </template>
-      </q-table>
-    </div>
+        <q-card>
+          <q-card-section>
+            <div class="grid grid-cols-1 gap-4 min-w-[600px] mt-4">
+              <q-input
+                ref="firstNameInput"
+                outlined
+                color="black"
+                label="First name"
+                v-model="userChanges.firstName"
+              />
+
+              <q-input
+                ref="lastNameInput"
+                outlined
+                color="black"
+                label="Last name"
+                v-model="userChanges.lastName"
+              />
+
+              <div>
+                <q-btn
+                  flat
+                  no-caps
+                  class="bg-black text-white rounded-lg py-2! px-4! float-right"
+                  label="Save Changes"
+                  @click="saveUserChanges"
+                  :loading="savingUserChanges"
+                />
+
+                <q-btn
+                  flat
+                  no-caps
+                  class="bg-[#ededed] text-black rounded-lg py-2! px-4! float-right mr-2"
+                  label="Cancel"
+                  @click="
+                    (userChanges.firstName = authStore.user.firstName),
+                      (userChanges.lastName = authStore.user.lastName)
+                  "
+                />
+              </div>
+            </div>
+          </q-card-section>
+        </q-card>
+      </q-expansion-item>
+
+      <!-- Broker Table -->
+      <q-expansion-item
+        expand-separator
+        icon="real_estate_agent"
+        label="Brokers"
+        caption="View and Manage Brokers"
+        v-if="authStore.isAdmin"
+      >
+        <q-card>
+          <q-card-section>
+            <div
+              class="border-solid border-2 border-[#d8d8d8] rounded-lg p-2 min-w-[600px]"
+            >
+              <div class="font-medium text-3xl px-2 py-4">Brokers</div>
+              <q-table flat :rows="rows" :columns="columns" row-key="name">
+                <template v-slot:body-cell-firstName="props">
+                  <q-td key="firstName" :props="props">
+                    {{ props.row.firstName }}
+                    <q-popup-edit
+                      v-model="props.row.firstName"
+                      title="Change First name"
+                      buttons
+                      persistent
+                      v-slot="scope"
+                    >
+                      <q-input v-model="scope.value" dense autofocus />
+                    </q-popup-edit>
+                  </q-td>
+                </template>
+
+                <template v-slot:body-cell-lastName="props">
+                  <q-td key="lastName" :props="props">
+                    {{ props.row.lastName }}
+                    <q-popup-edit
+                      v-model="props.row.lastName"
+                      title="Change Last name"
+                      buttons
+                      persistent
+                      v-slot="scope"
+                    >
+                      <q-input v-model="scope.value" dense autofocus />
+                    </q-popup-edit>
+                  </q-td>
+                </template>
+
+                <template v-slot:body-cell-revoke="props">
+                  <q-td :props="props">
+                    <!-- Display delete button only if current row's id is NOT in brokerApplicationIds -->
+                    <q-btn
+                      v-if="!brokerApplicationIds?.includes(props.row.id)"
+                      flat
+                      icon="delete"
+                      @click="revokeBroker(props.row)"
+                    />
+                    <q-btn
+                      v-if="brokerApplicationIds?.includes(props.row.id)"
+                      flat
+                      icon="check"
+                      @click="acceptOrDeclineApplication(props.row, true)"
+                    />
+                    <q-btn
+                      v-if="brokerApplicationIds?.includes(props.row.id)"
+                      flat
+                      icon="close"
+                      @click="acceptOrDeclineApplication(props.row)"
+                    />
+                  </q-td>
+                </template>
+              </q-table>
+            </div>
+          </q-card-section>
+        </q-card>
+      </q-expansion-item>
+
+      <!-- Visits -->
+      <q-expansion-item
+        expand-separator
+        icon="home"
+        label="Visits"
+        caption="View and Manage Visits on your Properties"
+      >
+        <q-card>
+          <q-card-section>
+            <div
+              class="border-solid border-2 border-[#d8d8d8] rounded-lg p-2 min-w-[600px] mt-[50px]"
+              v-if="authStore.isBroker"
+            >
+              <div class="font-medium text-3xl px-2 py-4">Visits</div>
+              <q-table
+                flat
+                :rows="visitRows"
+                :columns="visitColumns"
+                row-key="name"
+              >
+                <template v-slot:body-cell-revoke="props">
+                  <q-td :props="props">
+                    <!-- Display delete button only if current row's id is NOT in brokerApplicationIds -->
+                    <q-btn
+                      v-if="props.row.confirmed"
+                      flat
+                      icon="delete"
+                      @click="deleteVisit(props.row)"
+                    />
+                    <q-btn
+                      v-if="!props.row.confirmed"
+                      flat
+                      icon="check"
+                      @click="acceptOrDeclineVisit(props.row, true)"
+                    />
+                    <q-btn
+                      v-if="!props.row.confirmed"
+                      flat
+                      icon="close"
+                      @click="acceptOrDeclineVisit(props.row, false)"
+                    />
+                  </q-td>
+                </template>
+              </q-table>
+            </div>
+          </q-card-section>
+        </q-card>
+      </q-expansion-item>
+
+      <!-- Offers on own listings -->
+      <q-expansion-item
+        expand-separator
+        icon="inbox"
+        label="Offers Received"
+        caption="View and Manage Offers Placed on your Listings"
+      >
+        <q-card>
+          <q-card-section>
+            <div
+              class="border-solid border-2 border-[#d8d8d8] rounded-lg p-2 min-w-[600px] mt-[50px] mb-[50px]"
+              v-if="authStore.isBroker"
+            >
+              <div class="font-medium text-3xl px-2 py-4">Offers</div>
+              <q-table
+                flat
+                :rows="offerRows"
+                :columns="offerColumns"
+                row-key="name"
+                @row-click="onRowClick"
+              >
+                <template v-slot:body-cell-revoke="props">
+                  <q-td :props="props">
+                    <!-- Display delete button only if current row's id is NOT in brokerApplicationIds -->
+                    <q-btn
+                      v-if="props.row.confirmed"
+                      flat
+                      icon="delete"
+                      @click="deleteOffer(props.row)"
+                    />
+                    <q-btn
+                      v-if="!props.row.confirmed"
+                      flat
+                      icon="check"
+                      @click.stop="acceptOrDeclineOffer(props.row, true)"
+                    />
+                    <q-btn
+                      v-if="!props.row.confirmed"
+                      flat
+                      icon="close"
+                      @click.stop="acceptOrDeclineOffer(props.row, false)"
+                    />
+                  </q-td>
+                </template>
+              </q-table>
+            </div>
+          </q-card-section>
+        </q-card>
+      </q-expansion-item>
+
+      <!-- Sent Offers -->
+      <q-expansion-item
+        expand-separator
+        icon="outbox"
+        label="Pending Sent Offers"
+        caption="Offers Sent and Awaiting Response"
+      >
+        <q-card>
+          <q-card-section>
+            <div
+              class="border-solid border-2 border-[#d8d8d8] rounded-lg p-2 min-w-[600px] mb-[50px]"
+              v-if="authStore.isBroker"
+            >
+              <div class="font-medium text-3xl px-2 py-4">
+                Pending Sent Offers
+              </div>
+              <q-table
+                flat
+                :rows="pendingOfferRows"
+                :columns="pendingOfferColumns"
+                row-key="name"
+                @row-click="onRowClick"
+              >
+                <template v-slot:body-cell-revoke="props">
+                  <q-td :props="props">
+                    <!-- Display delete button only if current row's id is NOT in brokerApplicationIds -->
+                  </q-td>
+                </template>
+              </q-table>
+            </div>
+          </q-card-section>
+        </q-card>
+      </q-expansion-item>
+
+      <!-- Confirmed Offers -->
+      <q-expansion-item
+        expand-separator
+        icon="check"
+        label="Confirmed Offers"
+        caption="View Your Sent Offers"
+      >
+        <q-card>
+          <q-card-section>
+            <div
+              class="border-solid border-2 border-[#d8d8d8] rounded-lg p-2 min-w-[600px] mb-[50px]"
+              v-if="authStore.isBroker"
+            >
+              <div class="font-medium text-3xl px-2 py-4">Confirmed Offers</div>
+              <q-table
+                flat
+                :rows="confirmedOfferRows"
+                :columns="confirmedOfferColumns"
+                row-key="name"
+                @row-click="onRowClick"
+              >
+                <template v-slot:body-cell-revoke="props">
+                  <q-td :props="props">
+                    <!-- Display delete button only if current row's id is NOT in brokerApplicationIds -->
+                  </q-td>
+                </template>
+              </q-table>
+            </div>
+          </q-card-section>
+        </q-card>
+      </q-expansion-item>
+    </q-list>
+
     <q-dialog v-model="offerModal">
       <q-card style="width: 50vw">
         <q-card-section>
@@ -237,46 +360,6 @@
         </q-card-actions>
       </q-card>
     </q-dialog>
-
-    <div
-      class="border-solid border-2 border-[#d8d8d8] rounded-lg p-2 min-w-[600px] mb-[50px]"
-      v-if="authStore.isBroker"
-    >
-      <div class="font-medium text-3xl px-2 py-4">Pending Sent Offers</div>
-      <q-table
-        flat
-        :rows="pendingOfferRows"
-        :columns="pendingOfferColumns"
-        row-key="name"
-        @row-click="onRowClick"
-      >
-        <template v-slot:body-cell-revoke="props">
-          <q-td :props="props">
-            <!-- Display delete button only if current row's id is NOT in brokerApplicationIds -->
-          </q-td>
-        </template>
-      </q-table>
-    </div>
-
-    <div
-      class="border-solid border-2 border-[#d8d8d8] rounded-lg p-2 min-w-[600px] mb-[50px]"
-      v-if="authStore.isBroker"
-    >
-      <div class="font-medium text-3xl px-2 py-4">Confirmed Offers</div>
-      <q-table
-        flat
-        :rows="confirmedOfferRows"
-        :columns="confirmedOfferColumns"
-        row-key="name"
-        @row-click="onRowClick"
-      >
-        <template v-slot:body-cell-revoke="props">
-          <q-td :props="props">
-            <!-- Display delete button only if current row's id is NOT in brokerApplicationIds -->
-          </q-td>
-        </template>
-      </q-table>
-    </div>
   </q-page>
 </template>
 
