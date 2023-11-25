@@ -133,12 +133,12 @@
         icon="home"
         label="Visits"
         caption="View and Manage Visits on your Properties"
+        v-if="authStore.isBroker"
       >
         <q-card>
           <q-card-section>
             <div
               class="border-solid border-2 border-[#d8d8d8] rounded-lg p-2 min-w-[600px] mt-[50px]"
-              v-if="authStore.isBroker"
             >
               <div class="font-medium text-3xl px-2 py-4">Visits</div>
               <q-table
@@ -182,12 +182,12 @@
         icon="inbox"
         label="Offers Received"
         caption="View and Manage Offers Placed on your Listings"
+        v-if="authStore.isBroker"
       >
         <q-card>
           <q-card-section>
             <div
               class="border-solid border-2 border-[#d8d8d8] rounded-lg p-2 min-w-[600px] mt-[50px] mb-[50px]"
-              v-if="authStore.isBroker"
             >
               <div class="font-medium text-3xl px-2 py-4">Offers</div>
               <q-table
@@ -232,12 +232,12 @@
         icon="outbox"
         label="Pending Sent Offers"
         caption="Offers Sent and Awaiting Response"
+        v-if="authStore.isBroker"
       >
         <q-card>
           <q-card-section>
             <div
               class="border-solid border-2 border-[#d8d8d8] rounded-lg p-2 min-w-[600px] mb-[50px]"
-              v-if="authStore.isBroker"
             >
               <div class="font-medium text-3xl px-2 py-4">
                 Pending Sent Offers
@@ -266,12 +266,12 @@
         icon="check"
         label="Confirmed Offers"
         caption="View Your Sent Offers"
+        v-if="authStore.isBroker"
       >
         <q-card>
           <q-card-section>
             <div
               class="border-solid border-2 border-[#d8d8d8] rounded-lg p-2 min-w-[600px] mb-[50px]"
-              v-if="authStore.isBroker"
             >
               <div class="font-medium text-3xl px-2 py-4">Confirmed Offers</div>
               <q-table
