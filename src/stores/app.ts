@@ -9,6 +9,7 @@ import {
   remove,
   update,
   push,
+  set,
 } from 'firebase/database';
 import {
   getStorage,
@@ -94,27 +95,44 @@ export const useAppStore = defineStore('app', {
     },
 
     async approveOrDeclineOffer(offerId: string, approved: any) {
-      console.log('Store log')
-      console.log(offerId)
+      console.log('Store log');
+      console.log(offerId);
       const db = getDatabase();
       const offerRef = ref(db, `offers/${offerId}`);
-      console.log(offerRef)
-      if (approved) {
-        try {
-          await update(offerRef, { confirmed: true });
-          console.log('Offer approved successfully');
-        } catch (error) {
-          console.error('Error approving visit: ', error);
-          throw error;
+      const confirmedOffersRef = ref(db, 'offersConfirmed');
+      console.log(offerRef);
+      try {
+        const offerSnapshot = await get(offerRef);
+        if (offerSnapshot.exists()) {
+          const offerData = offerSnapshot.val();
+
+          if (approved) {
+            await update(offerRef, { confirmed: true });
+            // Add the accepted offer to offersConfirmed
+            await push(confirmedOffersRef, {
+              ...offerData,
+              accepted: true,
+            });
+            console.log(
+              'Offer approved and stored in offersConfirmed successfully'
+            );
+          } else {
+            await remove(offerRef);
+            // Add the declined offer to offersConfirmed
+            await push(confirmedOffersRef, {
+              ...offerData,
+              declined: true,
+            });
+            console.log(
+              'Offer declined and stored in offersConfirmed successfully'
+            );
+          }
+        } else {
+          console.log('Offer does not exist');
         }
-      } else {
-        try {
-          await remove(offerRef);
-          console.log('Offer declined and deleted successfully');
-        } catch (error) {
-          console.error('Error deleting offer: ', error);
-          throw error;
-        }
+      } catch (error) {
+        console.error('Error processing offer: ', error);
+        throw error;
       }
     },
 
@@ -179,8 +197,76 @@ export const useAppStore = defineStore('app', {
       }
     },
 
+    async getOffersByBrokerSender(senderID: string) {
+      console.log(
+        'In the getOfferByBrokerSender, this is the brokerId ' + senderID
+      );
+      const db = getDatabase();
+      const offersRef = ref(db, 'offers/');
+      const brokerOffersQuery = query(
+        offersRef,
+        orderByChild('senderID'),
+        equalTo(senderID)
+      );
+
+      try {
+        const snapshot = await get(brokerOffersQuery);
+        console.log(brokerOffersQuery);
+        if (snapshot.exists()) {
+          console.log('snapshot exists');
+          const offers: any = [];
+          snapshot.forEach((childSnapshot) => {
+            const offerData = childSnapshot.val();
+            offerData.id = childSnapshot.key; // Save the unique key of the visit
+            if (offerData.confirmed == false) offers.push(offerData);
+          });
+          return offers;
+        } else {
+          console.log('No offers found for the given brokerId');
+          return [];
+        }
+      } catch (error) {
+        console.error('Error fetching offers: ', error);
+        throw error; // Re-throw the error to handle it in the calling function
+      }
+    },
+
+    async getConfirmedOffersByBrokerSender(senderID: string) {
+      console.log(
+        'In the getOfferByBrokerSender, this is the brokerId ' + senderID
+      );
+      const db = getDatabase();
+      const offersRef = ref(db, 'offersConfirmed/');
+      const brokerOffersQuery = query(
+        offersRef,
+        orderByChild('senderID'),
+        equalTo(senderID)
+      );
+
+      try {
+        const snapshot = await get(brokerOffersQuery);
+        console.log(brokerOffersQuery);
+        if (snapshot.exists()) {
+          console.log('snapshot exists');
+          const offers: any = [];
+          snapshot.forEach((childSnapshot) => {
+            const offerData = childSnapshot.val();
+            offerData.id = childSnapshot.key; // Save the unique key of the visit
+            offers.push(offerData);
+          });
+          return offers;
+        } else {
+          console.log('No offers found for the given brokerId');
+          return [];
+        }
+      } catch (error) {
+        console.error('Error fetching offers: ', error);
+        throw error; // Re-throw the error to handle it in the calling function
+      }
+    },
+
     async createOffer(offer: any) {
-      console.log('hello');
+      console.log(offer.senderID);
       const db = getDatabase();
       const offerRef = ref(db, 'offers/');
 
@@ -226,10 +312,10 @@ export const useAppStore = defineStore('app', {
       const db = getDatabase();
       // Create a reference to the specific broker's data
       const brokerRef = ref(db, 'users/' + brokerId);
-    
+
       // Retrieve the snapshot for the specific broker
       const brokerSnapshot = await get(brokerRef);
-    
+
       if (brokerSnapshot.exists()) {
         const brokerData = brokerSnapshot.val();
         // Add the ID to the broker object
@@ -237,7 +323,7 @@ export const useAppStore = defineStore('app', {
         return brokerData;
       } else {
         // Handle the case where the broker does not exist
-        console.log("No broker found with ID: " + brokerId);
+        console.log('No broker found with ID: ' + brokerId);
         return null; // or throw an error or return a default value
       }
     },

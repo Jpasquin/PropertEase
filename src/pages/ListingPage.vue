@@ -566,6 +566,8 @@ const closeOfferModal = () => {
 
 const submitOffer = async () => {
   offerLoading.value = true;
+  const senderID = await authStore.getUser();
+
   await appStore.createOffer({
     brokerFName: brokerFName.value,
     brokerLName: brokerLName.value,
@@ -580,8 +582,9 @@ const submitOffer = async () => {
     address: listing.value.address,
     brokerId: listing.value.broker,
     confirmed: false,
+    senderID: senderID,
   });
-  
+
   closeOfferModal();
   offerLoading.value = false;
   offerSent.value = true;
