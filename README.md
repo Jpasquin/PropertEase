@@ -1,11 +1,17 @@
 # PropertEase ([Link](https://propertease-5ff7d.web.app))
 
 ### [Meeting Minutes](https://docs.google.com/document/d/1fAs3DRg0vzcju0SPYCO5jQVp3JQgr2mX9F3wEzdK4c8/edit?usp=sharing)
-### [Sprint Planning](https://docs.google.com/document/d/1H0YSSF9653HxJRnDzqFTT1_qtsoiBGjJTNg-ZdQE2hU/edit)
+
 ### [Contribution Log](https://docs.google.com/spreadsheets/d/1zzdhYC-tlj-8haEgOCKvL_3sBwnYYgP96RVW1nIbsQI/edit#gid=1386834576)
 ### [User Stories](https://docs.google.com/document/d/1C_qaazkOoA4voUydYpOeJQQqoFUSTETEa56SImrKguc/edit?usp=sharing)
 ### [User Stories #2](https://docs.google.com/document/d/1ytCwxEeEto3_IaKGqEW9cDVT33r3SRAmKiei9FF4YrA/edit?usp=sharing)
 ### [Wiki](https://github.com/Jpasquin/spectrum-soen341projectF2023/wiki)
+
+## Sprint Planning and Task Breakdown
+When accesing the linked documents, the excel breakdown sheet is hyperlinked within the task list.
+### [Sprint Planning 2](https://docs.google.com/document/d/1AWSJw1WR9Cif5JsjOVZ7un6dJYMlg5lRNgvT5fZ6fSY/edit?usp=sharing)
+### [Sprint Planning 3](https://docs.google.com/document/d/1UDYju_PnyAOBNckI_Y3CZ6YVT2BMgyyGfluMJUW0npM/edit?usp=sharing)
+### [Sprint Planning 4](https://docs.google.com/document/d/1H0YSSF9653HxJRnDzqFTT1_qtsoiBGjJTNg-ZdQE2hU/edit?usp=sharing)
 
 ## Description
 A real estate web application designed to facilitate the buying, selling, and renting, of real estate properties. These applications offer a wide range of features and functionalities to streamline the entire real estate transaction process, making it more convenient and efficient for users. 
