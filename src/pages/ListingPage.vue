@@ -171,6 +171,15 @@
             class="ml-4 mb-4 float-left"
             v-model="listing.baths"
           />
+
+          <q-input
+            dense
+            outlined
+            color="black"
+            label="Address"
+            class="ml-4 mb-4 float-left"
+            v-model="listing.address"
+          />
         </div>
       </div>
 
@@ -305,7 +314,6 @@
               transition-show="slide-up"
               transition-hide="slide-down"
             >
-              
               <div class="q-pa-md" style="width: 50%">
                 <q-stepper
                   v-model="step"
@@ -316,7 +324,11 @@
                   inactive-color="teal-3"
                   animated
                 >
-                <div class="q-pa-md text-[#2AAA8A] font-bold text-3xl tracking-[-1.5px]"> Send an Offer </div>
+                  <div
+                    class="q-pa-md text-[#2AAA8A] font-bold text-3xl tracking-[-1.5px]"
+                  >
+                    Send an Offer
+                  </div>
                   <q-step
                     :name="1"
                     title="Broker information"
@@ -469,75 +481,102 @@
             <q-separator class="my-4" />
 
             <q-btn
-            flat
-            no-caps
-            class="h-[48px] w-full mb-4 rounded-md text-base text-white bg-gradient-to-r from-[#2AAA6A] from-33% via-[#2AAA8A] via-66% to-[#2AAAAA] to-100%"
-            @click="openMortgageCalculator"
-            label="Mortgage Calculator"
+              flat
+              no-caps
+              class="h-[48px] w-full mb-4 rounded-md text-base text-white bg-gradient-to-r from-[#2AAA6A] from-33% via-[#2AAA8A] via-66% to-[#2AAAAA] to-100%"
+              @click="openMortgageCalculator"
+              label="Mortgage Calculator"
             />
 
             <div class="font-normal text-base pb-2 opacity-80">
-              To use the mortgage calculator, enter the loan's principal amount, the annual interest rate provided by your lender, and the loan term in years. Once these details are filled in, click to calculate.
+              To use the mortgage calculator, enter the loan's principal amount,
+              the annual interest rate provided by your lender, and the loan
+              term in years. Once these details are filled in, click to
+              calculate.
             </div>
 
             <q-dialog v-model="dialogVisible" class="dialog-container">
               <div class="q-pa-md text-center" style="width: 20%">
-              <q-card>
-                <q-card-section>
-                  <div class="text-[#2AAA8A] font-bold text-3xl tracking-[-1.5px]"> Mortgage Calculator </div>
-                </q-card-section>
-                <q-card-section class="input-section">
-                  <div class="text-teal font-bold text-2xl tracking-[-1.5px]">Principal Amount</div>
-                  <q-input 
-                      v-model="principal" 
+                <q-card>
+                  <q-card-section>
+                    <div
+                      class="text-[#2AAA8A] font-bold text-3xl tracking-[-1.5px]"
+                    >
+                      Mortgage Calculator
+                    </div>
+                  </q-card-section>
+                  <q-card-section class="input-section">
+                    <div class="text-teal font-bold text-2xl tracking-[-1.5px]">
+                      Principal Amount
+                    </div>
+                    <q-input
+                      v-model="principal"
                       :placeholder="listing.price"
-                      type="number" 
+                      type="number"
                       rounded
-                      outlined 
+                      outlined
                       color="teal"
                       class="q-mb-md"
-                      style="width: 50%" 
-                      readonly />                 
-                  <div class="text-teal font-bold text-2xl tracking-[-1.5px]">Annual Rate</div>      
-                  <q-input
-                      v-model="annualRate" 
+                      style="width: 50%"
+                      readonly
+                    />
+                    <div class="text-teal font-bold text-2xl tracking-[-1.5px]">
+                      Annual Rate
+                    </div>
+                    <q-input
+                      v-model="annualRate"
                       placeholder="%"
-                      type="number" 
+                      type="number"
                       rounded
                       outlined
                       color="teal"
                       class="q-mb-md"
-                      style="width: 50%" 
-                      :rules="[val => !!val || 'Annual rate is required']" />
-                  <div class="text-teal font-bold text-2xl tracking-[-1.5px]">Loan Term</div>
-                  <q-input 
-                      v-model="loanTerm" 
-                      placeholder="Years" 
-                      type="number" 
+                      style="width: 50%"
+                      :rules="[(val) => !!val || 'Annual rate is required']"
+                    />
+                    <div class="text-teal font-bold text-2xl tracking-[-1.5px]">
+                      Loan Term
+                    </div>
+                    <q-input
+                      v-model="loanTerm"
+                      placeholder="Years"
+                      type="number"
                       rounded
                       outlined
                       color="teal"
                       class="q-mb-md"
-                      style="width: 50%" 
-                      :rules="[val => !!val || 'Loan term is required']" />
-                  <q-btn label="Calculate" color="teal" @click="calculateAndDisplay" />
-                </q-card-section>
-                
-                <q-card-section>
-                  <q-separator class="my-4" />
-                  <div class="q-pb-md text-teal font-bold text-2xl tracking-[-1.5px]"> Monthly Payment </div>
-                  <q-card class="text-gray font-bold text-2xl">
-                    <q-card-section class="q-pb-md q-item-label">
-                      {{ monthlyPayment !== null ? monthlyPayment.toFixed(2) + ' $' : '' }}
-                    </q-card-section>
-                  </q-card>
-                  <div class="q-pb-xl"></div>
-                  <q-btn label="Reset" color="teal" @click="resetFields" />
-                </q-card-section>
-              </q-card>
+                      style="width: 50%"
+                      :rules="[(val) => !!val || 'Loan term is required']"
+                    />
+                    <q-btn
+                      label="Calculate"
+                      color="teal"
+                      @click="calculateAndDisplay"
+                    />
+                  </q-card-section>
+
+                  <q-card-section>
+                    <q-separator class="my-4" />
+                    <div
+                      class="q-pb-md text-teal font-bold text-2xl tracking-[-1.5px]"
+                    >
+                      Monthly Payment
+                    </div>
+                    <q-card class="text-gray font-bold text-2xl">
+                      <q-card-section class="q-pb-md q-item-label">
+                        {{
+                          monthlyPayment !== null
+                            ? monthlyPayment.toFixed(2) + ' $'
+                            : ''
+                        }}
+                      </q-card-section>
+                    </q-card>
+                    <div class="q-pb-xl"></div>
+                    <q-btn label="Reset" color="teal" @click="resetFields" />
+                  </q-card-section>
+                </q-card>
               </div>
             </q-dialog>
-
           </div>
         </div>
       </div>
@@ -673,13 +712,21 @@ const monthlyPayment = ref<number | null>(null);
 
 const openMortgageCalculator = () => {
   dialogVisible.value = true;
-}
+};
 
 const calculateAndDisplay = async () => {
   try {
-    if (annualRate.value !== undefined && annualRate.value !== null &&
-        loanTerm.value !== undefined && loanTerm.value !== null) {
-      const result = await appStore.calculateMortgage(listing.value.price, annualRate.value, loanTerm.value);
+    if (
+      annualRate.value !== undefined &&
+      annualRate.value !== null &&
+      loanTerm.value !== undefined &&
+      loanTerm.value !== null
+    ) {
+      const result = await appStore.calculateMortgage(
+        listing.value.price,
+        annualRate.value,
+        loanTerm.value
+      );
       monthlyPayment.value = result;
       console.log('Monthly Payment:', result);
     } else {
@@ -691,10 +738,10 @@ const calculateAndDisplay = async () => {
 };
 
 const resetFields = async () => {
-    annualRate.value = null; 
-    loanTerm.value = null; 
-    monthlyPayment.value = null; 
-  }
+  annualRate.value = null;
+  loanTerm.value = null;
+  monthlyPayment.value = null;
+};
 
 let storage;
 onMounted(async () => {
