@@ -116,6 +116,39 @@ export const useAppStore = defineStore('app', {
             console.log(
               'Offer approved and stored in offersConfirmed successfully'
             );
+
+            const listingsRef = ref(db, 'listings');
+
+            // Query to find listings with a specific address
+            const soldListingsQuery = query(
+              listingsRef,
+              orderByChild('address'),
+              equalTo(offerData.address)
+            );
+
+            // Get the snapshot of listings that match the query
+            const snapshot = await get(soldListingsQuery);
+
+            // Create an array of promises
+            const operations = [];
+
+            snapshot.forEach((childSnapshot) => {
+              const listingId = childSnapshot.key;
+              const listingData = childSnapshot.val();
+
+              // Reference to the new location in soldListings
+              const soldListingsRef = ref(db, `soldListings/${listingId}`);
+
+              // Push operation promise to the array
+              operations.push(
+                set(soldListingsRef, listingData)
+                  .then(() => remove(childSnapshot.ref))
+                  .then(() => console.log('Moved Listing'))
+              );
+            });
+
+            // Await all promises outside the loop
+            await Promise.all(operations);
           } else {
             await remove(offerRef);
             // Add the declined offer to offersConfirmed
