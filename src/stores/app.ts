@@ -512,5 +512,33 @@ export const useAppStore = defineStore('app', {
         throw error;
       }
     },
+
+    async calculateMortgage(
+      principal: number,
+      annualRate: number,
+      loanTerm: number
+    ): Promise<number> {
+      return new Promise((resolve, reject) => {
+        try {
+          console.log('Starting mortgage calculation...');
+          console.log(`Received principal: ${principal}, annualRate: ${annualRate}, loanTerm: ${loanTerm}`);
+          
+          const monthlyRate = annualRate / 100 / 12;
+          console.log(`Calculated monthlyRate: ${monthlyRate}`);
+
+          const numberOfPayments = loanTerm * 12;
+          console.log(`Calculated numberOfPayments: ${numberOfPayments}`);
+
+          
+          const monthlyPayment = principal * monthlyRate * Math.pow(1 + monthlyRate, numberOfPayments) / (Math.pow(1 + monthlyRate, numberOfPayments) - 1);
+          console.log(`Calculated monthlyPayment: ${monthlyPayment}`);
+          
+          resolve(monthlyPayment);
+        } catch (error) {
+          console.error('Failed to calculate mortgage:', error);
+          reject(error);
+        }
+      });
+    },
   },
 });

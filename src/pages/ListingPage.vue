@@ -305,6 +305,7 @@
               transition-show="slide-up"
               transition-hide="slide-down"
             >
+              
               <div class="q-pa-md" style="width: 50%">
                 <q-stepper
                   v-model="step"
@@ -315,6 +316,7 @@
                   inactive-color="teal-3"
                   animated
                 >
+                <div class="q-pa-md text-[#2AAA8A] font-bold text-3xl tracking-[-1.5px]"> Send an Offer </div>
                   <q-step
                     :name="1"
                     title="Broker information"
@@ -463,6 +465,79 @@
               property. Ensure you've reviewed all details and consulted with a
               broker or legal advisor.
             </div>
+
+            <q-separator class="my-4" />
+
+            <q-btn
+            flat
+            no-caps
+            class="h-[48px] w-full mb-4 rounded-md text-base text-white bg-gradient-to-r from-[#2AAA6A] from-33% via-[#2AAA8A] via-66% to-[#2AAAAA] to-100%"
+            @click="openMortgageCalculator"
+            label="Mortgage Calculator"
+            />
+
+            <div class="font-normal text-base pb-2 opacity-80">
+              To use the mortgage calculator, enter the loan's principal amount, the annual interest rate provided by your lender, and the loan term in years. Once these details are filled in, click to calculate.
+            </div>
+
+            <q-dialog v-model="dialogVisible" class="dialog-container">
+              <div class="q-pa-md text-center" style="width: 20%">
+              <q-card>
+                <q-card-section>
+                  <div class="text-[#2AAA8A] font-bold text-3xl tracking-[-1.5px]"> Mortgage Calculator </div>
+                </q-card-section>
+                <q-card-section class="input-section">
+                  <div class="text-teal font-bold text-2xl tracking-[-1.5px]">Principal Amount</div>
+                  <q-input 
+                      v-model="principal" 
+                      :placeholder="listing.price"
+                      type="number" 
+                      rounded
+                      outlined 
+                      color="teal"
+                      class="q-mb-md"
+                      style="width: 50%" 
+                      readonly />                 
+                  <div class="text-teal font-bold text-2xl tracking-[-1.5px]">Annual Rate</div>      
+                  <q-input
+                      v-model="annualRate" 
+                      placeholder="%"
+                      type="number" 
+                      rounded
+                      outlined
+                      color="teal"
+                      class="q-mb-md"
+                      style="width: 50%" 
+                      :rules="[val => !!val || 'Annual rate is required']" />
+                  <div class="text-teal font-bold text-2xl tracking-[-1.5px]">Loan Term</div>
+                  <q-input 
+                      v-model="loanTerm" 
+                      placeholder="Years" 
+                      type="number" 
+                      rounded
+                      outlined
+                      color="teal"
+                      class="q-mb-md"
+                      style="width: 50%" 
+                      :rules="[val => !!val || 'Loan term is required']" />
+                  <q-btn label="Calculate" color="teal" @click="calculateAndDisplay" />
+                </q-card-section>
+                
+                <q-card-section>
+                  <q-separator class="my-4" />
+                  <div class="q-pb-md text-teal font-bold text-2xl tracking-[-1.5px]"> Monthly Payment </div>
+                  <q-card class="text-gray font-bold text-2xl">
+                    <q-card-section class="q-pb-md q-item-label">
+                      {{ monthlyPayment !== null ? monthlyPayment.toFixed(2) + ' $' : '' }}
+                    </q-card-section>
+                  </q-card>
+                  <div class="q-pb-xl"></div>
+                  <q-btn label="Reset" color="teal" @click="resetFields" />
+                </q-card-section>
+              </q-card>
+              </div>
+            </q-dialog>
+
           </div>
         </div>
       </div>
@@ -590,24 +665,40 @@ const submitOffer = async () => {
   offerSent.value = true;
 };
 
-const checkScrollPosition = () => {
-  // Get the div's position from the top of the page
-  if (fixedDivRef.value) {
-    const divPosition = fixedDivRef.value.getBoundingClientRect().top;
-    // Check if the scroll position has reached the div's position
-    if (divPosition <= 102) {
-      shouldBeFixed.value = true;
+const dialogVisible = ref(false);
+const principal = ref<number | null>(null);
+const annualRate = ref<number | null>(null);
+const loanTerm = ref<number | null>(null);
+const monthlyPayment = ref<number | null>(null);
+
+const openMortgageCalculator = () => {
+  dialogVisible.value = true;
+}
+
+const calculateAndDisplay = async () => {
+  try {
+    if (annualRate.value !== undefined && annualRate.value !== null &&
+        loanTerm.value !== undefined && loanTerm.value !== null) {
+      const result = await appStore.calculateMortgage(listing.value.price, annualRate.value, loanTerm.value);
+      monthlyPayment.value = result;
+      console.log('Monthly Payment:', result);
     } else {
-      shouldBeFixed.value = false;
+      console.error('Please fill in all fields.');
     }
+  } catch (error) {
+    console.error('Failed to calculate mortgage:', error);
   }
 };
+
+const resetFields = async () => {
+    annualRate.value = null; 
+    loanTerm.value = null; 
+    monthlyPayment.value = null; 
+  }
 
 let storage;
 onMounted(async () => {
   storage = getStorage();
-  window.addEventListener('scroll', checkScrollPosition);
-  checkScrollPosition();
   // Check if "id" exists and is not empty
   const id = route?.query.id;
   if (!id || id === '') {
@@ -872,10 +963,6 @@ const removeListing = async () => {
   router.back();
 };
 
-onUnmounted(() => {
-  window.removeEventListener('scroll', checkScrollPosition);
-});
-
 const fixedStyle = computed(() => {
   return shouldBeFixed.value ? 'fixed w-full top-[104px]' : 'w-full!';
 });
@@ -930,5 +1017,18 @@ const fixedStyle = computed(() => {
     width: calc(50% - 56px);
     max-width: 556px;
   }
+}
+
+.dialog-container {
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  height: 100vh; /* Set to the viewport height for full-screen effect */
+}
+
+.input-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 </style>
