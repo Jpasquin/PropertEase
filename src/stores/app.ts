@@ -10,7 +10,6 @@ import {
   update,
   push,
   set,
-  DataSnapshot,
 } from 'firebase/database';
 import {
   getStorage,
@@ -131,7 +130,7 @@ export const useAppStore = defineStore('app', {
             const snapshot = await get(soldListingsQuery);
 
             // Create an array of promises
-            const operations: any[] = [];
+            const operations = [];
 
             snapshot.forEach((childSnapshot) => {
               const listingId = childSnapshot.key;
