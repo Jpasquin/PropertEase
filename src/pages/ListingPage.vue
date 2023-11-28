@@ -107,7 +107,7 @@
         </div>
       </transition-group>
 
-      <div key="listingPrice" class="font-medium text-[26px] pt-4 flex">
+      <div key="listingPrice" class="font-medium text-[26px] pt-4 flex" >
         {{ dataHandling.formatCurrency(listing?.price) + ' CAD' || 'Price' }}
         <span v-if="isAssociatedBroker">
           <q-btn dense flat icon="edit">
@@ -130,13 +130,15 @@
           </q-btn>
         </span>
 
+        <div class="q-pb-xl"></div>
+        
         <div v-if="isAssociatedBroker" class="flex">
           <q-input
             dense
             outlined
             color="black"
             label="City"
-            class="ml-4 mb-4 float-left"
+            class=""
             v-model="listing.city"
           />
 
@@ -158,7 +160,7 @@
             color="black"
             label="Bedrooms"
             type="number"
-            class="ml-4 mb-4 float-left"
+            class="ml-4 mb-4"
             v-model="listing.bedrooms"
           />
 
@@ -168,7 +170,7 @@
             color="black"
             label="Baths"
             type="number"
-            class="ml-4 mb-4 float-left"
+            class="ml-4 mb-4"
             v-model="listing.baths"
           />
 
@@ -177,9 +179,27 @@
             outlined
             color="black"
             label="Address"
-            class="ml-4 mb-4 float-left"
+            class="ml-4 mb-4"
             v-model="listing.address"
           />
+
+          
+          <div style="clear: both;" >
+            <q-radio
+              val="buy"
+              label="Buyable"
+              color="black"
+
+              v-model="listing.type"
+            />
+            <q-radio
+              val="rent"
+              label="Rentable"
+              color="black"
+              class="ml-4"
+              v-model="listing.type"
+            />
+          </div>
         </div>
       </div>
 
@@ -637,20 +657,21 @@ const offerLoading = ref(false);
 const offerSent = ref(false);
 
 const provinces = ref([
-  { label: 'Alberta', value: 'AB' },
-  { label: 'British Columbia', value: 'BC' },
-  { label: 'Manitoba', value: 'MB' },
-  { label: 'New Brunswick', value: 'NB' },
-  { label: 'Newfoundland and Labrador', value: 'NL' },
-  { label: 'Northwest Territories', value: 'NT' },
-  { label: 'Nova Scotia', value: 'NS' },
-  { label: 'Nunavut', value: 'NU' },
-  { label: 'Ontario', value: 'ON' },
-  { label: 'Prince Edward Island', value: 'PE' },
-  { label: 'Quebec', value: 'QC' },
-  { label: 'Saskatchewan', value: 'SK' },
-  { label: 'Yukon', value: 'YT' },
+  { label: 'Alberta', value: 'AB'},
+  { label: 'British Columbia', value: 'BC'},
+  { label: 'Manitoba', value: 'MB'},
+  { label: 'New Brunswick', value: 'NB'},
+  { label: 'Newfoundland and Labrador', value: 'NL'},
+  { label: 'Northwest Territories', value: 'NT'},
+  { label: 'Nova Scotia', value: 'NS'},
+  { label: 'Nunavut', value: 'NU'},
+  { label: 'Ontario', value: 'ON'},
+  { label: 'Prince Edward Island', value: 'PE'},
+  { label: 'Quebec', value: 'QC'},
+  { label: 'Saskatchewan', value: 'SK'},
+  { label: 'Yukon', value: 'YT'},
 ]);
+
 
 const offerModal = ref(false);
 const step = ref(1);
@@ -891,7 +912,6 @@ const saveChanges = async () => {
   } else if (route.query.id === 'new') {
     const token = await generateAndVerifyUID();
     listing.value.id = token;
-    listing.value.type = 'buy';
     listing.value.propertyType = 'house';
     listing.value.broker = authStore.user.userId;
     listing.value.province = listing.value.province.value;
