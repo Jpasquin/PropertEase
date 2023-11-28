@@ -1,45 +1,55 @@
-import { mount } from '@vue/test-utils'
+import { flushPromises, mount } from '@vue/test-utils'
 import { createPinia, setActivePinia } from 'pinia'
-import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { describe, it, expect, beforeEach, vi } from 'vitest'
 import SettingsPage from '../../../src/pages/SettingsPage.vue'
 import { createTestingPinia } from '@pinia/testing'
-import { useMockAuthStore } from '../__tests__/stores/mockAuthStore'
 
 describe('SettingsPage', () => {
   beforeEach(() => {
-    const pinia = createPinia()
-    setActivePinia(pinia)
-    useMockAuthStore()
-  })
+    const pinia = createPinia();
+    setActivePinia(pinia);
+  });
 
-  it('updates userChanges on input', async () => {
+  it('acceptOrDeclineOffer method test', async () => {
     const wrapper = mount(SettingsPage, {
       global: {
-        plugins: [
-          createTestingPinia({
-            createSpy: vi.fn,
-          }),
-        ],
+        plugins: [createTestingPinia({ createSpy: vi.fn })],
+        // other mocks and global configs
       },
-    })
+    });
+    const acceptOrDeclineOfferSpy = vi.spyOn(wrapper.vm, 'acceptOrDeclineOffer');
 
-    // // Access the input elements using refs
-    // const firstNameInput = wrapper.vm.$refs.firstNameInput
-    // const lastNameInput = wrapper.vm.$refs.lastNameInput
-    
-    if (true) {
-      // // Access the DOM element
-      // const firstNameInputElement = firstNameInput.$el || firstNameInput.element
-      // const lastNameInputElement = lastNameInput.$el || lastNameInput.element
-    
-      // // Set the value
-      // await firstNameInputElement.setValue('John')
-      // await lastNameInputElement.setValue('Doe')
-    
-      // expect(wrapper.vm.userChanges.firstName).toBe('John')
-      // expect(wrapper.vm.userChanges.lastName).toBe('Doe')
-    } else {
-      throw new Error('Refs not found')
-    }
-  })
-})
+    // Wait for any initial asynchronous operations
+    await flushPromises();
+    await wrapper.vm.$nextTick();
+
+    wrapper.vm.acceptOrDeclineOffer({ id: 0 }, true);
+
+    await flushPromises();
+    await wrapper.vm.$nextTick();
+
+    expect(acceptOrDeclineOfferSpy).toHaveBeenCalled();
+  });
+
+  it('deleteOffer method test', async () => {
+    const wrapper = mount(SettingsPage, {
+      global: {
+        plugins: [createTestingPinia({ createSpy: vi.fn })],
+        // other mocks and global configs
+      },
+    });
+    const deleteOfferSpy = vi.spyOn(wrapper.vm, 'deleteOffer');
+
+    // Wait for any initial asynchronous operations
+    await flushPromises();
+    await wrapper.vm.$nextTick();
+
+    wrapper.vm.deleteOffer({ id: 0 });
+
+    await flushPromises();
+    await wrapper.vm.$nextTick();
+
+    expect(deleteOfferSpy).toHaveBeenCalled();
+  });
+});
+
